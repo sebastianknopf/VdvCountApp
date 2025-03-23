@@ -11,7 +11,7 @@ android {
         minSdk 24
         targetSdk 34
         versionCode 1
-        versionName "1.0"
+        versionName "0.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,7 +36,15 @@ dependencies {
     implementation libs.constraintlayout
     implementation libs.lifecycle.livedata.ktx
     implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.navigation.fragment.ktx
+    implementation libs.navigation.ui.ktx
+
+    implementation libs.android.permissions
+    implementation libs.retrofit
+    implementation libs.converter.gson
+
     testImplementation libs.junit
+
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
 }
