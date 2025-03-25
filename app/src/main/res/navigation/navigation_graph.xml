@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph.xml"
+    app:startDestination="@id/permissionFragment">
+
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="de.vdvcount.app.ui.permission.PermissionFragment"
+        android:label="fragment_permission"
+        tools:layout="@layout/fragment_permission" />
+</navigation>

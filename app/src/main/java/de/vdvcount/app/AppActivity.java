@@ -4,18 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import de.vdvcount.app.ui.permission.PermissionFragment;
+import androidx.databinding.DataBindingUtil;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import de.vdvcount.app.databinding.ActivityAppBinding;
 
 public class AppActivity extends AppCompatActivity {
+
+    private ActivityAppBinding dataBinding;
+
+    private NavController navigationController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, PermissionFragment.newInstance())
-                    .commitNow();
-        }
+
+        this.dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_app);
+        this.setSupportActionBar(this.dataBinding.toolbar);
+
+        this.navigationController = Navigation.findNavController(this, R.id.nav_host_fragment);
     }
 }
