@@ -1,5 +1,7 @@
 package de.vdvcount.app.security;
 
+import android.security.keystore.KeyProperties;
+import android.security.keystore.KeyProtection;
 import android.util.Base64;
 
 import java.io.IOException;
@@ -17,9 +19,11 @@ import java.util.regex.Pattern;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Cipher {
 
@@ -145,6 +149,27 @@ public class Cipher {
         }
 
         return true;
+    }
+
+    public static void generateSecretKey(String keyName) throws KeyStoreException, CertificateException, IOException, NoSuchAlgorithmException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        keyGenerator.init(256);
+
+        byte[] randomKey = keyGenerator.generateKey().getEncoded();
+
+        KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+        keyStore.load(null);
+
+        SecretKey databaseKey = new SecretKeySpec(randomKey, 0, randomKey.length, "AES");
+        keyStore.setEntry(keyName,
+                new KeyStore.SecretKeyEntry(databaseKey),
+                new KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                        .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                        .build()
+        );
+
+        randomKey = null;
     }
 
     private static SecretKey loadSecretKey(String keyName) throws InvalidKeyException {
