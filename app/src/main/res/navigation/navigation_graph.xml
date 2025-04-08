@@ -9,5 +9,5 @@
         android:id="@+id/setupFragment"
         android:name="de.vdvcount.app.ui.setup.SetupFragment"
         android:label="fragment_permission"
-        tools:layout="@layout/fragment_permission" />
+        tools:layout="@layout/fragment_setup" />
 </navigation>

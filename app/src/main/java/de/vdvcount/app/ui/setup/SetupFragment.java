@@ -1,5 +1,6 @@
 package de.vdvcount.app.ui.setup;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -13,10 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import de.vdvcount.app.R;
+import de.vdvcount.app.databinding.FragmentSetupBinding;
 
 public class SetupFragment extends Fragment {
 
-    private SetupViewModel mViewModel;
+    private FragmentSetupBinding dataBinding;
+    private SetupViewModel viewModel;
 
     public static SetupFragment newInstance() {
         return new SetupFragment();
@@ -25,16 +28,18 @@ public class SetupFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(SetupViewModel.class);
-        // TODO: Use the ViewModel
+        this.viewModel = new ViewModelProvider(this).get(SetupViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_setup, container, false);
+        this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
 
-        this.mViewModel.initAppilcation();
-        return inflater.inflate(R.layout.fragment_permission, container, false);
+        this.viewModel.initAppilcation();
+
+        return this.dataBinding.getRoot();
     }
 
 }
