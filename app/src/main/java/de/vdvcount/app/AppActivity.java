@@ -24,4 +24,8 @@ public class AppActivity extends AppCompatActivity {
 
         this.navigationController = Navigation.findNavController(this, R.id.nav_host_fragment);
     }
+
+    public NavController getNavigationController() {
+        return this.navigationController;
+    }
 }

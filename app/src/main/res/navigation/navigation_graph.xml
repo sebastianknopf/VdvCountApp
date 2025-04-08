@@ -9,5 +9,18 @@
         android:id="@+id/setupFragment"
         android:name="de.vdvcount.app.ui.setup.SetupFragment"
         android:label="fragment_permission"
+        tools:layout="@layout/fragment_setup" >
+        <action
+            android:id="@+id/action_setupFragment_to_stopSelectFragment"
+            app:destination="@id/stopSelectFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph.xml"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/stopSelectFragment"
+        android:name="de.vdvcount.app.ui.stopselect.StopSelectFragment"
+        android:label="fragment_permission"
         tools:layout="@layout/fragment_setup" />
 </navigation>

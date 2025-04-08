@@ -24,6 +24,8 @@ import com.nabinbhandari.android.permissions.Permissions;
 
 import java.util.ArrayList;
 
+import androidx.navigation.NavController;
+import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.ScanActivity;
 import de.vdvcount.app.common.Status;
@@ -33,6 +35,8 @@ public class SetupFragment extends Fragment {
 
     private FragmentSetupBinding dataBinding;
     private SetupViewModel viewModel;
+
+    private NavController navigationController;
 
     private ActivityResultLauncher<Intent> softwareScanningLauncher;
 
@@ -61,6 +65,17 @@ public class SetupFragment extends Fragment {
         this.viewModel = new ViewModelProvider(this).get(SetupViewModel.class);
 
         this.initViewEvents();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        AppActivity appActivity = (AppActivity) this.getActivity();
+        appActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        appActivity.setTitle(R.string.setup_title);
+
+        this.navigationController = appActivity.getNavigationController();
     }
 
     @Override
@@ -106,12 +121,15 @@ public class SetupFragment extends Fragment {
             this.softwareScanningLauncher.launch(softwareScannerIntent);
         } else {
             // navigate to main fragment here
+            this.navigationController.navigate(R.id.action_setupFragment_to_stopSelectFragment);
         }
 
     }
 
     private void performSetup(byte[] setupScanResults) {
-        Log.d(this.getClass().getSimpleName(), new String(setupScanResults));
         this.viewModel.setupApplication(new String(setupScanResults));
+
+        // if everything worked until here, setup is complete, navigate to stop select fragment
+        this.navigationController.navigate(R.id.action_setupFragment_to_stopSelectFragment);
     }
 }

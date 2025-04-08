@@ -1,5 +1,6 @@
 package de.vdvcount.app.ui.stopselect;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -13,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.navigation.NavController;
+import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.databinding.FragmentStopSelectBinding;
 import de.vdvcount.app.ui.setup.SetupViewModel;
@@ -21,6 +24,8 @@ public class StopSelectFragment extends Fragment {
 
     private FragmentStopSelectBinding dataBinding;
     private StopSelectViewModel viewModel;
+
+    private NavController navigationController;
 
     public static StopSelectFragment newInstance() {
         return new StopSelectFragment();
@@ -43,6 +48,17 @@ public class StopSelectFragment extends Fragment {
         this.viewModel = new ViewModelProvider(this).get(StopSelectViewModel.class);
 
         this.initViewEvents();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        AppActivity appActivity = (AppActivity) this.getActivity();
+        appActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        appActivity.setTitle(R.string.stop_select_title);
+
+        this.navigationController = appActivity.getNavigationController();
     }
 
     private void initViewEvents() {
