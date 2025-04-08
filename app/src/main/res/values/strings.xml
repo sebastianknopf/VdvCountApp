@@ -6,6 +6,8 @@
     <!-- SetupFragment -->
     <string name="setup_title">Setup</string>
     <string name="setup_information_text">VdvCountApp benötigt die Berechtigungen für den Standort und den Kamerazugriff.\n\nBitte geben Sie die entsprechenden Berechtigungen frei.</string>
+    <string name="setup_failed">Setup fehlgeschlagen!</string>
+    <string name="setup_performed_successfully">Setup erfolgreich abgeschlossen.</string>
 
     <!-- StopSelectFragment -->
     <string name="stop_select_title">Haltestellenauswahl</string>

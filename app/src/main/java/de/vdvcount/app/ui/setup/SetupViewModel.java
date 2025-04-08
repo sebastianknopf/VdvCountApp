@@ -11,7 +11,7 @@ import de.vdvcount.app.security.Cipher;
 
 public class SetupViewModel extends ViewModel {
 
-    public void setupApplication(String setupString) {
+    public boolean setupApplication(String setupString) {
         Cipher.generateSecretKey(Cipher.DEFAULT_KEY);
 
         try {
@@ -47,8 +47,10 @@ public class SetupViewModel extends ViewModel {
             }
 
             Status.setString(Status.STATUS, Status.Values.READY);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+
+            return true;
+        } catch (Exception ex) {
+            return false;
         }
     }
 }

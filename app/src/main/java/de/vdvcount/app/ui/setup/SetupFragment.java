@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
@@ -124,9 +125,14 @@ public class SetupFragment extends Fragment {
     }
 
     private void performSetup(byte[] setupScanResults) {
-        this.viewModel.setupApplication(new String(setupScanResults));
+        if (this.viewModel.setupApplication(new String(setupScanResults))) {
+            Toast.makeText(this.requireContext(), R.string.setup_performed_successfully, Toast.LENGTH_LONG).show();
 
-        // if everything worked until here, setup is complete, navigate to stop select fragment
-        this.navigationController.navigate(R.id.action_setupFragment_to_stopSelectFragment);
+            // if everything worked until here, setup is complete, navigate to stop select fragment
+            this.navigationController.navigate(R.id.action_setupFragment_to_stopSelectFragment);
+        } else {
+            // that did not work - inform the user about the error
+            Toast.makeText(this.requireContext(), R.string.setup_failed, Toast.LENGTH_LONG).show();
+        }
     }
 }
