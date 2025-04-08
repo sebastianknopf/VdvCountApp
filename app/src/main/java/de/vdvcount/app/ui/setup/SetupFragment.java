@@ -112,6 +112,6 @@ public class SetupFragment extends Fragment {
 
     private void performSetup(byte[] setupScanResults) {
         Log.d(this.getClass().getSimpleName(), new String(setupScanResults));
-        this.viewModel.initAppilcation();
+        this.viewModel.setupApplication(new String(setupScanResults));
     }
 }
