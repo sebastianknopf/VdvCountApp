@@ -5,7 +5,7 @@
     android:id="@+id/permission"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.permission.PermissionFragment">
+    tools:context=".ui.setup.SetupFragment">
 
     <TextView
         android:id="@+id/message"

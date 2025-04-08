@@ -1,4 +1,4 @@
-package de.vdvcount.app.ui.permission;
+package de.vdvcount.app.ui.setup;
 
 import android.util.Log;
 
@@ -9,7 +9,7 @@ import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.security.Cipher;
 
-public class PermissionViewModel extends ViewModel {
+public class SetupViewModel extends ViewModel {
 
     public void initAppilcation() {
         if (Status.getString(Status.STATUS, Status.Values.INITIAL).equals(Status.Values.INITIAL)) {
