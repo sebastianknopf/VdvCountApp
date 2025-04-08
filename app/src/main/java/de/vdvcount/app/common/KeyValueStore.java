@@ -9,20 +9,20 @@ abstract class KeyValueStore {
 
     protected static SharedPreferences sharedPreferences;
 
-    protected static void init(String keyValueStoreName) {
-        KeyValueStore.sharedPreferences = App.getStaticContext().getSharedPreferences(keyValueStoreName, Context.MODE_PRIVATE);
+    static {
+        KeyValueStore.sharedPreferences = App.getStaticContext().getSharedPreferences("de.vdvcount.app.kvs", Context.MODE_PRIVATE);
     }
 
     public static String getString(String variableName, String defaultValue) {
-        return KeyValueStore.getString(variableName, defaultValue);
+        return KeyValueStore.sharedPreferences.getString(variableName, defaultValue);
     }
 
     public static Boolean getBoolean(String variableName, Boolean defaultValue) {
-        return KeyValueStore.getBoolean(variableName, defaultValue);
+        return KeyValueStore.sharedPreferences.getBoolean(variableName, defaultValue);
     }
 
-    public static Boolean getInt(String variableName, Integer defaultValue) {
-        return KeyValueStore.getInt(variableName, defaultValue);
+    public static Integer getInt(String variableName, Integer defaultValue) {
+        return KeyValueStore.sharedPreferences.getInt(variableName, defaultValue);
     }
 
     public static void setString(String variableName, String value) {

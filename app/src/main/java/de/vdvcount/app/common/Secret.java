@@ -11,10 +11,6 @@ public class Secret extends KeyValueStore {
    public final static String API_USERNAME = "de.vdvcount.app.kvs.secret.API_USERNAME";
    public final static String API_PASSWORD = "de.vdvcount.app.kvs.secret.API_PASSWORD";
 
-   static {
-      Status.init("de.vdvcount.app.kvs.secret");
-   }
-
    public static String getSecretString(String variableName, String defaultValue) throws InvalidKeyException, IllegalAccessException {
       return Cipher.decryptString(
               KeyValueStore.getString(variableName, defaultValue),

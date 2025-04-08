@@ -9,8 +9,4 @@ public class Status extends KeyValueStore {
         public final static String READY = "READY";
     }
 
-    static {
-        Status.init("de.vdvcount.app.kvs.status");
-    }
-
 }
