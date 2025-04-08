@@ -1,3 +1,8 @@
 <resources>
+    <!-- SetupFragment -->
+    <string name="setup_information_text">VdvCountApp benötigt die Berechtigungen für den Standort und den Kamerazugriff.\n\nBitte geben Sie die entsprechenden Berechtigungen frei.</string>
+
+    <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>
+    <string name="str_continue">Weiter</string>
 </resources>
