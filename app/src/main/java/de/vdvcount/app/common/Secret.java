@@ -8,6 +8,7 @@ import de.vdvcount.app.security.Cipher;
 
 public class Secret extends KeyValueStore {
 
+   public final static String API_ENDPOINT = "de.vdvcount.app.kvs.secret.API_ENDPOINT";
    public final static String API_USERNAME = "de.vdvcount.app.kvs.secret.API_USERNAME";
    public final static String API_PASSWORD = "de.vdvcount.app.kvs.secret.API_PASSWORD";
 
