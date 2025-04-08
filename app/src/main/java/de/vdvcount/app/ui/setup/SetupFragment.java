@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +75,11 @@ public class SetupFragment extends Fragment {
         appActivity.setTitle(R.string.setup_title);
 
         this.navigationController = appActivity.getNavigationController();
+
+        if (Status.getString(Status.STATUS, Status.Values.INITIAL).equals(Status.Values.READY)) {
+            // navigate to main fragment here
+            this.navigationController.navigate(R.id.action_setupFragment_to_stopSelectFragment);
+        }
     }
 
     @Override
@@ -102,7 +106,7 @@ public class SetupFragment extends Fragment {
             Permissions.check(this.getContext(), permissions, null, null, new PermissionHandler() {
                 @Override
                 public void onGranted() {
-                    verifyStatus();
+                    startSetup();
                 }
 
                 @Override
@@ -113,17 +117,10 @@ public class SetupFragment extends Fragment {
         });
     }
 
-    private void verifyStatus()
+    private void startSetup()
     {
-        if (Status.getString(Status.STATUS, Status.Values.INITIAL).equals(Status.Values.INITIAL)) {
-            // app must be initialized at first - scan setup code
-            Intent softwareScannerIntent = new Intent(this.requireActivity(), ScanActivity.class);
-            this.softwareScanningLauncher.launch(softwareScannerIntent);
-        } else {
-            // navigate to main fragment here
-            this.navigationController.navigate(R.id.action_setupFragment_to_stopSelectFragment);
-        }
-
+        Intent softwareScannerIntent = new Intent(this.requireActivity(), ScanActivity.class);
+        this.softwareScanningLauncher.launch(softwareScannerIntent);
     }
 
     private void performSetup(byte[] setupScanResults) {
