@@ -151,25 +151,30 @@ public class Cipher {
         return true;
     }
 
-    public static void generateSecretKey(String keyName) throws KeyStoreException, CertificateException, IOException, NoSuchAlgorithmException {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        keyGenerator.init(256);
+    public static void generateSecretKey(String keyName) {
+        try {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+            keyGenerator.init(256);
 
-        byte[] randomKey = keyGenerator.generateKey().getEncoded();
+            byte[] randomKey = keyGenerator.generateKey().getEncoded();
 
-        KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
-        keyStore.load(null);
+            KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+            keyStore.load(null);
 
-        SecretKey databaseKey = new SecretKeySpec(randomKey, 0, randomKey.length, "AES");
-        keyStore.setEntry(keyName,
-                new KeyStore.SecretKeyEntry(databaseKey),
-                new KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
-                        .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                        .build()
-        );
+            SecretKey databaseKey = new SecretKeySpec(randomKey, 0, randomKey.length, "AES");
+            keyStore.setEntry(keyName,
+                    new KeyStore.SecretKeyEntry(databaseKey),
+                    new KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                            .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                            .build()
+            );
 
-        randomKey = null;
+            randomKey = null;
+        } catch(Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
     }
 
     private static SecretKey loadSecretKey(String keyName) throws InvalidKeyException {
