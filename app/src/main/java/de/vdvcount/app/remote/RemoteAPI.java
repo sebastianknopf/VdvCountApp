@@ -20,10 +20,10 @@ interface RemoteAPI {
     Call<List<Object>> getTripByTripId(@Path("tripId") int tripId);
 
     @GET("masterdata/vehicles")
-    Call<List<Object>> getAllVehicles();
+    Call<List<VehicleObject>> getAllVehicles();
 
     @GET("masterdata/objectClasses")
-    Call<List<Object>> getAllObjectClasses();
+    Call<List<ObjectClassObject>> getAllObjectClasses();
 
     @POST("results/post")
     Call<List<Object>> postResults(@Body Object result);

@@ -7,7 +7,9 @@ import java.util.List;
 
 import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.model.Departure;
+import de.vdvcount.app.model.ObjectClass;
 import de.vdvcount.app.model.Station;
+import de.vdvcount.app.model.Vehicle;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -80,6 +82,50 @@ public class RemoteRepository {
                 List<Departure> resultList = new ArrayList<>();
 
                 for (DepartureObject obj : objectList) {
+                    resultList.add(obj.mapDomainModel());
+                }
+
+                return resultList;
+            } else {
+                return null;
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public List<Vehicle> getAllVehicles() {
+        try {
+            Call<List<VehicleObject>> call = this.remoteApiClient.getAllVehicles();
+            Response<List<VehicleObject>> response = call.execute();
+
+            if (response.isSuccessful()) {
+                List<VehicleObject> objectList = response.body();
+                List<Vehicle> resultList = new ArrayList<>();
+
+                for (VehicleObject obj : objectList) {
+                    resultList.add(obj.mapDomainModel());
+                }
+
+                return resultList;
+            } else {
+                return null;
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public List<ObjectClass> getAllObjectClasses() {
+        try {
+            Call<List<ObjectClassObject>> call = this.remoteApiClient.getAllObjectClasses();
+            Response<List<ObjectClassObject>> response = call.execute();
+
+            if (response.isSuccessful()) {
+                List<ObjectClassObject> objectList = response.body();
+                List<ObjectClass> resultList = new ArrayList<>();
+
+                for (ObjectClassObject obj : objectList) {
                     resultList.add(obj.mapDomainModel());
                 }
 
