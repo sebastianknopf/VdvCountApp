@@ -1,9 +1,15 @@
 package de.vdvcount.app.remote;
 
+import java.io.IOException;
 import java.security.InvalidKeyException;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.vdvcount.app.common.Secret;
+import de.vdvcount.app.model.Station;
 import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -39,5 +45,27 @@ public class RemoteRepository {
                 .build();
 
         this.remoteApiClient = retrofit.create(RemoteAPI.class);
+    }
+
+    public List<Station> getStopsByLookupName(String lookupName) {
+        try {
+            Call<List<StationObject>> call = this.remoteApiClient.getStopsByLookupName(lookupName);
+            Response<List<StationObject>> response = call.execute();
+
+            if (response.isSuccessful()) {
+                List<StationObject> objectList = response.body();
+                List<Station> resultList = new ArrayList<>();
+
+                for (StationObject obj : objectList) {
+                    resultList.add(obj.mapDomainModel());
+                }
+
+                return resultList;
+            } else {
+                return null;
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
