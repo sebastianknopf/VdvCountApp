@@ -2,7 +2,11 @@ package de.vdvcount.app.remote;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.vdvcount.app.common.DomainModelMapper;
+import de.vdvcount.app.model.StopTime;
 import de.vdvcount.app.model.Trip;
 
 class TripObject implements DomainModelMapper<Trip> {
@@ -19,8 +23,8 @@ class TripObject implements DomainModelMapper<Trip> {
    private String internationalId;
    @SerializedName("next_trip_id")
    private int nextTripId;
-
-   // TODO: add StopTime model
+   @SerializedName("stop_times")
+   private List<StopTimeObject> stopTimes;
 
    public int getTripId() {
       return this.tripId;
@@ -70,6 +74,14 @@ class TripObject implements DomainModelMapper<Trip> {
       this.nextTripId = nextTripId;
    }
 
+   public List<StopTimeObject> getStopTimes() {
+      return this.stopTimes;
+   }
+
+   public void setStopTimes(List<StopTimeObject> stopTimes) {
+      this.stopTimes = stopTimes;
+   }
+
    @Override
    public Trip mapDomainModel() {
       Trip domainModel = new Trip();
@@ -81,7 +93,12 @@ class TripObject implements DomainModelMapper<Trip> {
       domainModel.setInternationalId(this.getInternationalId());
       domainModel.setNextTripId(this.getNextTripId());
 
-      // TODO: conversion for StopTimes missing here
+      List<StopTime> stopTimes = new ArrayList<>();
+      for (StopTimeObject obj : this.getStopTimes()) {
+         stopTimes.add(obj.mapDomainModel());
+      }
+
+      domainModel.setStopTimes(stopTimes);
 
       return domainModel;
    }

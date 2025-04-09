@@ -1,5 +1,7 @@
 package de.vdvcount.app.model;
 
+import java.util.List;
+
 public class Trip {
 
     private int tripId;
@@ -8,6 +10,7 @@ public class Trip {
     private String headsign;
     private String internationalId;
     private int nextTripId;
+    private List<StopTime> stopTimes;
 
     public int getTripId() {
         return this.tripId;
@@ -55,5 +58,13 @@ public class Trip {
 
     public void setNextTripId(int nextTripId) {
         this.nextTripId = nextTripId;
+    }
+
+    public List<StopTime> getStopTimes() {
+        return this.stopTimes;
+    }
+
+    public void setStopTimes(List<StopTime> stopTimes) {
+        this.stopTimes = stopTimes;
     }
 }

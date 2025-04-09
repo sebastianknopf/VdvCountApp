@@ -8,18 +8,18 @@ import de.vdvcount.app.model.Line;
 class LineObject implements DomainModelMapper<Line> {
 
     @SerializedName("line_id")
-    private int id;
+    private int lineId;
     @SerializedName("name")
     private String name;
     @SerializedName("international_id")
     private String internationalId;
 
-    public int getId() {
-        return this.id;
+    public int getLineId() {
+        return this.lineId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setLineId(int lineId) {
+        this.lineId = lineId;
     }
 
     public String getName() {
@@ -42,7 +42,7 @@ class LineObject implements DomainModelMapper<Line> {
     public Line mapDomainModel() {
         Line domainModel = new Line();
 
-        domainModel.setId(this.getId());
+        domainModel.setId(this.getLineId());
         domainModel.setName(this.getName());
         domainModel.setInternationalId(this.getInternationalId());
 
