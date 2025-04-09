@@ -9,6 +9,7 @@ import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.model.Departure;
 import de.vdvcount.app.model.ObjectClass;
 import de.vdvcount.app.model.Station;
+import de.vdvcount.app.model.Trip;
 import de.vdvcount.app.model.Vehicle;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -86,6 +87,22 @@ public class RemoteRepository {
                 }
 
                 return resultList;
+            } else {
+                return null;
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public Trip getTripByTripId(int tripId) {
+        try {
+            Call<TripObject> call = this.remoteApiClient.getTripByTripId(tripId);
+            Response<TripObject> response = call.execute();
+
+            if (response.isSuccessful()) {
+                TripObject object = response.body();
+                return object.mapDomainModel();
             } else {
                 return null;
             }

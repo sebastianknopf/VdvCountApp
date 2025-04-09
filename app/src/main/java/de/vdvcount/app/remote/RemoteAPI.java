@@ -17,7 +17,7 @@ interface RemoteAPI {
     Call<List<DepartureObject>> getDeparturesByParentStopId(@Path("parentStopId") int parentStopId);
 
     @GET("trips/byTripId/{tripId}")
-    Call<List<Object>> getTripByTripId(@Path("tripId") int tripId);
+    Call<TripObject> getTripByTripId(@Path("tripId") int tripId);
 
     @GET("masterdata/vehicles")
     Call<List<VehicleObject>> getAllVehicles();
