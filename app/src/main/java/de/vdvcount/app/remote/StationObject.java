@@ -9,16 +9,12 @@ class StationObject implements DomainModelMapper<Station> {
 
    @SerializedName("parent_id")
    private int id;
-
    @SerializedName("name")
    private String name;
-
    @SerializedName("latitude")
    private double latitude;
-
    @SerializedName("longitude")
    private double longitude;
-
    @SerializedName("similarity")
    private double similarity;
 

@@ -14,7 +14,7 @@ interface RemoteAPI {
     Call<List<StationObject>> getStopsByLookupName(@Path("lookupName") String lookupName);
 
     @GET("departures/byParentStopId/{parentStopId}")
-    Call<List<Object>> getDeparturesByParentStopId(@Path("parentStopId") int parentStopId);
+    Call<List<DepartureObject>> getDeparturesByParentStopId(@Path("parentStopId") int parentStopId);
 
     @GET("trips/byTripId/{tripId}")
     Call<List<Object>> getTripByTripId(@Path("tripId") int tripId);

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.vdvcount.app.common.Secret;
+import de.vdvcount.app.model.Departure;
 import de.vdvcount.app.model.Station;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -57,6 +58,28 @@ public class RemoteRepository {
                 List<Station> resultList = new ArrayList<>();
 
                 for (StationObject obj : objectList) {
+                    resultList.add(obj.mapDomainModel());
+                }
+
+                return resultList;
+            } else {
+                return null;
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public List<Departure> getDeparturesByParentStopId(int parentStopId) {
+        try {
+            Call<List<DepartureObject>> call = this.remoteApiClient.getDeparturesByParentStopId(parentStopId);
+            Response<List<DepartureObject>> response = call.execute();
+
+            if (response.isSuccessful()) {
+                List<DepartureObject> objectList = response.body();
+                List<Departure> resultList = new ArrayList<>();
+
+                for (DepartureObject obj : objectList) {
                     resultList.add(obj.mapDomainModel());
                 }
 
