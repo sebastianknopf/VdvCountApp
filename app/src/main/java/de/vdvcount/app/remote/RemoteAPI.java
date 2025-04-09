@@ -26,7 +26,7 @@ interface RemoteAPI {
     Call<List<ObjectClassObject>> getAllObjectClasses();
 
     @POST("results/post")
-    Call<List<Object>> postResults(@Body Object result);
+    Call<Void> postResults(@Body CountedTripObject result);
 
     @GET("system/health")
     Call<List<Object>> getSystemHealthCheck();

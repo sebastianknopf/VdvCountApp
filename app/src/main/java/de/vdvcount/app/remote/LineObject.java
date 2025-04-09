@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import de.vdvcount.app.common.DomainModelMapper;
 import de.vdvcount.app.model.Line;
 
-class LineObject implements DomainModelMapper<Line> {
+public class LineObject implements DomainModelMapper<Line> {
 
     @SerializedName("line_id")
     private int lineId;
@@ -42,7 +42,7 @@ class LineObject implements DomainModelMapper<Line> {
     public Line mapDomainModel() {
         Line domainModel = new Line();
 
-        domainModel.setId(this.getLineId());
+        domainModel.setLineId(this.getLineId());
         domainModel.setName(this.getName());
         domainModel.setInternationalId(this.getInternationalId());
 

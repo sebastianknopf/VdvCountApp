@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.vdvcount.app.common.Secret;
+import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.model.Departure;
 import de.vdvcount.app.model.ObjectClass;
 import de.vdvcount.app.model.Station;
@@ -109,6 +110,20 @@ public class RemoteRepository {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public void postResults(CountedTrip countedTrip) {
+        try {
+            Call<Void> call = this.remoteApiClient.postResults(countedTrip.mapApiObject());
+            Response<Void> response = call.execute();
+
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("failed to send results object");
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
     }
 
     public List<Vehicle> getAllVehicles() {

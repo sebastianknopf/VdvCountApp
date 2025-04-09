@@ -1,19 +1,20 @@
 package de.vdvcount.app.model;
 
-import com.google.gson.annotations.SerializedName;
+import de.vdvcount.app.common.ApiObjectMapper;
+import de.vdvcount.app.remote.LineObject;
 
-public class Line {
+public class Line implements ApiObjectMapper<LineObject> {
 
-    private int id;
+    private int lineId;
     private String name;
     private String internationalId;
 
-    public int getId() {
-        return this.id;
+    public int getLineId() {
+        return this.lineId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setLineId(int lineId) {
+        this.lineId = lineId;
     }
 
     public String getName() {
@@ -30,5 +31,16 @@ public class Line {
 
     public void setInternationalId(String internationalId) {
         this.internationalId = internationalId;
+    }
+
+    @Override
+    public LineObject mapApiObject() {
+        LineObject apiObject = new LineObject();
+
+        apiObject.setLineId(this.getLineId());
+        apiObject.setName(this.getName());
+        apiObject.setInternationalId(this.getInternationalId());
+
+        return apiObject;
     }
 }
