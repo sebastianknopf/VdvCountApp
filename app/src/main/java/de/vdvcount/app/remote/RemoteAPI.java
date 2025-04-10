@@ -29,5 +29,5 @@ interface RemoteAPI {
     Call<Void> postResults(@Body CountedTripObject result);
 
     @GET("system/health")
-    Call<List<Object>> getSystemHealthCheck();
+    Call<SystemHealthObject> getSystemHealthCheck();
 }

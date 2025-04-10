@@ -3,6 +3,7 @@ package de.vdvcount.app.remote;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.vdvcount.app.common.Secret;
@@ -164,6 +165,28 @@ public class RemoteRepository {
                 return resultList;
             } else {
                 return null;
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public boolean performHealthCheck() {
+        try {
+            Call<SystemHealthObject> call = this.remoteApiClient.getSystemHealthCheck();
+            Response<SystemHealthObject> response = call.execute();
+
+            if (response.isSuccessful()) {
+                SystemHealthObject obj = response.body();
+
+                int currentUnixTimestamp = (int) (new Date().getTime() / 1000L);
+                if (obj.getTimestamp() >= currentUnixTimestamp - 300) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
             }
         } catch (IOException ex) {
             throw new RuntimeException(ex);
