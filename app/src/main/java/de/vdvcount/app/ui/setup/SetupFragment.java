@@ -65,6 +65,7 @@ public class SetupFragment extends Fragment {
         this.viewModel = new ViewModelProvider(this).get(SetupViewModel.class);
 
         this.initViewEvents();
+        this.initObserverEvents();
     }
 
     @Override
@@ -92,7 +93,9 @@ public class SetupFragment extends Fragment {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent intent = result.getData();
-                        this.performSetup(intent.getByteArrayExtra("dataBytes"));
+                        byte[] scanData = intent.getByteArrayExtra("dataBytes");
+
+                        this.viewModel.setupApplication(new String(scanData));
                     }
                 });
     }
@@ -118,21 +121,23 @@ public class SetupFragment extends Fragment {
         });
     }
 
+    public void initObserverEvents() {
+        this.viewModel.getSetupSuccessful().observe(this.getViewLifecycleOwner(), setupSuccessful -> {
+            if (setupSuccessful) {
+                Toast.makeText(this.requireContext(), R.string.setup_performed_successfully, Toast.LENGTH_LONG).show();
+
+                // if everything worked until here, setup is complete, navigate to stop select fragment
+                this.navigationController.navigate(R.id.action_setupFragment_to_stopSelectFragment);
+            } else {
+                // that did not work - inform the user about the error
+                Toast.makeText(this.requireContext(), R.string.setup_failed, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void startSetup()
     {
         Intent softwareScannerIntent = new Intent(this.requireActivity(), ScanActivity.class);
         this.softwareScanningLauncher.launch(softwareScannerIntent);
-    }
-
-    private void performSetup(byte[] setupScanResults) {
-        if (this.viewModel.setupApplication(new String(setupScanResults))) {
-            Toast.makeText(this.requireContext(), R.string.setup_performed_successfully, Toast.LENGTH_LONG).show();
-
-            // if everything worked until here, setup is complete, navigate to stop select fragment
-            this.navigationController.navigate(R.id.action_setupFragment_to_stopSelectFragment);
-        } else {
-            // that did not work - inform the user about the error
-            Toast.makeText(this.requireContext(), R.string.setup_failed, Toast.LENGTH_LONG).show();
-        }
     }
 }
