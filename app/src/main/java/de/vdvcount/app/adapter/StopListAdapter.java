@@ -12,12 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.vdvcount.app.R;
+import de.vdvcount.app.common.OnItemClickListener;
 import de.vdvcount.app.databinding.StopItemBinding;
 import de.vdvcount.app.model.Station;
 
 public class StopListAdapter extends RecyclerView.Adapter<StopListAdapter.ViewHolder> {
 
     private List<Station> stationList;
+    private OnItemClickListener<Station> onItemClickListener;
 
     public StopListAdapter() {
         this.stationList = new ArrayList<>();
@@ -32,11 +34,11 @@ public class StopListAdapter extends RecyclerView.Adapter<StopListAdapter.ViewHo
         this.notifyDataSetChanged();
     }
 
-    /*public void setManualValidationListener(OnManualValidationListener listener) {
+    public void setOnItemClickListener(OnItemClickListener<Station> listener) {
         if (listener != null) {
-            this.manualValidationListener = listener;
+            this.onItemClickListener = listener;
         }
-    }*/
+    }
 
     @NonNull
     @Override
@@ -49,7 +51,7 @@ public class StopListAdapter extends RecyclerView.Adapter<StopListAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Station obj = this.stationList.get(position);
         holder.setStation(obj, position);
-        //holder.setOnManualValidationListener(this.manualValidationListener);*/
+        holder.setOnItemClickListener(this.onItemClickListener);
     }
 
     @Override
@@ -62,7 +64,6 @@ public class StopListAdapter extends RecyclerView.Adapter<StopListAdapter.ViewHo
         private final Context context;
         private Station station;
         private final StopItemBinding itemBinding;
-        //private OnManualValidationListener manualValidationListener;
 
         public ViewHolder(Context context, StopItemBinding itemBinding) {
             super(itemBinding.getRoot());
@@ -76,8 +77,12 @@ public class StopListAdapter extends RecyclerView.Adapter<StopListAdapter.ViewHo
             this.itemBinding.setStation(this.station);
         }
 
-        /*public void setOnManualValidationListener(OnManualValidationListener listener) {
-            this.manualValidationListener = listener;
-        }*/
+        public void setOnItemClickListener(OnItemClickListener<Station> listener) {
+            this.itemBinding.getRoot().setOnClickListener(view -> {
+                if (listener != null) {
+                    listener.onItemClick(this.itemBinding.getStation());
+                }
+            });
+        }
     }
 }
