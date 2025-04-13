@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.vdvcount.app.model.Station;
+import de.vdvcount.app.remote.RemoteRepository;
 
 public class StopSelectViewModel extends ViewModel {
 
@@ -23,10 +24,16 @@ public class StopSelectViewModel extends ViewModel {
     }
 
     public void loadStations(String lookupName) {
-        Station station1 = new Station();
-        station1.setId(4711);
-        station1.setName("Test Station");
+        Runnable runnable = () -> {
+            RemoteRepository repository = RemoteRepository.getInstance();
+            List<Station> stations = repository.getStopsByLookupName(lookupName);
 
-        this.stations.setValue(List.of(station1));
+            if (stations != null) {
+                this.stations.postValue(stations);
+            }
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 }
