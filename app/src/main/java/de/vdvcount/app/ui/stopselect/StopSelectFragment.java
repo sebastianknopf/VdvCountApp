@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -74,6 +75,8 @@ public class StopSelectFragment extends Fragment {
         appActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         appActivity.setTitle(R.string.stop_select_title);
 
+        this.setHasOptionsMenu(true);
+
         this.navigationController = appActivity.getNavigationController();
     }
 
@@ -86,6 +89,16 @@ public class StopSelectFragment extends Fragment {
         InputMethodManager imm = (InputMethodManager) this.requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.showSoftInput(this.dataBinding.edtStopName, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.navigationController.navigate(R.id.action_stopSelectFragment_to_departureFragment);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

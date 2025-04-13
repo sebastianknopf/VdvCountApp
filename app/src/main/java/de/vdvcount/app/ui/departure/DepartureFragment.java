@@ -58,6 +58,8 @@ public class DepartureFragment extends Fragment {
         appActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         appActivity.setTitle(R.string.departure_title);
 
+        this.setHasOptionsMenu(false);
+
         this.navigationController = appActivity.getNavigationController();
     }
 
