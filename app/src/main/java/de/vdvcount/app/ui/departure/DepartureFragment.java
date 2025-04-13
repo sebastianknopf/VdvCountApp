@@ -61,12 +61,22 @@ public class DepartureFragment extends Fragment {
         this.navigationController = appActivity.getNavigationController();
     }
 
-    private void initViewEvents() {
+    @Override
+    public void onResume() {
+        super.onResume();
 
+
+    }
+
+    private void initViewEvents() {
+        this.dataBinding.edtStopName.setOnClickListener(view -> {
+            this.navigationController.navigate(R.id.action_departureFragment_to_stopSelectFragment);
+        });
     }
 
     private void initObserverEvents() {
+        this.viewModel.getDepartures().observe(this.getViewLifecycleOwner(), departures -> {
 
+        });
     }
-
 }
