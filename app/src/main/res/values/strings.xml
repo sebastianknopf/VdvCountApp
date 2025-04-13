@@ -11,6 +11,7 @@
 
     <!-- DepartureFragment -->
     <string name="departure_title">Abfahrten</string>
+    <string name="departure_stop_name_hint">Haltestelle</string>
 
     <!-- StopSelectFragment -->
     <string name="stop_select_title">Haltestellenauswahl</string>
