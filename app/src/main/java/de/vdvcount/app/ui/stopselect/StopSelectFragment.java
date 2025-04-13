@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.StopListAdapter;
@@ -51,6 +53,11 @@ public class StopSelectFragment extends Fragment {
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
 
         this.dataBinding.lstStops.setAdapter(this.stopListAdapter);
+
+        StopSelectFragmentArgs args = StopSelectFragmentArgs.fromBundle(this.getArguments());
+        if (args.getStopName() != null) {
+            this.dataBinding.edtStopName.setText(args.getStopName());
+        }
 
         return this.dataBinding.getRoot();
     }
@@ -131,7 +138,11 @@ public class StopSelectFragment extends Fragment {
         });
 
         this.stopListAdapter.setOnItemClickListener(station -> {
-            this.navigationController.navigate(R.id.action_stopSelectFragment_to_departureFragment);
+            StopSelectFragmentDirections.ActionStopSelectFragmentToDepartureFragment action = StopSelectFragmentDirections.actionStopSelectFragmentToDepartureFragment();
+            action.setStopId(station.getId());
+            action.setStopName(station.getName());
+
+            this.navigationController.navigate(action);
         });
     }
 

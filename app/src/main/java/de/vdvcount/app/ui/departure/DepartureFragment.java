@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,9 @@ import android.view.ViewGroup;
 
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
+import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentDepartureBinding;
+import de.vdvcount.app.ui.stopselect.StopSelectFragmentDirections;
 import de.vdvcount.app.ui.stopselect.StopSelectViewModel;
 
 public class DepartureFragment extends Fragment {
@@ -34,6 +37,15 @@ public class DepartureFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_departure, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
+
+        DepartureFragmentArgs args = DepartureFragmentArgs.fromBundle(this.getArguments());
+        if (args.getStopId() != -1) {
+            Status.setInt(Status.CURRENT_STOP_ID, args.getStopId());
+        }
+
+        if (args.getStopName() != null) {
+            Status.setString(Status.CURRENT_STOP_NAME, args.getStopName());
+        }
 
         return this.dataBinding.getRoot();
     }
@@ -67,12 +79,20 @@ public class DepartureFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        int currentStopId = Status.getInt(Status.CURRENT_STOP_ID, -1);
+        String currentStopName = Status.getString(Status.CURRENT_STOP_NAME, null);
 
+        if (currentStopName != null) {
+            this.dataBinding.edtStopName.setText(currentStopName);
+        }
     }
 
     private void initViewEvents() {
         this.dataBinding.edtStopName.setOnClickListener(view -> {
-            this.navigationController.navigate(R.id.action_departureFragment_to_stopSelectFragment);
+            DepartureFragmentDirections.ActionDepartureFragmentToStopSelectFragment action = DepartureFragmentDirections.actionDepartureFragmentToStopSelectFragment();
+            action.setStopName(Status.getString(Status.CURRENT_STOP_NAME, null));
+
+            this.navigationController.navigate(action);
         });
     }
 

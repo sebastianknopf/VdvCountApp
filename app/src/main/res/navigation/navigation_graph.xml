@@ -28,6 +28,11 @@
             app:destination="@id/departureFragment"
             app:popUpTo="@id/departureFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="stopName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/departureFragment"
@@ -36,5 +41,14 @@
         <action
             android:id="@+id/action_departureFragment_to_stopSelectFragment"
             app:destination="@id/stopSelectFragment" />
+        <argument
+            android:name="stopId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="stopName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>
