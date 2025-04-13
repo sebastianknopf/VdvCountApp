@@ -9,6 +9,9 @@
     <string name="setup_failed">Setup fehlgeschlagen!</string>
     <string name="setup_performed_successfully">Setup erfolgreich abgeschlossen.</string>
 
+    <!-- DepartureFragment -->
+    <string name="departure_title">Abfahrten</string>
+
     <!-- StopSelectFragment -->
     <string name="stop_select_title">Haltestellenauswahl</string>
 
