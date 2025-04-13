@@ -3,6 +3,7 @@ package de.vdvcount.app.ui.stopselect;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
@@ -79,7 +81,12 @@ public class StopSelectFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        // open keyboard and focus search edit text
         this.dataBinding.edtStopName.requestFocus();
+        InputMethodManager imm = (InputMethodManager) this.requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(this.dataBinding.edtStopName, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
     private void initViewEvents() {
