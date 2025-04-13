@@ -16,6 +16,12 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/navigation_graph.xml"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_setupFragment_to_departureFragment"
+            app:destination="@id/departureFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph.xml"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -23,4 +29,8 @@
         android:name="de.vdvcount.app.ui.stopselect.StopSelectFragment"
         android:label="fragment_permission"
         tools:layout="@layout/fragment_setup" />
+    <fragment
+        android:id="@+id/departureFragment"
+        android:name="de.vdvcount.app.ui.departure.DepartureFragment"
+        android:label="DepartureFragment" />
 </navigation>
