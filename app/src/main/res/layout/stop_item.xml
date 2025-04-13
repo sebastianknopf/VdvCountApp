@@ -15,8 +15,8 @@
         android:id="@+id/layoutTicketTimeValidity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/app_default_spacing"
-        android:listSelector="@android:color/transparent">
+        android:padding="@dimen/app_medium_spacing"
+        android:background="?attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/imgPassengerIcon"
@@ -34,6 +34,7 @@
             android:layout_marginStart="@dimen/app_default_spacing"
             android:maxLines="1"
             android:text="@{station.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintTop_toTopOf="@id/imgPassengerIcon"
             app:layout_constraintLeft_toRightOf="@id/imgPassengerIcon"
             app:layout_constraintBottom_toBottomOf="@id/imgPassengerIcon"

@@ -14,6 +14,7 @@
 
     <!-- StopSelectFragment -->
     <string name="stop_select_title">Haltestellenauswahl</string>
+    <string name="stop_select_stop_name_hint">Haltestelle</string>
 
     <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>
