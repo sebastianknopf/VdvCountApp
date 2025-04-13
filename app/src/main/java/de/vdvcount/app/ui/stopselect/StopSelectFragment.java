@@ -67,10 +67,17 @@ public class StopSelectFragment extends Fragment {
         super.onStart();
 
         AppActivity appActivity = (AppActivity) this.getActivity();
-        appActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        appActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         appActivity.setTitle(R.string.stop_select_title);
 
         this.navigationController = appActivity.getNavigationController();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        this.dataBinding.edtStopName.requestFocus();
     }
 
     private void initViewEvents() {
