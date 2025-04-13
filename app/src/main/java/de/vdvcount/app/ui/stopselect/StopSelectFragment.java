@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
+import de.vdvcount.app.adapter.StopListAdapter;
 import de.vdvcount.app.databinding.FragmentStopSelectBinding;
 import de.vdvcount.app.ui.setup.SetupViewModel;
 
@@ -29,14 +30,22 @@ public class StopSelectFragment extends Fragment {
 
     private NavController navigationController;
 
+    private StopListAdapter stopListAdapter;
+
     public static StopSelectFragment newInstance() {
         return new StopSelectFragment();
+    }
+
+    public StopSelectFragment() {
+        this.stopListAdapter = new StopListAdapter();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_stop_select, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
+
+        this.dataBinding.lstStops.setAdapter(this.stopListAdapter);
 
         return this.dataBinding.getRoot();
     }
@@ -79,11 +88,15 @@ public class StopSelectFragment extends Fragment {
             public void afterTextChanged(Editable editable) {
             }
         });
+
+        this.stopListAdapter.setOnItemClickListener(station -> {
+            this.navigationController.navigate(R.id.action_stopSelectFragment_to_departureFragment);
+        });
     }
 
     private void initObserverEvents() {
         this.viewModel.getStations().observe(this.getViewLifecycleOwner(), stations -> {
-
+            this.stopListAdapter.setStationList(stations);
         });
     }
 }
