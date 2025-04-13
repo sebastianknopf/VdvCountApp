@@ -1,11 +1,9 @@
 package de.vdvcount.app.ui.stopselect;
 
-import androidx.databinding.ObservableList;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.vdvcount.app.model.Station;
@@ -23,7 +21,7 @@ public class StopSelectViewModel extends ViewModel {
         return this.stations;
     }
 
-    public void loadStations(String lookupName) {
+    public void loadStationsByLookupName(String lookupName) {
         Runnable runnable = () -> {
             RemoteRepository repository = RemoteRepository.getInstance();
             List<Station> stations = repository.getStopsByLookupName(lookupName);
