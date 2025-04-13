@@ -48,8 +48,8 @@ public class StopListAdapter extends RecyclerView.Adapter<StopListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Station obj = this.stationList.get(position);
-        /*holder.setTicket(obj, position);
-        holder.setOnManualValidationListener(this.manualValidationListener);*/
+        holder.setStation(obj, position);
+        //holder.setOnManualValidationListener(this.manualValidationListener);*/
     }
 
     @Override
@@ -71,8 +71,9 @@ public class StopListAdapter extends RecyclerView.Adapter<StopListAdapter.ViewHo
             this.itemBinding = itemBinding;
         }
 
-        public void setDeparture(Station station, int index) {
+        public void setStation(Station station, int index) {
             this.station = station;
+            this.itemBinding.setStation(this.station);
         }
 
         /*public void setOnManualValidationListener(OnManualValidationListener listener) {
