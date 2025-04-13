@@ -80,7 +80,7 @@ public class SetupFragment extends Fragment {
 
         if (Status.getString(Status.STATUS, Status.Values.INITIAL).equals(Status.Values.READY)) {
             // navigate to main fragment here
-            this.navigationController.navigate(R.id.action_setupFragment_to_stopSelectFragment);
+            this.navigationController.navigate(R.id.action_setupFragment_to_departureFragment);
         }
     }
 
@@ -127,7 +127,7 @@ public class SetupFragment extends Fragment {
                 Toast.makeText(this.requireContext(), R.string.setup_performed_successfully, Toast.LENGTH_LONG).show();
 
                 // if everything worked until here, setup is complete, navigate to stop select fragment
-                this.navigationController.navigate(R.id.action_setupFragment_to_stopSelectFragment);
+                this.navigationController.navigate(R.id.action_setupFragment_to_departureFragment);
             } else {
                 // that did not work - inform the user about the error
                 Toast.makeText(this.requireContext(), R.string.setup_failed, Toast.LENGTH_LONG).show();
