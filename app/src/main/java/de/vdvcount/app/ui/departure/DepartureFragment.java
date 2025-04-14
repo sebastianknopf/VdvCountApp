@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +18,6 @@ import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentDepartureBinding;
-import de.vdvcount.app.ui.stopselect.StopSelectFragmentDirections;
-import de.vdvcount.app.ui.stopselect.StopSelectViewModel;
 
 public class DepartureFragment extends Fragment {
 
@@ -39,12 +36,12 @@ public class DepartureFragment extends Fragment {
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
 
         DepartureFragmentArgs args = DepartureFragmentArgs.fromBundle(this.getArguments());
-        if (args.getStopId() != -1) {
-            Status.setInt(Status.CURRENT_STOP_ID, args.getStopId());
+        if (args.getStationId() != -1) {
+            Status.setInt(Status.CURRENT_STATION_ID, args.getStationId());
         }
 
-        if (args.getStopName() != null) {
-            Status.setString(Status.CURRENT_STOP_NAME, args.getStopName());
+        if (args.getStationName() != null) {
+            Status.setString(Status.CURRENT_STATION_NAME, args.getStationName());
         }
 
         return this.dataBinding.getRoot();
@@ -79,8 +76,8 @@ public class DepartureFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        int currentStopId = Status.getInt(Status.CURRENT_STOP_ID, -1);
-        String currentStopName = Status.getString(Status.CURRENT_STOP_NAME, null);
+        int currentStopId = Status.getInt(Status.CURRENT_STATION_ID, -1);
+        String currentStopName = Status.getString(Status.CURRENT_STATION_NAME, null);
 
         if (currentStopName != null) {
             this.dataBinding.edtStopName.setText(currentStopName);
@@ -89,8 +86,8 @@ public class DepartureFragment extends Fragment {
 
     private void initViewEvents() {
         this.dataBinding.edtStopName.setOnClickListener(view -> {
-            DepartureFragmentDirections.ActionDepartureFragmentToStopSelectFragment action = DepartureFragmentDirections.actionDepartureFragmentToStopSelectFragment();
-            action.setStopName(Status.getString(Status.CURRENT_STOP_NAME, null));
+            DepartureFragmentDirections.ActionDepartureFragmentToStationSelectFragment action = DepartureFragmentDirections.actionDepartureFragmentToStationSelectFragment();
+            action.setStationName(Status.getString(Status.CURRENT_STATION_NAME, null));
 
             this.navigationController.navigate(action);
         });

@@ -1,4 +1,4 @@
-package de.vdvcount.app.ui.stopselect;
+package de.vdvcount.app.ui.stationselect;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,11 +9,11 @@ import java.util.List;
 import de.vdvcount.app.model.Station;
 import de.vdvcount.app.remote.RemoteRepository;
 
-public class StopSelectViewModel extends ViewModel {
+public class StationSelectViewModel extends ViewModel {
 
     private MutableLiveData<List<Station>> stations;
 
-    public StopSelectViewModel() {
+    public StationSelectViewModel() {
         this.stations = new MutableLiveData<>();
     }
 

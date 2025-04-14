@@ -1,4 +1,4 @@
-package de.vdvcount.app.ui.stopselect;
+package de.vdvcount.app.ui.stationselect;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,17 +20,16 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.StopListAdapter;
 import de.vdvcount.app.databinding.FragmentStopSelectBinding;
 
-public class StopSelectFragment extends Fragment {
+public class StationSelectFragment extends Fragment {
 
     private FragmentStopSelectBinding dataBinding;
-    private StopSelectViewModel viewModel;
+    private StationSelectViewModel viewModel;
 
     private NavController navigationController;
 
@@ -39,11 +38,11 @@ public class StopSelectFragment extends Fragment {
     private Handler stopInputDebounceHandler;
     private StopListAdapter stopListAdapter;
 
-    public static StopSelectFragment newInstance() {
-        return new StopSelectFragment();
+    public static StationSelectFragment newInstance() {
+        return new StationSelectFragment();
     }
 
-    public StopSelectFragment() {
+    public StationSelectFragment() {
         this.stopInputDebounceHandler = new Handler();
         this.stopListAdapter = new StopListAdapter();
     }
@@ -55,10 +54,10 @@ public class StopSelectFragment extends Fragment {
 
         this.dataBinding.lstStops.setAdapter(this.stopListAdapter);
 
-        StopSelectFragmentArgs args = StopSelectFragmentArgs.fromBundle(this.getArguments());
-        if (args.getStopName() != null) {
-            this.dataBinding.edtStopName.setText(args.getStopName());
-            this.currentStopName = args.getStopName();
+        StationSelectFragmentArgs args = StationSelectFragmentArgs.fromBundle(this.getArguments());
+        if (args.getStationName() != null) {
+            this.dataBinding.edtStopName.setText(args.getStationName());
+            this.currentStopName = args.getStationName();
         }
 
         return this.dataBinding.getRoot();
@@ -70,7 +69,7 @@ public class StopSelectFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        this.viewModel = new ViewModelProvider(this).get(StopSelectViewModel.class);
+        this.viewModel = new ViewModelProvider(this).get(StationSelectViewModel.class);
 
         if (this.currentStopName != null) {
             this.viewModel.loadStationsByLookupName(this.currentStopName);
@@ -108,7 +107,7 @@ public class StopSelectFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            this.navigationController.navigate(R.id.action_stopSelectFragment_to_departureFragment);
+            this.navigationController.navigate(R.id.action_stationSelectFragment_to_departureFragment);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -144,9 +143,9 @@ public class StopSelectFragment extends Fragment {
         });
 
         this.stopListAdapter.setOnItemClickListener(station -> {
-            StopSelectFragmentDirections.ActionStopSelectFragmentToDepartureFragment action = StopSelectFragmentDirections.actionStopSelectFragmentToDepartureFragment();
-            action.setStopId(station.getId());
-            action.setStopName(station.getName());
+            StationSelectFragmentDirections.ActionStationSelectFragmentToDepartureFragment action = StationSelectFragmentDirections.actionStationSelectFragmentToDepartureFragment();
+            action.setStationId(station.getId());
+            action.setStationName(station.getName());
 
             this.navigationController.navigate(action);
         });

@@ -20,16 +20,16 @@
 
     <fragment
         android:id="@+id/stopSelectFragment"
-        android:name="de.vdvcount.app.ui.stopselect.StopSelectFragment"
+        android:name="de.vdvcount.app.ui.stationselect.StationSelectFragment"
         android:label="fragment_permission"
         tools:layout="@layout/fragment_setup" >
         <action
-            android:id="@+id/action_stopSelectFragment_to_departureFragment"
+            android:id="@+id/action_stationSelectFragment_to_departureFragment"
             app:destination="@id/departureFragment"
             app:popUpTo="@id/departureFragment"
             app:popUpToInclusive="true" />
         <argument
-            android:name="stopName"
+            android:name="stationName"
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null" />
@@ -39,14 +39,14 @@
         android:name="de.vdvcount.app.ui.departure.DepartureFragment"
         android:label="DepartureFragment" >
         <action
-            android:id="@+id/action_departureFragment_to_stopSelectFragment"
+            android:id="@+id/action_departureFragment_to_stationSelectFragment"
             app:destination="@id/stopSelectFragment" />
         <argument
-            android:name="stopId"
+            android:name="stationId"
             app:argType="integer"
             android:defaultValue="-1" />
         <argument
-            android:name="stopName"
+            android:name="stationName"
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null" />
