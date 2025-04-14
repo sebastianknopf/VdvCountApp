@@ -34,6 +34,7 @@ public class StopSelectFragment extends Fragment {
 
     private NavController navigationController;
 
+    private String currentStopName;
     private Runnable stopInputDebounceRunnable;
     private Handler stopInputDebounceHandler;
     private StopListAdapter stopListAdapter;
@@ -57,6 +58,7 @@ public class StopSelectFragment extends Fragment {
         StopSelectFragmentArgs args = StopSelectFragmentArgs.fromBundle(this.getArguments());
         if (args.getStopName() != null) {
             this.dataBinding.edtStopName.setText(args.getStopName());
+            this.currentStopName = args.getStopName();
         }
 
         return this.dataBinding.getRoot();
@@ -69,6 +71,10 @@ public class StopSelectFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.viewModel = new ViewModelProvider(this).get(StopSelectViewModel.class);
+
+        if (this.currentStopName != null) {
+            this.viewModel.loadStationsByLookupName(this.currentStopName);
+        }
 
         this.initViewEvents();
         this.initObserverEvents();
