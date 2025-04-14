@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/app_default_spacing"
             android:layout_marginEnd="@dimen/app_default_spacing"
-            android:text="@{departure.headsign, default=IttersbachBahnhof}"
+            android:text="@{departure.headsign}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:singleLine="true"
             android:ellipsize="end"
