@@ -4,6 +4,8 @@
         <item name="colorPrimary">@color/color_primary_200</item>
         <item name="colorPrimaryDark">@color/gray</item>
         <item name="colorSecondary">@color/color_secondary_200</item>
+
+        <item name="defaultIconColor">@color/color_secondary_200</item>
     </style>
 
     <style name="Theme.Realtimer.Toolbar" parent="Theme.VdvCount">

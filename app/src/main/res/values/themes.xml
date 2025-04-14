@@ -4,6 +4,11 @@
         <item name="colorPrimary">@color/color_primary_600</item>
         <item name="colorPrimaryDark">@color/color_primary_900</item>
         <item name="colorSecondary">@color/color_secondary_600</item>
+
+        <item name="defaultIconColor">@color/gray</item>
+
+        <item name="android:textColorPrimary">@color/gray</item>
+        <item name="android:textColorSecondary">@color/color_secondary_600</item>
     </style>
 
     <style name="Theme.Realtimer" parent="Theme.VdvCount" />
