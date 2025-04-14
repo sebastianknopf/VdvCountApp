@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="departure"
+            type="de.vdvcount.app.model.Departure" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/app_medium_spacing"
+        android:background="?attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/lblDepartureTime"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textStyle="bold"
+            app:date="@{departure.departureTimestamp}"
+            app:dateFormat="@string/str_time_format"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="09:59"/>
+
+        <ImageView
+            android:id="@+id/imgRouteType"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="@dimen/app_default_spacing"
+            android:src="@drawable/ic_public_transport"
+            app:tint="?attr/defaultIconColor"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/lblDepartureTime"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/lblRouteName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/app_default_spacing"
+            android:text="@{departure.line.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/imgRouteType"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="X645" />
+
+        <TextView
+            android:id="@+id/lblTripHeadsign"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/app_default_spacing"
+            android:layout_marginEnd="@dimen/app_default_spacing"
+            android:text="@{departure.headsign, default=IttersbachBahnhof}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:singleLine="true"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/lblRouteName"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Stuttgart Hbf / Arnulf-Klett-Platz" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
