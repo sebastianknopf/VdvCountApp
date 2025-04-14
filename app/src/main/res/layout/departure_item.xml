@@ -24,7 +24,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textStyle="bold"
             app:date="@{departure.departureTimestamp}"
-            app:dateFormat="@string/str_time_format"
+            app:dateFormat="@{@string/str_format_time}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
+import de.vdvcount.app.adapter.DepartureListAdapter;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentDepartureBinding;
 
@@ -26,14 +27,22 @@ public class DepartureFragment extends Fragment {
 
     private NavController navigationController;
 
+    private DepartureListAdapter departureListAdapter;
+
     public static DepartureFragment newInstance() {
         return new DepartureFragment();
+    }
+
+    public DepartureFragment() {
+        this.departureListAdapter = new DepartureListAdapter();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_departure, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
+
+        this.dataBinding.lstDepartures.setAdapter(this.departureListAdapter);
 
         DepartureFragmentArgs args = DepartureFragmentArgs.fromBundle(this.getArguments());
         if (args.getStationId() != -1) {
@@ -76,11 +85,15 @@ public class DepartureFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        int currentStopId = Status.getInt(Status.CURRENT_STATION_ID, -1);
-        String currentStopName = Status.getString(Status.CURRENT_STATION_NAME, null);
+        int currentStationId = Status.getInt(Status.CURRENT_STATION_ID, -1);
+        String currentStationName = Status.getString(Status.CURRENT_STATION_NAME, null);
 
-        if (currentStopName != null) {
-            this.dataBinding.edtStopName.setText(currentStopName);
+        if (currentStationId != -1) {
+            this.viewModel.loadDepartures(currentStationId);
+        }
+
+        if (currentStationName != null) {
+            this.dataBinding.edtStopName.setText(currentStationName);
         }
     }
 
@@ -95,7 +108,7 @@ public class DepartureFragment extends Fragment {
 
     private void initObserverEvents() {
         this.viewModel.getDepartures().observe(this.getViewLifecycleOwner(), departures -> {
-
+            this.departureListAdapter.setDepartureList(departures);
         });
     }
 }
