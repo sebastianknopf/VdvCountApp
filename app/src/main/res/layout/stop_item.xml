@@ -34,7 +34,7 @@
             android:layout_marginStart="@dimen/app_default_spacing"
             android:maxLines="1"
             android:text="@{station.name}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             app:layout_constraintTop_toTopOf="@id/imgDepartureLineType"
             app:layout_constraintLeft_toRightOf="@id/imgDepartureLineType"
             app:layout_constraintBottom_toBottomOf="@id/imgDepartureLineType"
