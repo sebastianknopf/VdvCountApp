@@ -15,7 +15,9 @@ import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.VehicleListAdapter;
+import de.vdvcount.app.common.OnItemClickListener;
 import de.vdvcount.app.databinding.FragmentTripParamsBinding;
+import de.vdvcount.app.model.Vehicle;
 import de.vdvcount.app.ui.stationselect.StationSelectFragmentArgs;
 import de.vdvcount.app.ui.stationselect.StationSelectViewModel;
 
@@ -23,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 public class TripParamsFragment extends Fragment {
 
@@ -114,7 +117,11 @@ public class TripParamsFragment extends Fragment {
     }
 
     private void initViewEvents() {
+        this.dataBinding.edtVehicle.setOnItemClickListener((adapterView, view, i, l) -> {
+            Vehicle vehicle = this.vehicleListAdapter.getItem(i);
 
+            this.dataBinding.btnContinue.setEnabled(vehicle != null);
+        });
     }
 
     private void initObserverEvents() {
