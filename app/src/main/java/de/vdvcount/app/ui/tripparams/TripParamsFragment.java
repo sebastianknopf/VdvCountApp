@@ -27,6 +27,8 @@ public class TripParamsFragment extends Fragment {
 
     private NavController navigationController;
 
+    private int currentTripId;
+
     public static TripParamsFragment newInstance() {
         return new TripParamsFragment();
     }
@@ -38,11 +40,26 @@ public class TripParamsFragment extends Fragment {
 
         //this.dataBinding.lstStops.setAdapter(this.stopListAdapter);
 
-        /* args = StationSelectFragmentArgs.fromBundle(this.getArguments());
-        if (args.getStationName() != null) {
-            this.dataBinding.edtStopName.setText(args.getStationName());
-            this.currentStopName = args.getStationName();
-        }*/
+        TripParamsFragmentArgs args = TripParamsFragmentArgs.fromBundle(this.getArguments());
+        if (args.getTripId() != -1) {
+            this.currentTripId = args.getTripId();
+        }
+
+        if (args.getTripHeadsign() != null) {
+
+        }
+
+        if (args.getLineName() != null) {
+
+        }
+
+        if (args.getDepartureStopName() != null) {
+
+        }
+
+        if (args.getFormattedDepartureTime() != null) {
+
+        }
 
         return this.dataBinding.getRoot();
     }
