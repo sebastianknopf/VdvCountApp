@@ -14,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.DepartureListAdapter;
@@ -108,10 +111,13 @@ public class DepartureFragment extends Fragment {
         });
 
         this.departureListAdapter.setOnItemClickListener(departure -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+
             DepartureFragmentDirections.ActionDepartureFragmentToTripParamsFragment action = DepartureFragmentDirections.actionDepartureFragmentToTripParamsFragment(
                     departure.getTripId(),
                     departure.getHeadsign(),
-                    departure.getLine().getName()
+                    departure.getLine().getName(),
+                    sdf.format(departure.getDepartureTimestamp())
             );
 
             this.navigationController.navigate(action);

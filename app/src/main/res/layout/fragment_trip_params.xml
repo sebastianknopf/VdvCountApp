@@ -5,11 +5,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/app_default_spacing">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             app:layout_constraintBottom_toTopOf="@id/btnContinue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +31,7 @@
                 android:layout_margin="@dimen/app_default_spacing"
                 android:layout_weight="1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                tools:text="Zählung auf der Linie X nach Y"/>
+                tools:text="Zählung auf der Linie X nach Y, Abfahrt um 12:11 Uhr"/>
 
         </LinearLayout>
 
@@ -40,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/trip_params_start_counting"
+            android:enabled="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
