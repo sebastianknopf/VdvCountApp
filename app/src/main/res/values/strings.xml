@@ -19,6 +19,8 @@
 
     <!-- TripParamsFragment -->
     <string name="trip_params_title">Fahrtdetails</string>
+    <string name="trip_params_trip_info">Zählung auf der Linie %s nach %s</string>
+    <string name="trip_params_start_counting">Zählung beginnen</string>
 
     <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>

@@ -45,12 +45,14 @@ public class TripParamsFragment extends Fragment {
             this.currentTripId = args.getTripId();
         }
 
-        if (args.getTripHeadsign() != null) {
+        if (args.getLineName() != null && args.getTripHeadsign() != null) {
+            String tripInfo = this.requireContext().getString(
+                    R.string.trip_params_trip_info,
+                    args.getLineName(),
+                    args.getTripHeadsign()
+            );
 
-        }
-
-        if (args.getLineName() != null) {
-
+            this.dataBinding.lblTripInfo.setText(tripInfo);
         }
 
         return this.dataBinding.getRoot();
