@@ -12,16 +12,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/app_default_spacing">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/lblLineName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/app_default_spacing"
+            android:layout_margin="@dimen/app_medium_spacing"
             android:maxLines="1"
             android:text="@{vehicle.name}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             tools:text="PF-VB-496" />
 
     </LinearLayout>

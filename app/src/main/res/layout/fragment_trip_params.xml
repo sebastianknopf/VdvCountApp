@@ -40,8 +40,7 @@
             android:id="@+id/edtVehicleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@id/btnContinue"
+            android:layout_marginTop="@dimen/app_medium_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutTripInfo">
@@ -50,8 +49,8 @@
                 android:id="@+id/edtVehicle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/Widget.Material3.TextInputEditText.FilledBox"
-                android:hint="@string/trip_params_vehicle" />
+                android:hint="@string/trip_params_vehicle"
+                style="@style/TextInputAutoCompleteTextViewStyle"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

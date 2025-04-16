@@ -3,6 +3,9 @@ package de.vdvcount.app.ui.tripparams;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
+import de.vdvcount.app.adapter.VehicleListAdapter;
 import de.vdvcount.app.databinding.FragmentTripParamsBinding;
 import de.vdvcount.app.ui.stationselect.StationSelectFragmentArgs;
 import de.vdvcount.app.ui.stationselect.StationSelectViewModel;
@@ -28,9 +32,21 @@ public class TripParamsFragment extends Fragment {
     private NavController navigationController;
 
     private int currentTripId;
+    private VehicleListAdapter vehicleListAdapter;
 
     public static TripParamsFragment newInstance() {
         return new TripParamsFragment();
+    }
+
+    public TripParamsFragment() {
+
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        this.vehicleListAdapter = new VehicleListAdapter(this.requireContext());
     }
 
     @Override
@@ -38,7 +54,7 @@ public class TripParamsFragment extends Fragment {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_trip_params, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
 
-        //this.dataBinding.lstStops.setAdapter(this.stopListAdapter);
+        this.dataBinding.edtVehicle.setAdapter(this.vehicleListAdapter);
 
         TripParamsFragmentArgs args = TripParamsFragmentArgs.fromBundle(this.getArguments());
         if (args.getTripId() != -1) {
@@ -64,6 +80,9 @@ public class TripParamsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.viewModel = new ViewModelProvider(this).get(TripParamsViewModel.class);
+
+        this.viewModel.loadVehicles();
+        this.viewModel.loadObjectClasses();
 
         this.initViewEvents();
         this.initObserverEvents();
@@ -99,7 +118,13 @@ public class TripParamsFragment extends Fragment {
     }
 
     private void initObserverEvents() {
+        this.viewModel.getVehicles().observe(this.getViewLifecycleOwner(), vehicles -> {
+            this.vehicleListAdapter.setVehicles(vehicles);
+        });
 
+        this.viewModel.getObjectClasses().observe(this.getViewLifecycleOwner(), objectClasses -> {
+
+        });
     }
 
 }
