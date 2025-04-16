@@ -53,14 +53,6 @@ public class TripParamsFragment extends Fragment {
 
         }
 
-        if (args.getDepartureStopName() != null) {
-
-        }
-
-        if (args.getFormattedDepartureTime() != null) {
-
-        }
-
         return this.dataBinding.getRoot();
     }
 
@@ -90,7 +82,9 @@ public class TripParamsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            this.navigationController.navigate(R.id.action_stationSelectFragment_to_departureFragment);
+            TripParamsFragmentDirections.ActionTripParamsFragmentToDepartureFragment action = TripParamsFragmentDirections.actionTripParamsFragmentToDepartureFragment();
+            this.navigationController.navigate(action);
+
             return true;
         } else {
             return super.onOptionsItemSelected(item);

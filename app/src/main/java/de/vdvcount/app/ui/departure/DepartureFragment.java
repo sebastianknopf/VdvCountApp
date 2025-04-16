@@ -17,8 +17,10 @@ import android.view.ViewGroup;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.DepartureListAdapter;
+import de.vdvcount.app.common.OnItemClickListener;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentDepartureBinding;
+import de.vdvcount.app.model.Departure;
 
 public class DepartureFragment extends Fragment {
 
@@ -101,6 +103,16 @@ public class DepartureFragment extends Fragment {
         this.dataBinding.edtStopName.setOnClickListener(view -> {
             DepartureFragmentDirections.ActionDepartureFragmentToStationSelectFragment action = DepartureFragmentDirections.actionDepartureFragmentToStationSelectFragment();
             action.setStationName(Status.getString(Status.CURRENT_STATION_NAME, null));
+
+            this.navigationController.navigate(action);
+        });
+
+        this.departureListAdapter.setOnItemClickListener(departure -> {
+            DepartureFragmentDirections.ActionDepartureFragmentToTripParamsFragment action = DepartureFragmentDirections.actionDepartureFragmentToTripParamsFragment(
+                    departure.getTripId(),
+                    departure.getHeadsign(),
+                    departure.getLine().getName()
+            );
 
             this.navigationController.navigate(action);
         });
