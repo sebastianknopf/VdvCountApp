@@ -17,6 +17,9 @@
     <string name="stop_select_title">Haltestellenauswahl</string>
     <string name="stop_select_stop_name_hint">Haltestelle</string>
 
+    <!-- TripParamsFragment -->
+    <string name="trip_params_title">Fahrtdetails</string>
+
     <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>
     <string name="app_reset_counter">Noch %dx zum Zurücksetzen.</string>

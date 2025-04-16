@@ -67,8 +67,6 @@ public class StationSelectFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        super.onViewCreated(view, savedInstanceState);
-
         this.viewModel = new ViewModelProvider(this).get(StationSelectViewModel.class);
 
         if (this.currentStopName != null) {
