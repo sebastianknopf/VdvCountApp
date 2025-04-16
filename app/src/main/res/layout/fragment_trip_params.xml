@@ -9,10 +9,11 @@
         android:padding="@dimen/app_default_spacing">
 
         <LinearLayout
+            android:id="@+id/layoutTripInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            app:layout_constraintBottom_toTopOf="@id/btnContinue"
+            app:layout_constraintBottom_toTopOf="@id/edtVehicleLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -35,7 +36,24 @@
 
         </LinearLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edtVehicleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@id/btnContinue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutTripInfo">
 
+            <de.vdvcount.app.view.TextInputAutoCompleteTextView
+                android:id="@+id/edtVehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/Widget.Material3.TextInputEditText.FilledBox"
+                android:hint="@string/trip_params_vehicle" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnContinue"

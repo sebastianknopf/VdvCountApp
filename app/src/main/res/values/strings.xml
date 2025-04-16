@@ -20,6 +20,9 @@
     <!-- TripParamsFragment -->
     <string name="trip_params_title">Fahrtdetails</string>
     <string name="trip_params_trip_info">Zählung auf der Linie %s nach %s, Abfahrt um %s Uhr</string>
+    <string name="trip_params_vehicle">Fahrzeug</string>
+    <string name="trip_params_doors">Türen</string>
+    <string name="trip_params_object_classes">Objektklassen</string>
     <string name="trip_params_start_counting">Zählung beginnen</string>
 
     <!-- Common Strings -->
