@@ -5,14 +5,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/app_default_spacing">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/layoutTripInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:padding="@dimen/app_default_spacing"
             app:layout_constraintBottom_toTopOf="@id/edtVehicleLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,6 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/app_large_spacing"
+            android:layout_marginStart="@dimen/app_default_spacing"
+            android:layout_marginEnd="@dimen/app_default_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutTripInfo">
@@ -59,6 +61,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/app_large_spacing"
+            android:layout_marginStart="@dimen/app_default_spacing"
+            android:layout_marginEnd="@dimen/app_default_spacing"
             android:text="@string/trip_params_doors"
             android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,6 +73,7 @@
             android:id="@+id/lstDoors"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/app_default_spacing"
             android:layout_marginBottom="@dimen/app_large_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +85,9 @@
             android:id="@+id/btnContinue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/app_default_spacing"
+            android:layout_marginEnd="@dimen/app_default_spacing"
+            android:layout_marginBottom="@dimen/app_default_spacing"
             android:text="@string/trip_params_start_counting"
             android:enabled="false"
             app:layout_constraintStart_toStartOf="parent"
