@@ -101,9 +101,9 @@ public class TripParamsFragment extends Fragment {
 
         AppActivity appActivity = (AppActivity) this.getActivity();
         appActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        appActivity.setTitle(R.string.trip_details_title);
+        appActivity.setTitle(R.string.trip_params_title);
 
-        this.setHasOptionsMenu(false);
+        this.setHasOptionsMenu(true);
 
         this.navigationController = appActivity.getNavigationController();
     }

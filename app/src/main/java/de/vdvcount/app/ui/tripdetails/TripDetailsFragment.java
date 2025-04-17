@@ -16,13 +16,14 @@ import android.view.ViewGroup;
 import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
+import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
 import de.vdvcount.app.databinding.FragmentTripParamsBinding;
 import de.vdvcount.app.ui.tripparams.TripParamsFragmentArgs;
 import de.vdvcount.app.ui.tripparams.TripParamsViewModel;
 
 public class TripDetailsFragment extends Fragment {
 
-    private FragmentTripParamsBinding dataBinding;
+    private FragmentTripDetailsBinding dataBinding;
     private TripDetailsViewModel viewModel;
 
     private NavController navigationController;
@@ -36,21 +37,10 @@ public class TripDetailsFragment extends Fragment {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_trip_details, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
 
-        /*TripParamsFragmentArgs args = TripParamsFragmentArgs.fromBundle(this.getArguments());
-        if (args.getTripId() != -1) {
-            this.currentTripId = args.getTripId();
+        TripDetailsFragmentArgs args = TripDetailsFragmentArgs.fromBundle(this.getArguments());
+        if (args.getTripId() != -1 && args.getStartStopSequence() != -1) {
+            this.viewModel.startCountedTrip(args.getTripId(), args.getStartStopSequence());
         }
-
-        if (args.getLineName() != null && args.getTripHeadsign() != null && args.getFormattedDepartureTime() != null) {
-            String tripInfo = this.requireContext().getString(
-                    R.string.trip_params_trip_info,
-                    args.getLineName(),
-                    args.getTripHeadsign(),
-                    args.getFormattedDepartureTime()
-            );
-
-            this.dataBinding.lblTripInfo.setText(tripInfo);
-        }*/
 
         return this.dataBinding.getRoot();
     }
@@ -74,15 +64,17 @@ public class TripDetailsFragment extends Fragment {
 
         AppActivity appActivity = (AppActivity) this.getActivity();
         appActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        appActivity.setTitle(R.string.trip_params_title);
+        appActivity.setTitle(R.string.trip_details_title);
 
-        this.setHasOptionsMenu(true);
+        this.setHasOptionsMenu(false);
 
         this.navigationController = appActivity.getNavigationController();
     }
 
     private void initViewEvents() {
-
+        this.dataBinding.btnQuit.setOnClickListener(view -> {
+            this.viewModel.closeCountedTrip();
+        });
     }
 
     private void initObserverEvents() {
