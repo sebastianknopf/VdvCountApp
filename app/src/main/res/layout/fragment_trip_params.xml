@@ -40,7 +40,7 @@
             android:id="@+id/edtVehicleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/app_medium_spacing"
+            android:layout_marginTop="@dimen/app_large_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutTripInfo">
@@ -53,6 +53,27 @@
                 style="@style/TextInputAutoCompleteTextViewStyle"/>
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/lblDoors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/app_large_spacing"
+            android:text="@string/trip_params_doors"
+            android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edtVehicleLayout" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lstDoors"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/app_large_spacing"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lblDoors"
+            app:layout_constraintBottom_toTopOf="@id/btnContinue" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnContinue"

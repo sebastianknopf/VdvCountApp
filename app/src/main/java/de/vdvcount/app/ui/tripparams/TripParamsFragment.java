@@ -21,6 +21,8 @@ import de.vdvcount.app.model.Vehicle;
 import de.vdvcount.app.ui.stationselect.StationSelectFragmentArgs;
 import de.vdvcount.app.ui.stationselect.StationSelectViewModel;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -117,6 +119,21 @@ public class TripParamsFragment extends Fragment {
     }
 
     private void initViewEvents() {
+        this.dataBinding.edtVehicle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                dataBinding.btnContinue.setEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
         this.dataBinding.edtVehicle.setOnItemClickListener((adapterView, view, i, l) -> {
             Vehicle vehicle = this.vehicleListAdapter.getItem(i);
 
