@@ -41,7 +41,10 @@ public class VehicleListAdapter extends ArrayAdapter<Vehicle> implements Filtera
                 if (constraint != null) {
                     ArrayList<Vehicle> suggestions = new ArrayList<Vehicle>();
                     for (Vehicle vehicle : vehicleList) {
-                        if (vehicle.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                        String normalizedVehicleName = normalizeVehicleName(vehicle.getName());
+                        String normalizedConstraint = normalizeVehicleName(constraint.toString());
+
+                        if (normalizedVehicleName.contains(normalizedConstraint)) {
                             suggestions.add(vehicle);
                         }
                     }
@@ -59,8 +62,6 @@ public class VehicleListAdapter extends ArrayAdapter<Vehicle> implements Filtera
 
                 if (results != null && results.count > 0) {
                     addAll((ArrayList<Vehicle>) results.values);
-                } else {
-                    addAll(vehicleList);
                 }
 
                 notifyDataSetChanged();
@@ -104,5 +105,14 @@ public class VehicleListAdapter extends ArrayAdapter<Vehicle> implements Filtera
     @Override
     public Filter getFilter() {
         return this.filter;
+    }
+
+    private String normalizeVehicleName(String vehicleName) {
+        vehicleName = vehicleName.toLowerCase();
+        vehicleName = vehicleName.replace("_", "-");
+        vehicleName = vehicleName.replace(".", "-");
+        vehicleName = vehicleName.replace(" ", "-");
+
+        return vehicleName;
     }
 }
