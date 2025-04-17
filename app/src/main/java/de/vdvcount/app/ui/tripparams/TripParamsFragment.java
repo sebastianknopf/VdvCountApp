@@ -4,8 +4,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,12 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
+import de.vdvcount.app.adapter.DoorListAdapter;
 import de.vdvcount.app.adapter.VehicleListAdapter;
-import de.vdvcount.app.common.OnItemClickListener;
 import de.vdvcount.app.databinding.FragmentTripParamsBinding;
 import de.vdvcount.app.model.Vehicle;
-import de.vdvcount.app.ui.stationselect.StationSelectFragmentArgs;
-import de.vdvcount.app.ui.stationselect.StationSelectViewModel;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,7 +23,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TripParamsFragment extends Fragment {
 
@@ -37,7 +35,9 @@ public class TripParamsFragment extends Fragment {
     private NavController navigationController;
 
     private int currentTripId;
+    private String currentVehicleId;
     private VehicleListAdapter vehicleListAdapter;
+    private DoorListAdapter doorListAdapter;
 
     public static TripParamsFragment newInstance() {
         return new TripParamsFragment();
@@ -52,6 +52,7 @@ public class TripParamsFragment extends Fragment {
         super.onAttach(context);
 
         this.vehicleListAdapter = new VehicleListAdapter(this.requireContext());
+        this.doorListAdapter = new DoorListAdapter();
     }
 
     @Override
@@ -60,6 +61,7 @@ public class TripParamsFragment extends Fragment {
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
 
         this.dataBinding.edtVehicle.setAdapter(this.vehicleListAdapter);
+        this.dataBinding.lstDoors.setAdapter(this.doorListAdapter);
 
         TripParamsFragmentArgs args = TripParamsFragmentArgs.fromBundle(this.getArguments());
         if (args.getTripId() != -1) {
@@ -126,7 +128,10 @@ public class TripParamsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                dataBinding.btnContinue.setEnabled(false);
+                currentVehicleId = null;
+                doorListAdapter.setDoorList(new ArrayList<>());
+
+                validateInputs();
             }
 
             @Override
@@ -136,8 +141,19 @@ public class TripParamsFragment extends Fragment {
 
         this.dataBinding.edtVehicle.setOnItemClickListener((adapterView, view, i, l) -> {
             Vehicle vehicle = this.vehicleListAdapter.getItem(i);
+            this.currentVehicleId = vehicle.getName();
 
-            this.dataBinding.btnContinue.setEnabled(vehicle != null);
+            List<String> doorList = new ArrayList<>();
+            for (int d = 1; d <= vehicle.getNumDoors(); d++) {
+                doorList.add(String.valueOf(d));
+            }
+            this.doorListAdapter.setDoorList(doorList);
+
+            this.validateInputs();
+        });
+
+        this.doorListAdapter.setOnItemSelectListener((item, selected) -> {
+            this.validateInputs();
         });
     }
 
@@ -147,8 +163,21 @@ public class TripParamsFragment extends Fragment {
         });
 
         this.viewModel.getObjectClasses().observe(this.getViewLifecycleOwner(), objectClasses -> {
-
         });
+    }
+
+    private void validateInputs() {
+        boolean inputsValid = true;
+
+        if (this.currentVehicleId == null) {
+            inputsValid = false;
+        }
+
+        if (this.doorListAdapter.getSelectedDoorList().size() < 1) {
+            inputsValid = false;
+        }
+
+        this.dataBinding.btnContinue.setEnabled(inputsValid);
     }
 
 }
