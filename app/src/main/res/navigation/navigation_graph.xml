@@ -98,5 +98,8 @@
         <argument
             android:name="startStopSequence"
             app:argType="integer" />
+        <argument
+            android:name="countedDoorIds"
+            app:argType="string[]" />
     </fragment>
 </navigation>
