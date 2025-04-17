@@ -155,6 +155,16 @@ public class TripParamsFragment extends Fragment {
         this.doorListAdapter.setOnItemSelectListener((item, selected) -> {
             this.validateInputs();
         });
+
+        this.dataBinding.btnContinue.setOnClickListener(view -> {
+            TripParamsFragmentDirections.ActionTripParamsFragmentToTripDetailsFragment action = TripParamsFragmentDirections.actionTripParamsFragmentToTripDetailsFragment(
+                    this.currentTripId,
+                    0,
+                    this.doorListAdapter.getSelectedDoorList().toArray(new String[0])
+            );
+
+            this.navigationController.navigate(action);
+        });
     }
 
     private void initObserverEvents() {

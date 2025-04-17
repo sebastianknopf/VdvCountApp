@@ -16,6 +16,12 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/navigation_graph.xml"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_setupFragment_to_tripDetailsFragment"
+            app:destination="@id/tripDetailsFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph.xml"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
