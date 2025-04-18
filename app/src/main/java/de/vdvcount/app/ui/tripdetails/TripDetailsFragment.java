@@ -23,6 +23,8 @@ import de.vdvcount.app.R;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
 import de.vdvcount.app.databinding.FragmentTripParamsBinding;
+import de.vdvcount.app.model.CountedStopTime;
+import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.ui.tripparams.TripParamsFragmentArgs;
 import de.vdvcount.app.ui.tripparams.TripParamsViewModel;
 
@@ -96,9 +98,17 @@ public class TripDetailsFragment extends Fragment {
 
     private void initViewEvents() {
         this.dataBinding.btnQuit.setOnClickListener(view -> {
+            CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
+
             this.viewModel.closeCountedTrip();
 
             TripDetailsFragmentDirections.ActionTripDetailsFragmentToDepartureFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToDepartureFragment();
+            if (countedTrip != null) {
+                CountedStopTime countedStopTime = countedTrip.getCountedStopTimes().get(countedTrip.getCountedStopTimes().size() - 1);
+                action.setStationId(countedStopTime.getStop().getParentId());
+                action.setStationName(countedStopTime.getStop().getName());
+            }
+
             this.navigationController.navigate(action);
         });
     }
