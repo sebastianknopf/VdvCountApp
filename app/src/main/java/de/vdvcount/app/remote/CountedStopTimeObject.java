@@ -1,5 +1,7 @@
 package de.vdvcount.app.remote;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +11,7 @@ import de.vdvcount.app.model.PassengerCountingEvent;
 
 public class CountedStopTimeObject extends StopTimeObject {
 
+    @SerializedName("passenger_counting_events")
     private List<PassengerCountingEventObject> passengerCountingEvents;
 
     public CountedStopTimeObject() {

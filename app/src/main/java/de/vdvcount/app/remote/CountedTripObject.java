@@ -1,5 +1,7 @@
 package de.vdvcount.app.remote;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,11 @@ import de.vdvcount.app.model.PassengerCountingEvent;
 
 public class CountedTripObject extends TripObject {
 
+    @SerializedName("vehicle_id")
+    private String vehicleId;
+    @SerializedName("counted_stop_times")
     private List<CountedStopTimeObject> countedStopTimes;
+    @SerializedName("unmatched_passenger_counting_events")
     private List<PassengerCountingEventObject> unmatchedPassengerCountingEvents;
 
     public CountedTripObject() {
@@ -25,6 +31,14 @@ public class CountedTripObject extends TripObject {
     @Override
     public void setStopTimes(List<StopTimeObject> stopTimes) {
         throw new RuntimeException("Method setStopTimes not available for CountedTripObject object!");
+    }
+
+    public String getVehicleId() {
+        return this.vehicleId;
+    }
+
+    public void setVehicleId(String vehicleId) {
+        this.vehicleId = vehicleId;
     }
 
     public List<CountedStopTimeObject> getCountedStopTimes() {
@@ -53,6 +67,7 @@ public class CountedTripObject extends TripObject {
         domainModel.setHeadsign(this.getHeadsign());
         domainModel.setInternationalId(this.getInternationalId());
         domainModel.setNextTripId(this.getNextTripId());
+        domainModel.setVehicleId(this.getVehicleId());
 
         List<CountedStopTime> countedStopTimes = new ArrayList<>();
         for (CountedStopTimeObject obj : this.getCountedStopTimes()) {

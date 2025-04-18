@@ -10,6 +10,7 @@ import de.vdvcount.app.remote.PassengerCountingEventObject;
 
 public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObject> {
 
+    private String vehicleId;
     private List<CountedStopTime> countedStopTimes;
     private List<PassengerCountingEvent> unmatchedPassengerCountingEvents;
 
@@ -44,6 +45,14 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         throw new RuntimeException("Method setStopTimes not available for CountedTrip object!");
     }
 
+    public String getVehicleId() {
+        return this.vehicleId;
+    }
+
+    public void setVehicleId(String vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
     public List<CountedStopTime> getCountedStopTimes() {
         return this.countedStopTimes;
     }
@@ -69,6 +78,7 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         apiObject.setHeadsign(this.getHeadsign());
         apiObject.setInternationalId(this.getInternationalId());
         apiObject.setNextTripId(this.getNextTripId());
+        apiObject.setVehicleId(this.getVehicleId());
 
         List<CountedStopTimeObject> countedStopTimes = new ArrayList<>();
         for (CountedStopTime obj : this.getCountedStopTimes()) {
