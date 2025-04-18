@@ -11,6 +11,7 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
 
     private double latitude;
     private double longitude;
+    private int afterStopSequence;
     private List<CountingSequence> countingSequences;
 
     public PassengerCountingEvent() {
@@ -33,6 +34,14 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
         this.longitude = longitude;
     }
 
+    public int getAfterStopSequence() {
+        return this.afterStopSequence;
+    }
+
+    public void setAfterStopSequence(int afterStopSequence) {
+        this.afterStopSequence = afterStopSequence;
+    }
+
     public List<CountingSequence> getCountingSequences() {
         return this.countingSequences;
     }
@@ -46,6 +55,7 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
         PassengerCountingEventObject apiObject = new PassengerCountingEventObject();
         apiObject.setLatitude(this.getLatitude());
         apiObject.setLongitude(this.getLongitude());
+        apiObject.setAfterStopSequence(this.getAfterStopSequence());
 
         List<CountingSequenceObject> countingSequences = new ArrayList<>();
         for (CountingSequence obj : this.getCountingSequences()) {

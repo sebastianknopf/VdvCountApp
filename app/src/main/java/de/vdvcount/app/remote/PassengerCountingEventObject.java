@@ -15,6 +15,8 @@ public class PassengerCountingEventObject implements DomainModelMapper<Passenger
     private double latitude;
     @SerializedName("longitude")
     private double longitude;
+    @SerializedName("after_stop_sequence")
+    private int afterStopSequence;
     @SerializedName("counting_sequences")
     private List<CountingSequenceObject> countingSequences;
 
@@ -38,6 +40,14 @@ public class PassengerCountingEventObject implements DomainModelMapper<Passenger
         this.longitude = longitude;
     }
 
+    public int getAfterStopSequence() {
+        return this.afterStopSequence;
+    }
+
+    public void setAfterStopSequence(int afterStopSequence) {
+        this.afterStopSequence = afterStopSequence;
+    }
+
     public List<CountingSequenceObject> getCountingSequences() {
         return this.countingSequences;
     }
@@ -51,6 +61,7 @@ public class PassengerCountingEventObject implements DomainModelMapper<Passenger
         PassengerCountingEvent domainModel = new PassengerCountingEvent();
         domainModel.setLatitude(this.getLatitude());
         domainModel.setLongitude(this.getLongitude());
+        domainModel.setAfterStopSequence(this.getAfterStopSequence());
 
         List<CountingSequence> countingSequences = new ArrayList<>();
         for (CountingSequenceObject obj : this.getCountingSequences()) {
