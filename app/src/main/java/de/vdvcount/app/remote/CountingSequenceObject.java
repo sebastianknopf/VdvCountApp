@@ -12,7 +12,7 @@ public class CountingSequenceObject implements DomainModelMapper<CountingSequenc
     @SerializedName("count_begin_timestamp")
     private long countBeginTimestamp;
 
-    @SerializedName("count_begin_timestamp")
+    @SerializedName("count_end_timestamp")
     private long countEndTimestamp;
 
     @SerializedName("door_id")
