@@ -17,6 +17,16 @@ public class CountedTripObject extends TripObject {
         this.unmatchedPassengerCountingEvents = new ArrayList<>();
     }
 
+    @Override
+    public List<StopTimeObject> getStopTimes() {
+        throw new RuntimeException("Method getStopTimes not available for CountedTripObject object!");
+    }
+
+    @Override
+    public void setStopTimes(List<StopTimeObject> stopTimes) {
+        throw new RuntimeException("Method setStopTimes not available for CountedTripObject object!");
+    }
+
     public List<CountedStopTimeObject> getCountedStopTimes() {
         return this.countedStopTimes;
     }

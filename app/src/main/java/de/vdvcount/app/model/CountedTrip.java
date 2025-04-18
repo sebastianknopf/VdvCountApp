@@ -18,6 +18,16 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         this.unmatchedPassengerCountingEvents = new ArrayList<>();
     }
 
+    @Override
+    public List<StopTime> getStopTimes() {
+        throw new RuntimeException("Method getStopTimes not available for CountedTrip object!");
+    }
+
+    @Override
+    public void setStopTimes(List<StopTime> stopTimes) {
+        throw new RuntimeException("Method setStopTimes not available for CountedTrip object!");
+    }
+
     public List<CountedStopTime> getCountedStopTimes() {
         return this.countedStopTimes;
     }
