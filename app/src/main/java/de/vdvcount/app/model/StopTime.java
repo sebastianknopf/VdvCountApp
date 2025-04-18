@@ -2,7 +2,10 @@ package de.vdvcount.app.model;
 
 import java.util.Date;
 
-public class StopTime {
+import de.vdvcount.app.common.ApiObjectMapper;
+import de.vdvcount.app.remote.StopTimeObject;
+
+public class StopTime implements ApiObjectMapper<StopTimeObject> {
 
     private Date arrivalTimestamp;
     private Date departureTimestamp;
@@ -39,5 +42,16 @@ public class StopTime {
 
     public void setStop(Stop stop) {
         this.stop = stop;
+    }
+
+    @Override
+    public StopTimeObject mapApiObject() {
+        StopTimeObject apiObject = new StopTimeObject();
+        apiObject.setArrivalTimestamp(this.getArrivalTimestamp().getTime() / 1000L);
+        apiObject.setDepartureTimestamp(this.getDepartureTimestamp().getTime() / 1000L);
+        apiObject.setSequence(this.getSequence());
+        apiObject.setStop(this.getStop().mapApiObject());
+
+        return apiObject;
     }
 }
