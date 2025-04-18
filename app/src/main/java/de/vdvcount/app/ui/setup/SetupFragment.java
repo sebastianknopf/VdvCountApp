@@ -87,6 +87,7 @@ public class SetupFragment extends Fragment {
 
             SetupFragmentDirections.ActionSetupFragmentToTripDetailsFragment action = SetupFragmentDirections.actionSetupFragmentToTripDetailsFragment(
                     Status.getInt(Status.CURRENT_TRIP_ID, -1),
+                    Status.getString(Status.CURRENT_VEHICLE_ID, ""),
                     Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1),
                     new String[] {}
             );

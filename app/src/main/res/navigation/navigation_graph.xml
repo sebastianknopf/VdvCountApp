@@ -105,6 +105,8 @@
         <argument
             android:name="tripId"
             app:argType="integer" />
+        <argument android:name="vehicleId"
+            app:argType="string" />
         <argument
             android:name="startStopSequence"
             app:argType="integer" />
