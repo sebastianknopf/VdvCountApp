@@ -1,6 +1,7 @@
 package de.vdvcount.app.filesystem;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,7 +47,7 @@ public class FilesystemRepository {
     public void updateCountedTrip(CountedTrip countedTrip) {
         String countedTripFilename = this.getCountedTripFilename();
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String countedTripData = gson.toJson(countedTrip.mapApiObject());
 
         FileOutputStream fos = null;
@@ -96,10 +97,10 @@ public class FilesystemRepository {
             }
         }
 
-        String inspectionObjectJson = new String(buffer, Charsets.UTF_8);
-        Gson gson = new Gson();
+        String countedTripObjectJson = new String(buffer, Charsets.UTF_8);
+        Gson gson = new GsonBuilder().serializeNulls().create();
 
-        CountedTripObject countedTripObject = gson.fromJson(inspectionObjectJson, CountedTripObject.class);
+        CountedTripObject countedTripObject = gson.fromJson(countedTripObjectJson, CountedTripObject.class);
 
         return countedTripObject.mapDomainModel();
     }

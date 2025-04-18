@@ -1,5 +1,7 @@
 package de.vdvcount.app.remote;
 
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
@@ -48,7 +50,11 @@ public class RemoteRepository {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(remoteApiEndpoint)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(
+                        new GsonBuilder()
+                                .serializeNulls()
+                                .create()
+                ))
                 .build();
 
         this.remoteApiClient = retrofit.create(RemoteAPI.class);
