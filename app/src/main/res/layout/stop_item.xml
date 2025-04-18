@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="station"
+            type="de.vdvcount.app.model.Station" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/app_medium_spacing"
+        android:background="?attr/selectableItemBackground">
+
+        <ImageView
+            android:id="@+id/imgDepartureLineType"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_stop"
+            app:tint="?attr/defaultIconColor"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/lblLineName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/app_default_spacing"
+            android:maxLines="1"
+            android:text="@{station.name}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintTop_toTopOf="@id/imgDepartureLineType"
+            app:layout_constraintLeft_toRightOf="@id/imgDepartureLineType"
+            app:layout_constraintBottom_toBottomOf="@id/imgDepartureLineType"
+            tools:text="Pforzheim Hbf" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

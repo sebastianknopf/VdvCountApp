@@ -2,7 +2,11 @@ package de.vdvcount.app.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Stop {
+import de.vdvcount.app.common.ApiObjectMapper;
+import de.vdvcount.app.remote.StopObject;
+import de.vdvcount.app.remote.StopTimeObject;
+
+public class Stop implements ApiObjectMapper<StopObject> {
 
     private String internationalId;
     private double latitude;
@@ -57,5 +61,18 @@ public class Stop {
 
     public void setStopId(int stopId) {
         this.stopId = stopId;
+    }
+
+    @Override
+    public StopObject mapApiObject() {
+        StopObject apiObject = new StopObject();
+        apiObject.setStopId(this.getStopId());
+        apiObject.setLatitude(this.getLatitude());
+        apiObject.setLongitude(this.getLongitude());
+        apiObject.setInternationalId(this.getInternationalId());
+        apiObject.setName(this.getName());
+        apiObject.setParentId(this.getParentId());
+
+        return apiObject;
     }
 }

@@ -7,7 +7,7 @@ import java.util.Date;
 import de.vdvcount.app.common.DomainModelMapper;
 import de.vdvcount.app.model.StopTime;
 
-class StopTimeObject implements DomainModelMapper<StopTime> {
+public class StopTimeObject implements DomainModelMapper<StopTime> {
 
     @SerializedName("arrival_timestamp")
     private long arrivalTimestamp;
@@ -53,7 +53,6 @@ class StopTimeObject implements DomainModelMapper<StopTime> {
     @Override
     public StopTime mapDomainModel() {
         StopTime domainModel = new StopTime();
-
         domainModel.setArrivalTimestamp(new Date(this.getArrivalTimestamp() * 1000L));
         domainModel.setDepartureTimestamp(new Date(this.getDepartureTimestamp() * 1000L));
         domainModel.setSequence(this.getSequence());

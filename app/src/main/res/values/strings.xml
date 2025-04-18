@@ -9,11 +9,31 @@
     <string name="setup_failed">Setup fehlgeschlagen!</string>
     <string name="setup_performed_successfully">Setup erfolgreich abgeschlossen.</string>
 
+    <!-- DepartureFragment -->
+    <string name="departure_title">Abfahrten</string>
+    <string name="departure_stop_name_hint">Haltestelle</string>
+
     <!-- StopSelectFragment -->
     <string name="stop_select_title">Haltestellenauswahl</string>
+    <string name="stop_select_stop_name_hint">Haltestelle</string>
+
+    <!-- TripParamsFragment -->
+    <string name="trip_params_title">Fahrtdetails</string>
+    <string name="trip_params_trip_info">Zählung auf der Linie %s nach %s, Abfahrt um %s Uhr</string>
+    <string name="trip_params_vehicle">Fahrzeug</string>
+    <string name="trip_params_doors">Gezählte Türen</string>
+    <string name="trip_params_object_classes">Gezählte Objektklassen</string>
+    <string name="trip_params_start_counting">Zählung beginnen</string>
+
+    <!-- TripDetailsFragment -->
+    <string name="trip_details_title">Zählfahrt</string>
+    <string name="trip_details_quit">Zählung beenden</string>
 
     <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>
-    <string name="app_reset_counter">Noch %d mal tippen zum Zurücksetzen.</string>
+    <string name="app_reset_counter">Noch %dx zum Zurücksetzen.</string>
     <string name="str_continue">Weiter</string>
+    <string name="str_door">Tür %s</string>
+
+    <string name="str_format_time">HH:mm</string>
 </resources>

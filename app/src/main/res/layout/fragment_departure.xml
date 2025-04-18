@@ -20,20 +20,24 @@
                 android:id="@+id/edtStopName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/stop_select_stop_name_hint" />
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="@string/departure_stop_name_hint"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lstStops"
+            android:id="@+id/lstDepartures"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/app_default_spacing"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             app:layout_constraintTop_toBottomOf="@id/edtStopNameLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

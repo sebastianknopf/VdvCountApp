@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import de.vdvcount.app.common.DomainModelMapper;
 import de.vdvcount.app.model.Stop;
 
-class StopObject implements DomainModelMapper<Stop> {
+public class StopObject implements DomainModelMapper<Stop> {
 
    @SerializedName("international_id")
    private String internationalId;
@@ -71,7 +71,6 @@ class StopObject implements DomainModelMapper<Stop> {
    @Override
    public Stop mapDomainModel() {
       Stop domainModel = new Stop();
-
       domainModel.setInternationalId(this.getInternationalId());
       domainModel.setLatitude(this.getLatitude());
       domainModel.setLongitude(this.getLongitude());
