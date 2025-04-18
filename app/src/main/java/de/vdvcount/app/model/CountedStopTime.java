@@ -14,6 +14,16 @@ public class CountedStopTime extends StopTime {
         this.passengerCountingEvents = new ArrayList<>();
     }
 
+    public static CountedStopTime from(StopTime stopTime) {
+        CountedStopTime countedStopTime = new CountedStopTime();
+        countedStopTime.setArrivalTimestamp(stopTime.getArrivalTimestamp());
+        countedStopTime.setDepartureTimestamp(stopTime.getDepartureTimestamp());
+        countedStopTime.setSequence(stopTime.getSequence());
+        countedStopTime.setStop(stopTime.getStop());
+
+        return countedStopTime;
+    }
+
     public List<PassengerCountingEvent> getPassengerCountingEvents() {
         return this.passengerCountingEvents;
     }

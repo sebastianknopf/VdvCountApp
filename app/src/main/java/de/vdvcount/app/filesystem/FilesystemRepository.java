@@ -36,16 +36,9 @@ public class FilesystemRepository {
     }
 
     public CountedTrip startCountedTrip(Trip trip) {
-        CountedTrip countedTrip = new CountedTrip();
-        countedTrip.setTripId(trip.getTripId());
-        countedTrip.setLine(trip.getLine());
-        countedTrip.setDirection(trip.getDirection());
-        countedTrip.setHeadsign(trip.getHeadsign());
-        countedTrip.setInternationalId(trip.getInternationalId());
-        countedTrip.setNextTripId(trip.getNextTripId());
+        CountedTrip countedTrip = CountedTrip.from(trip);
 
         this.updateCountedTrip(countedTrip);
-
         return countedTrip;
     }
 
