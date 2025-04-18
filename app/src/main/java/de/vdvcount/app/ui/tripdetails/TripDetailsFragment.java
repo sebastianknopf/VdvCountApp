@@ -67,10 +67,14 @@ public class TripDetailsFragment extends Fragment {
         this.viewModel = new ViewModelProvider(this).get(TripDetailsViewModel.class);
 
         if (Status.getInt(Status.CURRENT_TRIP_ID, -1) != -1 && Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1) != -1) {
-            this.viewModel.startCountedTrip(
-                    Status.getInt(Status.CURRENT_TRIP_ID, -1),
-                    Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
-            );
+            if (Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.READY)) {
+                this.viewModel.startCountedTrip(
+                        Status.getInt(Status.CURRENT_TRIP_ID, -1),
+                        Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
+                );
+            } else {
+                this.viewModel.loadCountedTrip();
+            }
         }
 
         this.initViewEvents();
@@ -100,6 +104,10 @@ public class TripDetailsFragment extends Fragment {
     }
 
     private void initObserverEvents() {
-
+        this.viewModel.getCountedTrip().observe(this.getViewLifecycleOwner(), countedTrip -> {
+            if (countedTrip != null) {
+                // TODO: set countedTripAdapter here
+            }
+        });
     }
 }
