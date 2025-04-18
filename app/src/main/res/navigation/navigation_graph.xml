@@ -87,7 +87,10 @@
             app:argType="string" />
         <action
             android:id="@+id/action_tripParamsFragment_to_tripDetailsFragment"
-            app:destination="@id/tripDetailsFragment" />
+            app:destination="@id/tripDetailsFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph.xml"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/tripDetailsFragment"
@@ -96,7 +99,8 @@
         <action
             android:id="@+id/action_tripDetailsFragment_to_departureFragment"
             app:destination="@id/departureFragment"
-            app:popUpTo="@id/departureFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph.xml"
             app:popUpToInclusive="true" />
         <argument
             android:name="tripId"
