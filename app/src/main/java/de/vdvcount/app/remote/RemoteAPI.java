@@ -25,8 +25,8 @@ interface RemoteAPI {
     @GET("masterdata/objectClasses")
     Call<List<ObjectClassObject>> getAllObjectClasses();
 
-    @POST("results/post")
-    Call<Void> postResults(@Body CountedTripObject result);
+    @POST("results/post/{guid}")
+    Call<Void> postResults(@Path("guid") String guid, @Body CountedTripObject result);
 
     @GET("system/health")
     Call<SystemHealthObject> getSystemHealthCheck();

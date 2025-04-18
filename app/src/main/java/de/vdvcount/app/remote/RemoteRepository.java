@@ -5,6 +5,7 @@ import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.model.CountedTrip;
@@ -115,7 +116,9 @@ public class RemoteRepository {
 
     public void postResults(CountedTrip countedTrip) {
         try {
-            Call<Void> call = this.remoteApiClient.postResults(countedTrip.mapApiObject());
+            String resultGuid = UUID.randomUUID().toString();
+
+            Call<Void> call = this.remoteApiClient.postResults(resultGuid, countedTrip.mapApiObject());
             Response<Void> response = call.execute();
 
             if (!response.isSuccessful()) {
