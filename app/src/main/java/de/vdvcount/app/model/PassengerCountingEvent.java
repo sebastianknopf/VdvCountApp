@@ -1,6 +1,7 @@
 package de.vdvcount.app.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.vdvcount.app.common.ApiObjectMapper;
@@ -15,7 +16,21 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
     private List<CountingSequence> countingSequences;
 
     public PassengerCountingEvent() {
+        this.latitude = 48.8881773;
+        this.longitude = 8.5466048;
+        this.afterStopSequence = 0;
+
+        CountingSequence cs = new CountingSequence();
+        cs.setDoorId("1");
+        cs.setCountingAreaId("1");
+        cs.setObjectClass("Adult");
+        cs.setCountBeginTimestamp(new Date());
+        cs.setCountEndTimestamp(new Date());
+        cs.setIn(2);
+        cs.setOut(0);
+
         this.countingSequences = new ArrayList<>();
+        this.countingSequences.add(cs);
     }
 
     public double getLatitude() {
@@ -52,7 +67,6 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
 
     public int getIn() {
         int sum = 0;
-
         for (CountingSequence countingSequence : this.getCountingSequences()) {
             sum += countingSequence.getIn();
         }
@@ -62,7 +76,6 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
 
     public int getOut() {
         int sum = 0;
-
         for (CountingSequence countingSequence : this.getCountingSequences()) {
             sum += countingSequence.getOut();
         }
