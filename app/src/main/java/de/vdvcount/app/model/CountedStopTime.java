@@ -12,7 +12,6 @@ public class CountedStopTime extends StopTime {
 
     public CountedStopTime() {
         this.passengerCountingEvents = new ArrayList<>();
-        this.passengerCountingEvents.add(new PassengerCountingEvent());
     }
 
     public static CountedStopTime from(StopTime stopTime) {
