@@ -60,18 +60,23 @@ public class CountedStopTimeListAdapter extends RecyclerView.Adapter<CountedStop
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public CountedStopTimeItemBinding itemBinding;
+        private CountedStopTimeItemBinding itemBinding;
+        private PassengerCountingEventListAdapter passengerCountingEventListAdapter;
 
         public ViewHolder(CountedStopTimeItemBinding itemBinding, int viewType) {
             super(itemBinding.getRoot());
             this.itemBinding = itemBinding;
+            this.passengerCountingEventListAdapter = new PassengerCountingEventListAdapter();
 
             this.itemBinding.viewTimeLine.initLine(viewType);
+            this.itemBinding.lstPassengerCountingEvents.setAdapter(this.passengerCountingEventListAdapter);
         }
 
         public void setCountedStopTime(CountedStopTime obj) {
             this.itemBinding.setCountedStopTime(obj);
             this.itemBinding.executePendingBindings();
+
+            this.passengerCountingEventListAdapter.setPassengerCountingEventList(obj.getPassengerCountingEvents());
         }
 
         public void setOnItemClickListener(final OnItemClickListener<CountedStopTime> listener) {
