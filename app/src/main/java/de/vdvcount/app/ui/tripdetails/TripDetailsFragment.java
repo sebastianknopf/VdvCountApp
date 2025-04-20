@@ -20,6 +20,7 @@ import java.util.List;
 import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
+import de.vdvcount.app.adapter.CountedStopTimeListAdapter;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
 import de.vdvcount.app.databinding.FragmentTripParamsBinding;
@@ -37,14 +38,22 @@ public class TripDetailsFragment extends Fragment {
 
     private List<String> currentCountedDoors;
 
+    private CountedStopTimeListAdapter countedStopTimeListAdapter;
+
     public static TripDetailsFragment newInstance() {
         return new TripDetailsFragment();
+    }
+
+    public TripDetailsFragment() {
+        this.countedStopTimeListAdapter = new CountedStopTimeListAdapter();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_trip_details, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
+
+        this.dataBinding.lstCountedStopTimes.setAdapter(this.countedStopTimeListAdapter);
 
         TripDetailsFragmentArgs args = TripDetailsFragmentArgs.fromBundle(this.getArguments());
         if (args.getTripId() != -1) {
@@ -121,7 +130,7 @@ public class TripDetailsFragment extends Fragment {
     private void initObserverEvents() {
         this.viewModel.getCountedTrip().observe(this.getViewLifecycleOwner(), countedTrip -> {
             if (countedTrip != null) {
-                // TODO: set countedTripAdapter here
+                this.countedStopTimeListAdapter.setCountedStopTimeList(countedTrip.getCountedStopTimes());
             }
         });
     }
