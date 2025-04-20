@@ -66,6 +66,7 @@
             android:id="@+id/viewInvisibleDivider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="@dimen/app_medium_spacing"
             android:background="@android:color/transparent"
             app:layout_constraintTop_toBottomOf="@id/lblStopName"
             app:layout_constraintStart_toStartOf="parent"

@@ -14,10 +14,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
+        android:paddingTop="4dp"
         android:paddingStart="@dimen/app_default_spacing"
         android:paddingEnd="@dimen/app_default_spacing"
-        android:paddingBottom="16dp">
+        android:paddingBottom="4dp">
 
         <TextView
             android:id="@+id/lblTimestamp"
