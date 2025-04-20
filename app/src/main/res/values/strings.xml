@@ -34,6 +34,7 @@
     <string name="app_reset_counter">Noch %dx zum Zurücksetzen.</string>
     <string name="str_continue">Weiter</string>
     <string name="str_door">Tür %s</string>
+    <string name="str_slash">/</string>
 
     <string name="str_format_time">HH:mm</string>
 </resources>
