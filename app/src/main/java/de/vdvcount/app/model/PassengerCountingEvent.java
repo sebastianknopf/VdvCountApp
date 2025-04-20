@@ -50,6 +50,26 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
         this.countingSequences = countingSequences;
     }
 
+    public int getIn() {
+        int sum = 0;
+
+        for (CountingSequence countingSequence : this.getCountingSequences()) {
+            sum += countingSequence.getIn();
+        }
+
+        return sum;
+    }
+
+    public int getOut() {
+        int sum = 0;
+
+        for (CountingSequence countingSequence : this.getCountingSequences()) {
+            sum += countingSequence.getOut();
+        }
+
+        return sum;
+    }
+
     @Override
     public PassengerCountingEventObject mapApiObject() {
         PassengerCountingEventObject apiObject = new PassengerCountingEventObject();
