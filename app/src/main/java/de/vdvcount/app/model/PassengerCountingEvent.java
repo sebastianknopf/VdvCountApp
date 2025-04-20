@@ -94,6 +94,7 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
         for (CountingSequence obj : this.getCountingSequences()) {
             countingSequences.add(obj.mapApiObject());
         }
+        apiObject.setCountingSequences(countingSequences);
 
         return apiObject;
     }
