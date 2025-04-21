@@ -3,6 +3,12 @@ package de.vdvcount.app.common;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import de.vdvcount.app.App;
 
 abstract class KeyValueStore {
@@ -25,6 +31,26 @@ abstract class KeyValueStore {
         return KeyValueStore.sharedPreferences.getInt(variableName, defaultValue);
     }
 
+    public static String[] getStringArray(String variableName, String[] defaultValue) {
+        String jsonString = KeyValueStore.sharedPreferences.getString(variableName, null);
+
+        if (jsonString != null) {
+            List<String> list = new ArrayList<>();
+            try {
+                JSONArray jsonArray = new JSONArray(jsonString);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    list.add(jsonArray.getString(i));
+                }
+            } catch (JSONException e) {
+                return defaultValue;
+            }
+
+            return list.toArray(new String[0]);
+        } else {
+            return defaultValue;
+        }
+    }
+
     public static void setString(String variableName, String value) {
         SharedPreferences.Editor editor = KeyValueStore.sharedPreferences.edit();
         editor.putString(variableName, value);
@@ -40,6 +66,17 @@ abstract class KeyValueStore {
     public static void setInt(String variableName, Integer value) {
         SharedPreferences.Editor editor = KeyValueStore.sharedPreferences.edit();
         editor.putInt(variableName, value);
+        editor.commit();
+    }
+
+    public static void setStringArray(String variableName, String[] value) {
+        JSONArray jsonArray = new JSONArray();
+        for (String item : value) {
+            jsonArray.put(item);
+        }
+
+        SharedPreferences.Editor editor = KeyValueStore.sharedPreferences.edit();
+        editor.putString(variableName, jsonArray.toString());
         editor.commit();
     }
 
