@@ -36,8 +36,6 @@ public class TripDetailsFragment extends Fragment {
 
     private NavController navigationController;
 
-    private List<String> currentCountedDoors;
-
     private CountedStopTimeListAdapter countedStopTimeListAdapter;
 
     public static TripDetailsFragment newInstance() {
@@ -69,7 +67,7 @@ public class TripDetailsFragment extends Fragment {
         }
 
         if (args.getCountedDoorIds() != null) {
-            this.currentCountedDoors = Arrays.asList(args.getCountedDoorIds());
+            Status.setStringArray(Status.CURRENT_COUNTED_DOOR_IDS, args.getCountedDoorIds());
         }
 
         return this.dataBinding.getRoot();
