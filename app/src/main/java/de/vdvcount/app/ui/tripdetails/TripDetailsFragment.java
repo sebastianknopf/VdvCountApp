@@ -21,6 +21,7 @@ import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.CountedStopTimeListAdapter;
+import de.vdvcount.app.common.OnItemClickListener;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
 import de.vdvcount.app.databinding.FragmentTripParamsBinding;
@@ -58,7 +59,7 @@ public class TripDetailsFragment extends Fragment {
             Status.setInt(Status.CURRENT_TRIP_ID, args.getTripId());
         }
 
-        if (!args.getVehicleId().isEmpty()) {
+        if (args.getVehicleId() != null && !args.getVehicleId().isEmpty()) {
             Status.setString(Status.CURRENT_VEHICLE_ID, args.getVehicleId());
         }
 
@@ -109,6 +110,16 @@ public class TripDetailsFragment extends Fragment {
     }
 
     private void initViewEvents() {
+        this.countedStopTimeListAdapter.setOnItemClickListener(countedStopTime -> {
+            TripDetailsFragmentDirections.ActionTripDetailsFragmentToCountingFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToCountingFragment(
+                countedStopTime.getStop().getName(),
+                countedStopTime.getSequence(),
+                Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {})
+            );
+
+            this.navigationController.navigate(action);
+        });
+
         this.dataBinding.btnQuit.setOnClickListener(view -> {
             CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
 

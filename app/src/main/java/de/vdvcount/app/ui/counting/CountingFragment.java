@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -36,7 +37,7 @@ public class CountingFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_departure, container, false);
+        this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_counting, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
 
         return this.dataBinding.getRoot();
@@ -63,6 +64,18 @@ public class CountingFragment extends Fragment {
         this.setHasOptionsMenu(true);
 
         this.navigationController = appActivity.getNavigationController();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            CountingFragmentDirections.ActionCountingFragmentToTripDetailsFragment action = CountingFragmentDirections.actionCountingFragmentToTripDetailsFragment();
+            this.navigationController.navigate(action);
+
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private void initViewEvents() {

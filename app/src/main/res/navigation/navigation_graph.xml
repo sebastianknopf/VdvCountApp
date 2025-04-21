@@ -27,7 +27,9 @@
                 android:defaultValue="-1" />
             <argument
                 android:name="vehicleId"
-                android:defaultValue='""' />
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
             <argument
                 android:name="startStopSequence"
                 android:defaultValue="-1" />
@@ -121,7 +123,8 @@
             android:name="tripId"
             app:argType="integer" />
         <argument android:name="vehicleId"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
         <argument
             android:name="startStopSequence"
             app:argType="integer" />
@@ -129,5 +132,45 @@
             android:name="countedDoorIds"
             app:argType="string[]"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_tripDetailsFragment_to_countingFragment"
+            app:destination="@id/countingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/countingFragment"
+        android:name="de.vdvcount.app.ui.counting.CountingFragment"
+        android:label="CountingFragment" >
+        <action
+            android:id="@+id/action_countingFragment_to_tripDetailsFragment"
+            app:destination="@id/tripDetailsFragment"
+            app:popUpTo="@id/tripDetailsFragment"
+            app:popUpToInclusive="true" >
+            <argument
+                android:name="tripId"
+                android:defaultValue="-1" />
+            <argument
+                android:name="vehicleId"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+            <argument
+                android:name="startStopSequence"
+                android:defaultValue="-1" />
+            <argument
+                android:name="countedDoorIds"
+                android:defaultValue="@null"
+                app:argType="string[]"
+                app:nullable="true" />
+        </action>
+        <argument
+            android:name="stopName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="stopSequence"
+            app:argType="integer" />
+        <argument
+            android:name="countedDoorIds"
+            app:argType="string[]" />
     </fragment>
 </navigation>
