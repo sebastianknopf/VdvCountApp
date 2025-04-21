@@ -15,11 +15,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <LinearLayout
+                    android:id="@+id/layoutStopInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/app_default_spacing"
+                    app:layout_constraintBottom_toTopOf="@id/lstCountingSequences"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="@dimen/app_default_spacing"
+                        android:src="@drawable/ic_stop"
+                        app:tint="?attr/defaultIconColor" />
+
+                    <TextView
+                        android:id="@+id/lblStopInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/app_default_spacing"
+                        android:layout_weight="1"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        tools:text="Zählung an der Haltestelle Pforzheim Emilienstraße"/>
+
+                </LinearLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/lstCountingSequences"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layoutStopInfo"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"  />

@@ -27,11 +27,12 @@
 
     <!-- TripDetailsFragment -->
     <string name="trip_details_title">Zählfahrt</string>
-    <string name="trip_details_quit">Fahrt beenden</string>
+    <string name="trip_details_quit">Fahrt abschließen</string>
 
     <!-- CountingFragment -->
     <string name="counting_title">Zählung</string>
     <string name="counting_save">Zählung beenden</string>
+    <string name="counting_stop_info">Zählung an der Haltestelle %s</string>
 
     <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>

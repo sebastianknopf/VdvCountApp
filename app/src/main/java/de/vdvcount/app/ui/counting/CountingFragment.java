@@ -46,7 +46,7 @@ public class CountingFragment extends Fragment {
 
         CountingFragmentArgs args = CountingFragmentArgs.fromBundle(this.getArguments());
         if (args.getStopName() != null) {
-
+            this.dataBinding.lblStopInfo.setText(this.getString(R.string.counting_stop_info, args.getStopName()));
         }
 
         if (args.getStopSequence() != -1) {
