@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
@@ -27,6 +29,8 @@ public class CountingFragment extends Fragment {
 
     private NavController navigationController;
 
+    private int currentStopSequence;
+
     public static CountingFragment newInstance() {
         return new CountingFragment();
     }
@@ -39,6 +43,19 @@ public class CountingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_counting, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
+
+        CountingFragmentArgs args = CountingFragmentArgs.fromBundle(this.getArguments());
+        if (args.getStopName() != null) {
+
+        }
+
+        if (args.getStopSequence() != -1) {
+            this.currentStopSequence = args.getStopSequence();
+        }
+
+        if (args.getCountedDoorIds() != null) {
+
+        }
 
         return this.dataBinding.getRoot();
     }
@@ -79,7 +96,12 @@ public class CountingFragment extends Fragment {
     }
 
     private void initViewEvents() {
+        this.dataBinding.btnSave.setOnClickListener(view -> {
+            this.viewModel.addPassengerCountingEvent(this.currentStopSequence, new ArrayList<>());
 
+            CountingFragmentDirections.ActionCountingFragmentToTripDetailsFragment action = CountingFragmentDirections.actionCountingFragmentToTripDetailsFragment();
+            this.navigationController.navigate(action);
+        });
     }
 
     private void initObserverEvents() {
