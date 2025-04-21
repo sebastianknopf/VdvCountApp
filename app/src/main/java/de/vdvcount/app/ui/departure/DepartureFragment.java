@@ -65,8 +65,6 @@ public class DepartureFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        super.onViewCreated(view, savedInstanceState);
-
         this.viewModel = new ViewModelProvider(this).get(DepartureViewModel.class);
 
         this.initViewEvents();
