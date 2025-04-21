@@ -29,6 +29,9 @@
     <string name="trip_details_title">Zählfahrt</string>
     <string name="trip_details_quit">Zählung beenden</string>
 
+    <!-- CountingFragment -->
+    <string name="counting_title">Zählung</string>
+
     <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>
     <string name="app_reset_counter">Noch %dx zum Zurücksetzen.</string>
