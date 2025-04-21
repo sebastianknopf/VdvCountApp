@@ -14,13 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
+import de.vdvcount.app.adapter.CountingSequenceListAdapter;
 import de.vdvcount.app.databinding.FragmentCountingBinding;
-import de.vdvcount.app.ui.departure.DepartureViewModel;
+import de.vdvcount.app.model.CountingSequence;
 
 public class CountingFragment extends Fragment {
 
@@ -30,19 +31,23 @@ public class CountingFragment extends Fragment {
     private NavController navigationController;
 
     private int currentStopSequence;
+    private String[] currentCountedDoorIds;
+    private CountingSequenceListAdapter countingSequenceListAdapter;
 
     public static CountingFragment newInstance() {
         return new CountingFragment();
     }
 
     public CountingFragment() {
-
+        this.countingSequenceListAdapter = new CountingSequenceListAdapter();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_counting, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
+
+        this.dataBinding.lstCountingSequences.setAdapter(this.countingSequenceListAdapter);
 
         CountingFragmentArgs args = CountingFragmentArgs.fromBundle(this.getArguments());
         if (args.getStopName() != null) {
@@ -54,7 +59,7 @@ public class CountingFragment extends Fragment {
         }
 
         if (args.getCountedDoorIds() != null) {
-
+            this.currentCountedDoorIds = args.getCountedDoorIds();
         }
 
         return this.dataBinding.getRoot();
@@ -65,6 +70,9 @@ public class CountingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.viewModel = new ViewModelProvider(this).get(CountingViewModel.class);
+
+        List<CountingSequence> countingSequenceContainers = this.viewModel.generateCountingSequenceContainers(this.currentCountedDoorIds);
+        this.countingSequenceListAdapter.setCountingSequenceList(countingSequenceContainers);
 
         this.initViewEvents();
         this.initObserverEvents();
@@ -97,7 +105,7 @@ public class CountingFragment extends Fragment {
 
     private void initViewEvents() {
         this.dataBinding.btnSave.setOnClickListener(view -> {
-            this.viewModel.addPassengerCountingEvent(this.currentStopSequence, new ArrayList<>());
+            this.viewModel.addPassengerCountingEvent(this.currentStopSequence, this.countingSequenceListAdapter.getCountingSequenceList());
 
             CountingFragmentDirections.ActionCountingFragmentToTripDetailsFragment action = CountingFragmentDirections.actionCountingFragmentToTripDetailsFragment();
             this.navigationController.navigate(action);

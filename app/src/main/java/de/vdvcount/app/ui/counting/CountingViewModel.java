@@ -1,5 +1,7 @@
 package de.vdvcount.app.ui.counting;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import androidx.lifecycle.ViewModel;
@@ -10,7 +12,26 @@ import de.vdvcount.app.model.PassengerCountingEvent;
 
 public class CountingViewModel extends ViewModel {
 
+    public List<CountingSequence> generateCountingSequenceContainers(String[] doorIds) {
+        List<CountingSequence> countingSequences = new ArrayList<>();
+        for (String doorId : doorIds) {
+            CountingSequence cs = new CountingSequence();
+            cs.setDoorId(doorId);
+            cs.setCountingAreaId("1");
+            cs.setObjectClass("Adult");
+            cs.setCountBeginTimestamp(new Date());
+
+            countingSequences.add(cs);
+        }
+
+        return countingSequences;
+    }
+
     public void addPassengerCountingEvent(int stopSequence, List<CountingSequence> countingSequences) {
+        for (CountingSequence cs : countingSequences) {
+            cs.setCountEndTimestamp(new Date());
+        }
+
         FilesystemRepository repository = FilesystemRepository.getInstance();
         CountedTrip countedTrip = repository.loadCountedTrip();
 
