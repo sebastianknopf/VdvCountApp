@@ -40,6 +40,7 @@ public class CountingSequenceListAdapter extends RecyclerView.Adapter<CountingSe
     @Override
     public void onBindViewHolder(@NonNull CountingSequenceListAdapter.ViewHolder holder, int position) {
         CountingSequence obj = this.countingSequenceList.get(position);
+        holder.setCountingSequence(obj);
     }
 
     @Override
@@ -57,8 +58,8 @@ public class CountingSequenceListAdapter extends RecyclerView.Adapter<CountingSe
         }
 
         public void setCountingSequence(CountingSequence obj) {
-            /*this.itemBinding.setPassengerCountingEvent(obj);
-            this.itemBinding.executePendingBindings();*/
+            this.itemBinding.setCountingSequence(obj);
+            this.itemBinding.executePendingBindings();
         }
     }
 }
