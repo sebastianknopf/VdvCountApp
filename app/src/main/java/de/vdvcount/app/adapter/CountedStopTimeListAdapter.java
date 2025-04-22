@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import com.github.vipulasri.timelineview.TimelineView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -75,6 +76,13 @@ public class CountedStopTimeListAdapter extends RecyclerView.Adapter<CountedStop
 
         public void setCountedStopTime(CountedStopTime obj) {
             this.itemBinding.setCountedStopTime(obj);
+
+            if (obj.getDepartureTimestamp() != null && obj.getDepartureTimestamp().getTime() > 0) {
+                this.itemBinding.setDisplayedTimestamp(obj.getDepartureTimestamp());
+            } else {
+                this.itemBinding.setDisplayedTimestamp(obj.getArrivalTimestamp());
+            }
+
             this.itemBinding.executePendingBindings();
 
             this.passengerCountingEventListAdapter.setPassengerCountingEventList(obj.getPassengerCountingEvents());

@@ -9,6 +9,10 @@
             name="countedStopTime"
             type="de.vdvcount.app.model.CountedStopTime" />
 
+        <variable
+            name="displayedTimestamp"
+            type="java.util.Date" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +28,7 @@
             android:layout_marginStart="@dimen/app_default_spacing"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textStyle="bold"
-            app:date="@{countedStopTime.departureTimestamp}"
+            app:date="@{displayedTimestamp}"
             app:dateFormat="@{@string/str_format_time}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
