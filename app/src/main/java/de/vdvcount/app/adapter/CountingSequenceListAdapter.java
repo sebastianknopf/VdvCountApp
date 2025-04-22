@@ -50,6 +50,7 @@ public class CountingSequenceListAdapter extends RecyclerView.Adapter<CountingSe
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
+        private CountingSequence countingSequence;
         public CountingSequenceItemBinding itemBinding;
 
         public ViewHolder(CountingSequenceItemBinding itemBinding) {
@@ -58,8 +59,49 @@ public class CountingSequenceListAdapter extends RecyclerView.Adapter<CountingSe
         }
 
         public void setCountingSequence(CountingSequence obj) {
+            this.countingSequence = obj;
+
             this.itemBinding.setCountingSequence(obj);
             this.itemBinding.executePendingBindings();
+
+            this.itemBinding.btnDecreaseIn.setOnClickListener(view -> {
+                int in = this.countingSequence.getIn();
+                if (in > 0) {
+                    this.countingSequence.setIn(--in);
+                }
+
+                this.updateInOutView();
+            });
+
+            this.itemBinding.btnIncreaseIn.setOnClickListener(view -> {
+                int in = this.countingSequence.getIn();
+                this.countingSequence.setIn(++in);
+
+                this.updateInOutView();
+            });
+
+            this.itemBinding.btnDecreaseOut.setOnClickListener(view -> {
+                int out = this.countingSequence.getOut();
+                if (out > 0) {
+                    this.countingSequence.setOut(--out);
+                }
+
+                this.updateInOutView();
+            });
+
+            this.itemBinding.btnIncreaseOut.setOnClickListener(view -> {
+                int out = this.countingSequence.getOut();
+                this.countingSequence.setOut(++out);
+
+                this.updateInOutView();
+            });
+
+            this.updateInOutView();
+        }
+
+        private void updateInOutView() {
+            this.itemBinding.edtIn.setText(String.valueOf(this.countingSequence.getIn()));
+            this.itemBinding.edtOut.setText(String.valueOf(this.countingSequence.getOut()));
         }
     }
 }

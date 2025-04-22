@@ -27,30 +27,103 @@
             android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
             tools:text="Tür 1" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="@dimen/app_default_spacing"
-            android:background="#ffff80"
-            android:onClick="@{() -> countingSequence.incrementIn()}" />
-
         <TextView
-            android:id="@+id/lblIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/app_large_spacing"
-            android:layout_marginStart="@dimen/app_default_spacing"
-            android:layout_marginEnd="@dimen/app_default_spacing"
-            android:text="@{String.valueOf(countingSequence.observableIn)}"
-            android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
-            tools:text="Tür 1" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
             android:layout_marginTop="@dimen/app_default_spacing"
-            android:background="#ffff00"
-            android:onClick="@{() -> countingSequence.decrementIn()}" />
+            android:text="@string/counting_in"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.Material3.LabelMedium" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDecreaseIn"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:text="@string/str_minus"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <EditText
+                android:id="@+id/edtIn"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:inputType="number"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:background="#00000000"
+                tools:text="0" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnIncreaseIn"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:text="@string/str_plus"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/app_default_spacing"
+            android:text="@string/counting_out"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.Material3.LabelMedium" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDecreaseOut"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:text="@string/str_minus"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <EditText
+                android:id="@+id/edtOut"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:inputType="number"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:background="#00000000"
+                tools:text="0" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnIncreaseOut"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:text="@string/str_plus"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
