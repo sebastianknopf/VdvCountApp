@@ -1,10 +1,13 @@
 package de.vdvcount.app.ui.counting;
 
+import android.location.Location;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import androidx.lifecycle.ViewModel;
+import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.filesystem.FilesystemRepository;
 import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.model.CountingSequence;
@@ -28,21 +31,31 @@ public class CountingViewModel extends ViewModel {
     }
 
     public void addPassengerCountingEvent(int stopSequence, List<CountingSequence> countingSequences) {
-        for (CountingSequence cs : countingSequences) {
-            cs.setCountEndTimestamp(new Date());
-        }
+        Runnable runnable = () -> {
+            for (CountingSequence cs : countingSequences) {
+                cs.setCountEndTimestamp(new Date());
+            }
 
-        FilesystemRepository repository = FilesystemRepository.getInstance();
-        CountedTrip countedTrip = repository.loadCountedTrip();
+            FilesystemRepository repository = FilesystemRepository.getInstance();
+            CountedTrip countedTrip = repository.loadCountedTrip();
 
-        PassengerCountingEvent pce = new PassengerCountingEvent();
-        pce.setLatitude(48.8881773);
-        pce.setLongitude(8.5466048);
-        pce.setAfterStopSequence(-1);
-        pce.setCountingSequences(countingSequences);
+            Location location = LocationService.requestCurrentLocation();
 
-        countedTrip.getCountedStopTimes().get(stopSequence - 1).getPassengerCountingEvents().add(pce);
-        repository.updateCountedTrip(countedTrip);
+            PassengerCountingEvent pce = new PassengerCountingEvent();
+
+            if (location != null) {
+                pce.setLatitude(location.getLatitude());
+                pce.setLongitude(location.getLongitude());
+            }
+
+            pce.setAfterStopSequence(-1);
+            pce.setCountingSequences(countingSequences);
+
+            countedTrip.getCountedStopTimes().get(stopSequence - 1).getPassengerCountingEvents().add(pce);
+            repository.updateCountedTrip(countedTrip);
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
-
 }
