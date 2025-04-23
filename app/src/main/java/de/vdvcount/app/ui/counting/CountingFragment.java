@@ -70,6 +70,7 @@ public class CountingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.viewModel = new ViewModelProvider(this).get(CountingViewModel.class);
+        this.dataBinding.setViewModel(this.viewModel);
 
         List<CountingSequence> countingSequenceContainers = this.viewModel.generateCountingSequenceContainers(this.currentCountedDoorIds);
         this.countingSequenceListAdapter.setCountingSequenceList(countingSequenceContainers);
@@ -107,13 +108,23 @@ public class CountingFragment extends Fragment {
         this.dataBinding.btnSave.setOnClickListener(view -> {
             this.viewModel.addPassengerCountingEvent(this.currentStopSequence, this.countingSequenceListAdapter.getCountingSequenceList());
 
-            CountingFragmentDirections.ActionCountingFragmentToTripDetailsFragment action = CountingFragmentDirections.actionCountingFragmentToTripDetailsFragment();
-            this.navigationController.navigate(action);
+
         });
     }
 
     private void initObserverEvents() {
+        this.viewModel.getState().observe(this.getViewLifecycleOwner(), state -> {
+            if (state == State.STORED) {
+                CountingFragmentDirections.ActionCountingFragmentToTripDetailsFragment action = CountingFragmentDirections.actionCountingFragmentToTripDetailsFragment();
+                this.navigationController.navigate(action);
+            }
+        });
+    }
 
+    public enum State {
+        INITIAL,
+        STORING,
+        STORED
     }
 
 }

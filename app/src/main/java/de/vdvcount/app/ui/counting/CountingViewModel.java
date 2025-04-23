@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.filesystem.FilesystemRepository;
@@ -14,6 +16,16 @@ import de.vdvcount.app.model.CountingSequence;
 import de.vdvcount.app.model.PassengerCountingEvent;
 
 public class CountingViewModel extends ViewModel {
+
+    private MutableLiveData<CountingFragment.State> state;
+
+    public CountingViewModel() {
+        this.state = new MutableLiveData<>(CountingFragment.State.INITIAL);
+    }
+
+    public LiveData<CountingFragment.State> getState() {
+        return this.state;
+    }
 
     public List<CountingSequence> generateCountingSequenceContainers(String[] doorIds) {
         List<CountingSequence> countingSequences = new ArrayList<>();
@@ -32,6 +44,8 @@ public class CountingViewModel extends ViewModel {
 
     public void addPassengerCountingEvent(int stopSequence, List<CountingSequence> countingSequences) {
         Runnable runnable = () -> {
+            this.state.postValue(CountingFragment.State.STORING);
+
             for (CountingSequence cs : countingSequences) {
                 cs.setCountEndTimestamp(new Date());
             }
@@ -53,6 +67,8 @@ public class CountingViewModel extends ViewModel {
 
             countedTrip.getCountedStopTimes().get(stopSequence - 1).getPassengerCountingEvents().add(pce);
             repository.updateCountedTrip(countedTrip);
+
+            this.state.postValue(CountingFragment.State.STORED);
         };
 
         Thread thread = new Thread(runnable);
