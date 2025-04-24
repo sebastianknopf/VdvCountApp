@@ -1,15 +1,18 @@
 package de.vdvcount.app.model;
 
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.vdvcount.app.common.ApiObjectMapper;
+import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.remote.CountedStopTimeObject;
 import de.vdvcount.app.remote.CountedTripObject;
 import de.vdvcount.app.remote.PassengerCountingEventObject;
 
 public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObject> {
 
+    private String deviceId;
     private String vehicleId;
     private List<CountedStopTime> countedStopTimes;
     private List<PassengerCountingEvent> unmatchedPassengerCountingEvents;
@@ -26,6 +29,7 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         countedTrip.setDirection(trip.getDirection());
         countedTrip.setHeadsign(trip.getHeadsign());
         countedTrip.setInternationalId(trip.getInternationalId());
+        countedTrip.setOperationDay(trip.getOperationDay());
         countedTrip.setNextTripId(trip.getNextTripId());
 
         for (StopTime stopTime : trip.getStopTimes()) {
@@ -43,6 +47,14 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
     @Override
     public void setStopTimes(List<StopTime> stopTimes) {
         throw new RuntimeException("Method setStopTimes not available for CountedTrip object!");
+    }
+
+    public String getDeviceId() {
+        return this.deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     public String getVehicleId() {
@@ -71,13 +83,25 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
 
     @Override
     public CountedTripObject mapApiObject() {
+        String deviceId;
+        try {
+            deviceId = Secret.getSecretString(Secret.DEVICE_ID, null);
+        } catch (InvalidKeyException ex) {
+            throw new RuntimeException(ex);
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException(ex);
+        }
+
         CountedTripObject apiObject = new CountedTripObject();
         apiObject.setTripId(this.getTripId());
         apiObject.setLine(this.getLine().mapApiObject());
         apiObject.setDirection(this.getDirection());
         apiObject.setHeadsign(this.getHeadsign());
         apiObject.setInternationalId(this.getInternationalId());
+        apiObject.setOperationDay(this.getOperationDay());
         apiObject.setNextTripId(this.getNextTripId());
+        apiObject.setDeviceId(this.getDeviceId());
+        apiObject.setDeviceId(deviceId);
         apiObject.setVehicleId(this.getVehicleId());
 
         List<CountedStopTimeObject> countedStopTimes = new ArrayList<>();

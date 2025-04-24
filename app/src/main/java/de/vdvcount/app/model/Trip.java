@@ -9,6 +9,7 @@ public class Trip {
     private int direction;
     private String headsign;
     private String internationalId;
+    private int operationDay;
     private int nextTripId;
     private List<StopTime> stopTimes;
 
@@ -50,6 +51,14 @@ public class Trip {
 
     public void setInternationalId(String internationalId) {
         this.internationalId = internationalId;
+    }
+
+    public int getOperationDay() {
+        return this.operationDay;
+    }
+
+    public void setOperationDay(int operationDay) {
+        this.operationDay = operationDay;
     }
 
     public int getNextTripId() {

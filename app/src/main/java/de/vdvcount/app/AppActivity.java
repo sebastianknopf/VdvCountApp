@@ -6,9 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import java.security.InvalidKeyException;
+import java.util.UUID;
+
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.ActivityAppBinding;
 
@@ -60,6 +64,22 @@ public class AppActivity extends AppCompatActivity {
                 this.actionBarTapCountToast.show();
             } else if (this.actionBarTapCount >= 10) {
                 Status.setString(Status.STATUS, Status.Values.INITIAL);
+
+                try {
+                    Secret.setSecretString(Secret.DEVICE_ID, "");
+                    Secret.setSecretString(Secret.API_ENDPOINT, "");
+                    Secret.setSecretString(Secret.API_USERNAME, "");
+                    Secret.setSecretString(Secret.API_PASSWORD, "");
+
+                    Status.setInt(Status.CURRENT_STATION_ID, -1);
+                    Status.setString(Status.CURRENT_STATION_NAME, null);
+                    Status.setInt(Status.CURRENT_TRIP_ID, -1);
+                    Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
+                    Status.setString(Status.CURRENT_VEHICLE_ID, null);
+                    Status.setStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {});
+                } catch (InvalidKeyException e) {
+                    throw new RuntimeException(e);
+                }
 
                 this.finishAffinity();
             }

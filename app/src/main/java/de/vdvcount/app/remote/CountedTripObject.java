@@ -11,6 +11,8 @@ import de.vdvcount.app.model.PassengerCountingEvent;
 
 public class CountedTripObject extends TripObject {
 
+    @SerializedName("device_id")
+    private String deviceId;
     @SerializedName("vehicle_id")
     private String vehicleId;
     @SerializedName("counted_stop_times")
@@ -31,6 +33,14 @@ public class CountedTripObject extends TripObject {
     @Override
     public void setStopTimes(List<StopTimeObject> stopTimes) {
         throw new RuntimeException("Method setStopTimes not available for CountedTripObject object!");
+    }
+
+    public String getDeviceId() {
+        return this.deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     public String getVehicleId() {
@@ -66,7 +76,9 @@ public class CountedTripObject extends TripObject {
         domainModel.setDirection(this.getDirection());
         domainModel.setHeadsign(this.getHeadsign());
         domainModel.setInternationalId(this.getInternationalId());
+        domainModel.setOperationDay(this.getOperationDay());
         domainModel.setNextTripId(this.getNextTripId());
+        domainModel.setDeviceId(this.getDeviceId());
         domainModel.setVehicleId(this.getVehicleId());
 
         List<CountedStopTime> countedStopTimes = new ArrayList<>();
