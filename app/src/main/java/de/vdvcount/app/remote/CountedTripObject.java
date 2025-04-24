@@ -66,6 +66,7 @@ public class CountedTripObject extends TripObject {
         domainModel.setDirection(this.getDirection());
         domainModel.setHeadsign(this.getHeadsign());
         domainModel.setInternationalId(this.getInternationalId());
+        domainModel.setOperationDay(this.getOperationDay());
         domainModel.setNextTripId(this.getNextTripId());
         domainModel.setVehicleId(this.getVehicleId());
 

@@ -21,6 +21,8 @@ class TripObject implements DomainModelMapper<Trip> {
    private String headsign;
    @SerializedName("international_id")
    private String internationalId;
+   @SerializedName("operation_day")
+   private int operationDay;
    @SerializedName("next_trip_id")
    private int nextTripId;
    @SerializedName("stop_times")
@@ -66,6 +68,14 @@ class TripObject implements DomainModelMapper<Trip> {
       this.internationalId = internationalId;
    }
 
+   public int getOperationDay() {
+      return this.operationDay;
+   }
+
+   public void setOperationDay(int operationDay) {
+      this.operationDay = operationDay;
+   }
+
    public int getNextTripId() {
       return this.nextTripId;
    }
@@ -91,6 +101,7 @@ class TripObject implements DomainModelMapper<Trip> {
       domainModel.setDirection(this.getDirection());
       domainModel.setHeadsign(this.getHeadsign());
       domainModel.setInternationalId(this.getInternationalId());
+      domainModel.setOperationDay(this.getOperationDay());
       domainModel.setNextTripId(this.getNextTripId());
 
       List<StopTime> stopTimes = new ArrayList<>();

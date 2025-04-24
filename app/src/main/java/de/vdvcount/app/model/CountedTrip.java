@@ -77,6 +77,7 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         apiObject.setDirection(this.getDirection());
         apiObject.setHeadsign(this.getHeadsign());
         apiObject.setInternationalId(this.getInternationalId());
+        apiObject.setOperationDay(this.getOperationDay());
         apiObject.setNextTripId(this.getNextTripId());
         apiObject.setVehicleId(this.getVehicleId());
 
