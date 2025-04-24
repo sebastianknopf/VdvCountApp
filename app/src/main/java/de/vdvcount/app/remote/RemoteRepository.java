@@ -16,7 +16,9 @@ import de.vdvcount.app.model.ObjectClass;
 import de.vdvcount.app.model.Station;
 import de.vdvcount.app.model.Trip;
 import de.vdvcount.app.model.Vehicle;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -134,6 +136,26 @@ public class RemoteRepository {
             throw new RuntimeException(ex);
         }
 
+    }
+
+    public void postLogs(String logs) {
+        try {
+            String deviceId = Secret.getSecretString(Secret.DEVICE_ID, null);
+            if (deviceId == null) {
+                deviceId = UUID.randomUUID().toString();
+            }
+
+            RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), logs);
+
+            Call<Void> call = this.remoteApiClient.postLogs(deviceId, requestBody);
+            Response<Void> response = call.execute();
+
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("failed to send results object");
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public List<Vehicle> getAllVehicles() {
