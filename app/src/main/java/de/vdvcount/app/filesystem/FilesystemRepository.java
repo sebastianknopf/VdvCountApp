@@ -131,7 +131,7 @@ public class FilesystemRepository {
         StringBuilder fileNameBuilder = new StringBuilder();
         fileNameBuilder.append(this.getAppDataPath());
         fileNameBuilder.append(File.separator);
-        fileNameBuilder.append("countedTrip.json");
+        fileNameBuilder.append("de.vdvcount.app.countedtrip.json");
 
         return fileNameBuilder.toString();
     }
