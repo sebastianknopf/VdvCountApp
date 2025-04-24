@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.model.Departure;
@@ -65,6 +66,8 @@ public class RemoteRepository {
     public List<Station> getStopsByLookupName(String lookupName) {
         try {
             Call<List<StationObject>> call = this.remoteApiClient.getStopsByLookupName(lookupName);
+            Logging.d(this.getClass().getName(), String.format("Performing request [%s] %s", call.request().method(), call.request().url()));
+
             Response<List<StationObject>> response = call.execute();
 
             if (response.isSuccessful()) {
@@ -75,18 +78,26 @@ public class RemoteRepository {
                     resultList.add(obj.mapDomainModel());
                 }
 
+                Logging.i(this.getClass().getName(), "Request successful");
+
                 return resultList;
             } else {
+                Logging.e(this.getClass().getName(), "Error performing remote API request");
+                Logging.d(this.getClass().getName(), String.format("HTTP status code %d", response.code()));
+
                 return null;
             }
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            Logging.e(this.getClass().getName(), "Error performing remote API request", ex);
+            return null;
         }
     }
 
     public List<Departure> getDeparturesByParentStopId(int parentStopId) {
         try {
             Call<List<DepartureObject>> call = this.remoteApiClient.getDeparturesByParentStopId(parentStopId);
+            Logging.d(this.getClass().getName(), String.format("Performing request [%s] %s", call.request().method(), call.request().url()));
+
             Response<List<DepartureObject>> response = call.execute();
 
             if (response.isSuccessful()) {
@@ -97,48 +108,73 @@ public class RemoteRepository {
                     resultList.add(obj.mapDomainModel());
                 }
 
+                Logging.i(this.getClass().getName(), "Request successful");
+
                 return resultList;
             } else {
+                Logging.e(this.getClass().getName(), "Error performing remote API request");
+                Logging.d(this.getClass().getName(), String.format("HTTP status code %d", response.code()));
+
                 return null;
             }
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            Logging.e(this.getClass().getName(), "Error performing remote API request", ex);
+            return null;
         }
     }
 
     public Trip getTripByTripId(int tripId) {
         try {
             Call<TripObject> call = this.remoteApiClient.getTripByTripId(tripId);
+            Logging.d(this.getClass().getName(), String.format("Performing request [%s] %s", call.request().method(), call.request().url()));
+
             Response<TripObject> response = call.execute();
 
             if (response.isSuccessful()) {
                 TripObject object = response.body();
+
+                Logging.i(this.getClass().getName(), "Request successful");
+
                 return object.mapDomainModel();
             } else {
+                Logging.e(this.getClass().getName(), "Error performing remote API request");
+                Logging.d(this.getClass().getName(), String.format("HTTP status code %d", response.code()));
+
                 return null;
             }
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            Logging.e(this.getClass().getName(), "Error performing remote API request", ex);
+            return null;
         }
     }
 
-    public void postResults(CountedTrip countedTrip) {
+    public boolean postResults(CountedTrip countedTrip) {
         try {
             String resultGuid = UUID.randomUUID().toString();
 
             Call<Void> call = this.remoteApiClient.postResults(resultGuid, countedTrip.mapApiObject());
+            Logging.d(this.getClass().getName(), String.format("Performing request [%s] %s", call.request().method(), call.request().url()));
+
             Response<Void> response = call.execute();
 
-            if (!response.isSuccessful()) {
-                throw new RuntimeException("failed to send results object");
+            if (response.isSuccessful()) {
+                Logging.i(this.getClass().getName(), "Request successful");
+
+                return true;
+            } else {
+                Logging.e(this.getClass().getName(), "Error performing remote API request");
+                Logging.d(this.getClass().getName(), String.format("HTTP status code %d", response.code()));
+
+                return false;
             }
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+            Logging.e(this.getClass().getName(), "Error performing remote API request", ex);
 
+            return false;
+        }
     }
 
-    public void postLogs(String logs) {
+    public boolean postLogs(String logs) {
         try {
             String deviceId = Secret.getSecretString(Secret.DEVICE_ID, null);
             if (deviceId == null) {
@@ -148,19 +184,32 @@ public class RemoteRepository {
             RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), logs);
 
             Call<Void> call = this.remoteApiClient.postLogs(deviceId, requestBody);
+            Logging.d(this.getClass().getName(), String.format("Performing request [%s] %s", call.request().method(), call.request().url()));
+
             Response<Void> response = call.execute();
 
-            if (!response.isSuccessful()) {
-                throw new RuntimeException("failed to send results object");
+            if (response.isSuccessful()) {
+                Logging.i(this.getClass().getName(), "Request successful");
+
+                return true;
+            } else {
+                Logging.e(this.getClass().getName(), "Error performing remote API request");
+                Logging.d(this.getClass().getName(), String.format("HTTP status code %d", response.code()));
+
+                return false;
             }
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            Logging.e(this.getClass().getName(), "Error performing remote API request", ex);
+
+            return false;
         }
     }
 
     public List<Vehicle> getAllVehicles() {
         try {
             Call<List<VehicleObject>> call = this.remoteApiClient.getAllVehicles();
+            Logging.d(this.getClass().getName(), String.format("Performing request [%s] %s", call.request().method(), call.request().url()));
+
             Response<List<VehicleObject>> response = call.execute();
 
             if (response.isSuccessful()) {
@@ -171,18 +220,26 @@ public class RemoteRepository {
                     resultList.add(obj.mapDomainModel());
                 }
 
+                Logging.i(this.getClass().getName(), "Request successful");
+
                 return resultList;
             } else {
+                Logging.e(this.getClass().getName(), "Error performing remote API request");
+                Logging.d(this.getClass().getName(), String.format("HTTP status code %d", response.code()));
+
                 return null;
             }
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            Logging.e(this.getClass().getName(), "Error performing remote API request", ex);
+            return null;
         }
     }
 
     public List<ObjectClass> getAllObjectClasses() {
         try {
             Call<List<ObjectClassObject>> call = this.remoteApiClient.getAllObjectClasses();
+            Logging.d(this.getClass().getName(), String.format("Performing request [%s] %s", call.request().method(), call.request().url()));
+
             Response<List<ObjectClassObject>> response = call.execute();
 
             if (response.isSuccessful()) {
@@ -193,18 +250,26 @@ public class RemoteRepository {
                     resultList.add(obj.mapDomainModel());
                 }
 
+                Logging.i(this.getClass().getName(), "Request successful");
+
                 return resultList;
             } else {
+                Logging.e(this.getClass().getName(), "Error performing remote API request");
+                Logging.d(this.getClass().getName(), String.format("HTTP status code %d", response.code()));
+
                 return null;
             }
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            Logging.e(this.getClass().getName(), "Error performing remote API request", ex);
+            return null;
         }
     }
 
     public boolean performHealthCheck() {
         try {
             Call<SystemHealthObject> call = this.remoteApiClient.getSystemHealthCheck();
+            Logging.d(this.getClass().getName(), String.format("Performing request [%s] %s", call.request().method(), call.request().url()));
+
             Response<SystemHealthObject> response = call.execute();
 
             if (response.isSuccessful()) {
@@ -212,15 +277,21 @@ public class RemoteRepository {
 
                 int currentUnixTimestamp = (int) (new Date().getTime() / 1000L);
                 if (obj.getTimestamp() >= currentUnixTimestamp - 300) {
+                    Logging.i(this.getClass().getName(), "Health check request successful");
                     return true;
                 } else {
+                    Logging.e(this.getClass().getName(), "Server and device time differs more than 300 seconds");
                     return false;
                 }
             } else {
+                Logging.e(this.getClass().getName(), "Error performing remote API request");
+                Logging.d(this.getClass().getName(), String.format("HTTP status code %d", response.code()));
+
                 return false;
             }
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            Logging.e(this.getClass().getName(), "Error performing remote API request", ex);
+            return false;
         }
     }
 }
