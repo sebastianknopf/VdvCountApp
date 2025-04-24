@@ -14,14 +14,10 @@ class RemoteAuthenticationInterceptor implements Interceptor {
     private String credentials;
 
     public RemoteAuthenticationInterceptor() {
-        try {
-            this.credentials = Credentials.basic(
-                    Secret.getSecretString(Secret.API_USERNAME, ""),
-                    Secret.getSecretString(Secret.API_PASSWORD, "")
-            );
-        } catch (InvalidKeyException | IllegalAccessException ex) {
-            throw new RuntimeException(ex);
-        }
+        this.credentials = Credentials.basic(
+                Secret.getSecretString(Secret.API_USERNAME, ""),
+                Secret.getSecretString(Secret.API_PASSWORD, "")
+        );
     }
 
     @Override

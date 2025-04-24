@@ -13,21 +13,30 @@ public class Secret extends KeyValueStore {
    public final static String API_USERNAME = "de.vdvcount.app.kvs.secret.API_USERNAME";
    public final static String API_PASSWORD = "de.vdvcount.app.kvs.secret.API_PASSWORD";
 
-   public static String getSecretString(String variableName, String defaultValue) throws InvalidKeyException, IllegalAccessException {
-      return Cipher.decryptString(
-              KeyValueStore.getString(variableName, defaultValue),
-              Cipher.DEFAULT_KEY
-      );
+   public static String getSecretString(String variableName, String defaultValue) {
+      try {
+         return Cipher.decryptString(
+                 KeyValueStore.getString(variableName, defaultValue),
+                 Cipher.DEFAULT_KEY
+         );
+      } catch (Exception ex) {
+         return defaultValue;
+      }
    }
 
-   public static void setSecretString(String variableName, String value) throws InvalidKeyException {
-      SharedPreferences.Editor editor = Secret.sharedPreferences.edit();
-      editor.putString(variableName,
-              Cipher.encryptString(
-                      value,
-                      Cipher.DEFAULT_KEY
-              )
-      );
-      editor.commit();
+   public static void setSecretString(String variableName, String value) {
+      try {
+         SharedPreferences.Editor editor = Secret.sharedPreferences.edit();
+         editor.putString(variableName,
+                 Cipher.encryptString(
+                         value,
+                         Cipher.DEFAULT_KEY
+                 )
+         );
+         editor.commit();
+      } catch (Exception ex) {
+         throw new RuntimeException(ex);
+      }
+
    }
 }

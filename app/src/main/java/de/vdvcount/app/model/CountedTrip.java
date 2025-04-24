@@ -83,14 +83,7 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
 
     @Override
     public CountedTripObject mapApiObject() {
-        String deviceId;
-        try {
-            deviceId = Secret.getSecretString(Secret.DEVICE_ID, null);
-        } catch (InvalidKeyException ex) {
-            throw new RuntimeException(ex);
-        } catch (IllegalAccessException ex) {
-            throw new RuntimeException(ex);
-        }
+        String deviceId = Secret.getSecretString(Secret.DEVICE_ID, null);;
 
         CountedTripObject apiObject = new CountedTripObject();
         apiObject.setTripId(this.getTripId());

@@ -52,14 +52,9 @@ public class SetupViewModel extends ViewModel {
 
                 String apiEndpoint = sanitizedUri.toString();
 
-                try {
-                    Secret.setSecretString(Secret.DEVICE_ID, UUID.randomUUID().toString());
-                    Secret.setSecretString(Secret.API_ENDPOINT, apiEndpoint);
-                    Secret.setSecretString(Secret.API_USERNAME, userCredentials[0]);
-                    Secret.setSecretString(Secret.API_PASSWORD, userCredentials[1]);
-                } catch (InvalidKeyException e) {
-                    throw new RuntimeException(e);
-                }
+                Secret.setSecretString(Secret.API_ENDPOINT, apiEndpoint);
+                Secret.setSecretString(Secret.API_USERNAME, userCredentials[0]);
+                Secret.setSecretString(Secret.API_PASSWORD, userCredentials[1]);
 
                 RemoteRepository remoteRepository = RemoteRepository.getInstance();
                 if (remoteRepository.performHealthCheck()) {
