@@ -12,9 +12,11 @@ import java.util.UUID;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.ActivityAppBinding;
+import de.vdvcount.app.remote.RemoteRepository;
 
 public class AppActivity extends AppCompatActivity {
 
@@ -42,7 +44,31 @@ public class AppActivity extends AppCompatActivity {
 
         this.navigationController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
+        // generate device ID if not already existing
+        String deviceId = Secret.getSecretString(Secret.DEVICE_ID, null);
+        if (deviceId == null) {
+            Secret.setSecretString(Secret.DEVICE_ID, UUID.randomUUID().toString());
+        }
+
+        // check former app termination state
+        boolean terminated = Status.getBoolean(Status.TERMINATED, false);
+        if (!terminated && !Status.getString(Status.STATUS, Status.Values.INITIAL).equals(Status.Values.INITIAL)) {
+            Logging.i(this.getClass().getName(), "Application was killed by user or system before");
+
+            this.sendLogs();
+        }
+
         this.initViewEvents();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Status.setBoolean(Status.TERMINATED, true);
+        Logging.i(this.getClass().getName(), "Application terminating");
+
+        this.sendLogs();
     }
 
     public NavController getNavigationController() {
@@ -65,24 +91,37 @@ public class AppActivity extends AppCompatActivity {
             } else if (this.actionBarTapCount >= 10) {
                 Status.setString(Status.STATUS, Status.Values.INITIAL);
 
-                try {
-                    Secret.setSecretString(Secret.DEVICE_ID, "");
-                    Secret.setSecretString(Secret.API_ENDPOINT, "");
-                    Secret.setSecretString(Secret.API_USERNAME, "");
-                    Secret.setSecretString(Secret.API_PASSWORD, "");
+                Secret.setSecretString(Secret.API_ENDPOINT, "");
+                Secret.setSecretString(Secret.API_USERNAME, "");
+                Secret.setSecretString(Secret.API_PASSWORD, "");
 
-                    Status.setInt(Status.CURRENT_STATION_ID, -1);
-                    Status.setString(Status.CURRENT_STATION_NAME, null);
-                    Status.setInt(Status.CURRENT_TRIP_ID, -1);
-                    Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
-                    Status.setString(Status.CURRENT_VEHICLE_ID, null);
-                    Status.setStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {});
-                } catch (InvalidKeyException e) {
-                    throw new RuntimeException(e);
-                }
+                Status.setInt(Status.CURRENT_STATION_ID, -1);
+                Status.setString(Status.CURRENT_STATION_NAME, null);
+                Status.setInt(Status.CURRENT_TRIP_ID, -1);
+                Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
+                Status.setString(Status.CURRENT_VEHICLE_ID, null);
+                Status.setStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {});
 
-                this.finishAffinity();
+                this.finish();
             }
         });
+    }
+
+    public void sendLogs() {
+        Runnable runnable = () -> {
+            try {
+                String logs = Logging.getCurrentLogs();
+
+                RemoteRepository repository = RemoteRepository.getInstance();
+                repository.postLogs(logs);
+
+                Logging.clearCurrentLogs();
+            } catch (Exception ex) {
+                Logging.e(this.getClass().getName(), "Failed to send logs to remote API", ex);
+            }
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 }

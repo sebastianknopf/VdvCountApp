@@ -3,6 +3,10 @@ package de.vdvcount.app;
 import android.app.Application;
 import android.content.Context;
 
+import com.google.firebase.components.BuildConfig;
+
+import de.vdvcount.app.common.Logging;
+
 public class App extends Application {
 
     private static Context staticContext;
@@ -12,6 +16,9 @@ public class App extends Application {
         super.onCreate();
 
         App.staticContext = this.getApplicationContext();
+
+        Logging.i(getClass().getName(), "Application startup - Running static context constructor");
+        Logging.d(getClass().getName(), "Debug configuration " + BuildConfig.DEBUG);
     }
 
     public static Context getStaticContext() {
