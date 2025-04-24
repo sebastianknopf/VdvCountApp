@@ -6,9 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import java.security.InvalidKeyException;
+import java.util.UUID;
+
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.ActivityAppBinding;
 
@@ -60,6 +64,15 @@ public class AppActivity extends AppCompatActivity {
                 this.actionBarTapCountToast.show();
             } else if (this.actionBarTapCount >= 10) {
                 Status.setString(Status.STATUS, Status.Values.INITIAL);
+
+                try {
+                    Secret.setSecretString(Secret.DEVICE_ID, null);
+                    Secret.setSecretString(Secret.API_ENDPOINT, null);
+                    Secret.setSecretString(Secret.API_USERNAME, null);
+                    Secret.setSecretString(Secret.API_PASSWORD, null);
+                } catch (InvalidKeyException e) {
+                    throw new RuntimeException(e);
+                }
 
                 this.finishAffinity();
             }

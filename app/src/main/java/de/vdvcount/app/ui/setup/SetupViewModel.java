@@ -2,6 +2,7 @@ package de.vdvcount.app.ui.setup;
 
 import java.net.URI;
 import java.security.InvalidKeyException;
+import java.util.UUID;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -52,6 +53,7 @@ public class SetupViewModel extends ViewModel {
                 String apiEndpoint = sanitizedUri.toString();
 
                 try {
+                    Secret.setSecretString(Secret.DEVICE_ID, UUID.randomUUID().toString());
                     Secret.setSecretString(Secret.API_ENDPOINT, apiEndpoint);
                     Secret.setSecretString(Secret.API_USERNAME, userCredentials[0]);
                     Secret.setSecretString(Secret.API_PASSWORD, userCredentials[1]);
