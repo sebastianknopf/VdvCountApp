@@ -20,6 +20,7 @@ import java.util.Locale;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.DepartureListAdapter;
+import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.OnItemClickListener;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentDepartureBinding;
@@ -92,11 +93,17 @@ public class DepartureFragment extends Fragment {
         String currentStationName = Status.getString(Status.CURRENT_STATION_NAME, null);
 
         if (currentStationId != -1) {
+            Logging.i(this.getClass().getName(), String.format("CURRENT_STATION_ID is %d", currentStationId));
             this.viewModel.loadDepartures(currentStationId);
+        } else {
+            Logging.w(this.getClass().getName(), "CURRENT_STATION_ID is -1");
         }
 
         if (currentStationName != null) {
+            Logging.i(this.getClass().getName(), String.format("CURRENT_STATION_NAME is %s", currentStationName));
             this.dataBinding.edtStopName.setText(currentStationName);
+        } else {
+            Logging.w(this.getClass().getName(), "CURRENT_STATION_NAME is null");
         }
     }
 
@@ -124,6 +131,12 @@ public class DepartureFragment extends Fragment {
 
     private void initObserverEvents() {
         this.viewModel.getDepartures().observe(this.getViewLifecycleOwner(), departures -> {
+            if (departures != null) {
+                Logging.i(this.getClass().getName(), String.format("Found %d departures", departures.size()));
+            } else {
+                Logging.w(this.getClass().getName(), "Observed departures result is null");
+            }
+
             this.departureListAdapter.setDepartureList(departures);
         });
     }
