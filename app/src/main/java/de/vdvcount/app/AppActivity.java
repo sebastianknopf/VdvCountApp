@@ -52,6 +52,8 @@ public class AppActivity extends AppCompatActivity {
 
         // check former app termination state
         boolean terminated = Status.getBoolean(Status.TERMINATED, false);
+        Status.setBoolean(Status.TERMINATED, false);
+
         if (!terminated && !Status.getString(Status.STATUS, Status.Values.INITIAL).equals(Status.Values.INITIAL)) {
             Logging.i(this.getClass().getName(), "Application was killed by user or system before");
 
@@ -109,19 +111,18 @@ public class AppActivity extends AppCompatActivity {
 
     public void sendLogs() {
         Runnable runnable = () -> {
-            Logging.i(this.getClass().getName(), "Sending logs to remote server");
-            Logging.setLockedState(true);
 
             try {
-                String logs = Logging.getCurrentLogs();
-
                 RemoteRepository repository = RemoteRepository.getInstance();
-                repository.postLogs(logs);
+                if (repository.performHealthCheck()) {
+                    Logging.i(this.getClass().getName(), "Sending logs to remote server");
 
-                Logging.clearCurrentLogs();
-                Logging.setLockedState(false);
+                    String logs = Logging.getCurrentLogs();
+                    if (repository.postLogs(logs)) {
+                        Logging.clearCurrentLogs();
+                    }
+                }
             } catch (Exception ex) {
-                Logging.setLockedState(false);
                 Logging.e(this.getClass().getName(), "Failed to send logs to remote API", ex);
             }
         };
