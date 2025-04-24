@@ -13,6 +13,7 @@ lifecycleViewmodelKtx = "2.8.7"
 navigationFragmentKtx = "2.8.4"
 retrofit = "2.11.0"
 legacySupportV4 = "1.0.0"
+timelineview = "1.1.5"
 
 [libraries]
 android-permissions = { module = "com.github.Redman1037:Android-Permissions", version.ref = "androidPermissions" }
@@ -30,6 +31,7 @@ navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-kt
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
+timelineview = { module = "com.github.vipulasri:timelineview", version.ref = "timelineview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

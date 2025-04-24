@@ -27,13 +27,23 @@
 
     <!-- TripDetailsFragment -->
     <string name="trip_details_title">Zählfahrt</string>
-    <string name="trip_details_quit">Zählung beenden</string>
+    <string name="trip_details_quit">Fahrt abschließen</string>
+
+    <!-- CountingFragment -->
+    <string name="counting_title">Zählung</string>
+    <string name="counting_save">Zählung beenden</string>
+    <string name="counting_stop_info">Zählung an der Haltestelle %s</string>
+    <string name="counting_in">Einsteiger</string>
+    <string name="counting_out">Aussteiger</string>
 
     <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>
     <string name="app_reset_counter">Noch %dx zum Zurücksetzen.</string>
     <string name="str_continue">Weiter</string>
     <string name="str_door">Tür %s</string>
+    <string name="str_slash">/</string>
+    <string name="str_minus">-</string>
+    <string name="str_plus">+</string>
 
     <string name="str_format_time">HH:mm</string>
 </resources>

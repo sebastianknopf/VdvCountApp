@@ -1,9 +1,9 @@
 package de.vdvcount.app.model;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.Date;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import de.vdvcount.app.common.ApiObjectMapper;
 import de.vdvcount.app.remote.CountingSequenceObject;
 
@@ -16,6 +16,14 @@ public class CountingSequence implements ApiObjectMapper<CountingSequenceObject>
     private String countingAreaId;
     private int in;
     private int out;
+
+    private MutableLiveData<Integer> observableIn;
+    private MutableLiveData<Integer> observableOut;
+
+    public CountingSequence() {
+        this.observableIn = new MutableLiveData<>();
+        this.observableOut = new MutableLiveData<>();
+    }
 
     public Date getCountBeginTimestamp() {
         return this.countBeginTimestamp;
@@ -63,6 +71,7 @@ public class CountingSequence implements ApiObjectMapper<CountingSequenceObject>
 
     public void setIn(int in) {
         this.in = in;
+        this.observableIn.postValue(in);
     }
 
     public int getOut() {
@@ -71,6 +80,39 @@ public class CountingSequence implements ApiObjectMapper<CountingSequenceObject>
 
     public void setOut(int out) {
         this.out = out;
+        this.observableOut.postValue(out);
+    }
+
+    public LiveData<Integer> getObservableIn() {
+        return this.observableIn;
+    }
+
+    public LiveData<Integer> getObservableOut() {
+        return this.observableOut;
+    }
+
+    public void incrementIn() {
+        int in = this.getIn();
+        this.setIn(in++);
+    }
+
+    public void decrementIn() {
+        int in = this.getIn();
+        if (in > 0) {
+            this.setIn(in--);
+        }
+    }
+
+    public void incrementOut() {
+        int out = this.getOut();
+        this.setOut(out++);
+    }
+
+    public void decrementOut() {
+        int out = this.getOut();
+        if (out> 0) {
+            this.setOut(out--);
+        }
     }
 
     @Override

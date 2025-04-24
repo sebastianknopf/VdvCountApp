@@ -159,6 +159,7 @@ public class TripParamsFragment extends Fragment {
         this.dataBinding.btnContinue.setOnClickListener(view -> {
             TripParamsFragmentDirections.ActionTripParamsFragmentToTripDetailsFragment action = TripParamsFragmentDirections.actionTripParamsFragmentToTripDetailsFragment(
                     this.currentTripId,
+                    this.currentVehicleId,
                     0,
                     this.doorListAdapter.getSelectedDoorList().toArray(new String[0])
             );

@@ -85,12 +85,7 @@ public class SetupFragment extends Fragment {
         } else if (Status.getString(Status.STATUS, Status.Values.INITIAL).equals(Status.Values.COUNTING)) {
             // navigate to counting fragment here
 
-            SetupFragmentDirections.ActionSetupFragmentToTripDetailsFragment action = SetupFragmentDirections.actionSetupFragmentToTripDetailsFragment(
-                    Status.getInt(Status.CURRENT_TRIP_ID, -1),
-                    Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1),
-                    new String[] {}
-            );
-
+            SetupFragmentDirections.ActionSetupFragmentToTripDetailsFragment action = SetupFragmentDirections.actionSetupFragmentToTripDetailsFragment();
             this.navigationController.navigate(action);
         }
     }

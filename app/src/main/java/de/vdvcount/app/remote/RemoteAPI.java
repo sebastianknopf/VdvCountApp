@@ -22,7 +22,7 @@ interface RemoteAPI {
     @GET("masterdata/vehicles")
     Call<List<VehicleObject>> getAllVehicles();
 
-    @GET("masterdata/objectClasses")
+    @GET("masterdata/objectclasses")
     Call<List<ObjectClassObject>> getAllObjectClasses();
 
     @POST("results/post/{guid}")

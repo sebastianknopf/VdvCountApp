@@ -1,6 +1,7 @@
 package de.vdvcount.app.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.vdvcount.app.common.ApiObjectMapper;
@@ -50,6 +51,24 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
         this.countingSequences = countingSequences;
     }
 
+    public int getIn() {
+        int sum = 0;
+        for (CountingSequence countingSequence : this.getCountingSequences()) {
+            sum += countingSequence.getIn();
+        }
+
+        return sum;
+    }
+
+    public int getOut() {
+        int sum = 0;
+        for (CountingSequence countingSequence : this.getCountingSequences()) {
+            sum += countingSequence.getOut();
+        }
+
+        return sum;
+    }
+
     @Override
     public PassengerCountingEventObject mapApiObject() {
         PassengerCountingEventObject apiObject = new PassengerCountingEventObject();
@@ -61,6 +80,7 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
         for (CountingSequence obj : this.getCountingSequences()) {
             countingSequences.add(obj.mapApiObject());
         }
+        apiObject.setCountingSequences(countingSequences);
 
         return apiObject;
     }
