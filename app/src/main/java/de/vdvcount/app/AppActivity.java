@@ -66,16 +66,16 @@ public class AppActivity extends AppCompatActivity {
                 Status.setString(Status.STATUS, Status.Values.INITIAL);
 
                 try {
-                    Secret.setSecretString(Secret.DEVICE_ID, null);
-                    Secret.setSecretString(Secret.API_ENDPOINT, null);
-                    Secret.setSecretString(Secret.API_USERNAME, null);
-                    Secret.setSecretString(Secret.API_PASSWORD, null);
+                    Secret.setSecretString(Secret.DEVICE_ID, "");
+                    Secret.setSecretString(Secret.API_ENDPOINT, "");
+                    Secret.setSecretString(Secret.API_USERNAME, "");
+                    Secret.setSecretString(Secret.API_PASSWORD, "");
 
                     Status.setInt(Status.CURRENT_STATION_ID, -1);
                     Status.setString(Status.CURRENT_STATION_NAME, null);
                     Status.setInt(Status.CURRENT_TRIP_ID, -1);
                     Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
-                    Status.getInt(Status.CURRENT_VEHICLE_ID, null);
+                    Status.setString(Status.CURRENT_VEHICLE_ID, null);
                     Status.setStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {});
                 } catch (InvalidKeyException e) {
                     throw new RuntimeException(e);
