@@ -20,9 +20,11 @@ import de.vdvcount.app.App;
 public class Logging {
 
    private static String storageLocation;
+   private static boolean locked;
 
    static {
       Logging.storageLocation = App.getStaticContext().getFilesDir().toString();
+      Logging.locked = false;
 
       Logging.verifyFileSystemStructure();
    }
@@ -33,6 +35,9 @@ public class Logging {
    }
 
    private static void addLogEntry(String level, String tag, String message) {
+      while(Logging.locked) {
+      }
+
       String logFilename = Logging.getLogPath("de.vdvcount.app.log");
 
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -72,6 +77,10 @@ public class Logging {
       builder.append("logs");
 
       return builder.toString();
+   }
+
+   public static void setLockedState(boolean locked) {
+      Logging.locked = locked;
    }
 
    public static String getCurrentLogs() {

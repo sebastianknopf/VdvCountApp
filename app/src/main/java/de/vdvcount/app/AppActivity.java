@@ -109,6 +109,8 @@ public class AppActivity extends AppCompatActivity {
 
     public void sendLogs() {
         Runnable runnable = () -> {
+            Logging.setLockedState(true);
+
             try {
                 String logs = Logging.getCurrentLogs();
 
@@ -116,7 +118,9 @@ public class AppActivity extends AppCompatActivity {
                 repository.postLogs(logs);
 
                 Logging.clearCurrentLogs();
+                Logging.setLockedState(false);
             } catch (Exception ex) {
+                Logging.setLockedState(false);
                 Logging.e(this.getClass().getName(), "Failed to send logs to remote API", ex);
             }
         };
