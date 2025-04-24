@@ -109,6 +109,7 @@ public class AppActivity extends AppCompatActivity {
 
     public void sendLogs() {
         Runnable runnable = () -> {
+            Logging.i(this.getClass().getName(), "Sending logs to remote server");
             Logging.setLockedState(true);
 
             try {
