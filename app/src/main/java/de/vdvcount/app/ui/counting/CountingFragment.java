@@ -20,6 +20,7 @@ import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.CountingSequenceListAdapter;
+import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.databinding.FragmentCountingBinding;
 import de.vdvcount.app.model.CountingSequence;
 
