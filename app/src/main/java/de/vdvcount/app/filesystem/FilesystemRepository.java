@@ -119,6 +119,8 @@ public class FilesystemRepository {
         String countedTripFilename = this.getCountedTripFilename();
         File file = new File(countedTripFilename);
         file.delete();
+
+        Logging.i(this.getClass().getName(), "Removed CountedTrip object from local storage");
     }
 
     private void verifyFileSystemStructure() {
