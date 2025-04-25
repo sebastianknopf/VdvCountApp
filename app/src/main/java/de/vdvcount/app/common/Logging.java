@@ -6,14 +6,22 @@ import com.google.firebase.components.BuildConfig;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import de.vdvcount.app.App;
 
@@ -27,12 +35,7 @@ public class Logging {
       Logging.verifyFileSystemStructure();
    }
 
-   private static String getLogTimestamp() {
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-      return sdf.format(new Date());
-   }
-
-   private static void addLogEntry(String level, String tag, String message) {
+   private static synchronized void addLogEntry(String level, String tag, String message) {
       String logFilename = Logging.getLogPath("de.vdvcount.app.log");
 
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -74,31 +77,48 @@ public class Logging {
       return builder.toString();
    }
 
-   public static String getCurrentLogs() {
-      String logFilename = Logging.getLogPath("de.vdvcount.app.log");
+   public static Map<String, String> getArchivedLogs() {
+      Map<String, String> logs = new LinkedHashMap<>();
 
-      StringBuilder sb = new StringBuilder();
+      File logDirectory = new File(Logging.getLogPath());
+      File[] logFiles = logDirectory.listFiles(file -> file.isFile() & !file.getName().toLowerCase().endsWith(".log"));
 
-      try {
-         BufferedReader reader = new BufferedReader(new FileReader(logFilename));
+      if (logFiles != null) {
+         for (File logFile : logFiles) {
+            StringBuilder sb = new StringBuilder();
 
-         String line;
-         while((line = reader.readLine()) != null) {
-            sb.append(line).append(System.lineSeparator());
+            try {
+               BufferedReader reader = new BufferedReader(new FileReader(logFile));
+
+               String line;
+               while((line = reader.readLine()) != null) {
+                  sb.append(line).append(System.lineSeparator());
+               }
+            } catch (IOException ex) {
+            }
+
+            logs.put(logFile.getName(), sb.toString());
          }
-      } catch (IOException ex) {
       }
 
-      return sb.toString();
+      return logs;
    }
 
-   public static void clearCurrentLogs() {
-      String logFilename = Logging.getLogPath("de.vdvcount.app.log");
+   public static void removeArchivedLog(String logFilename) {
+      File logFile = new File(Logging.getLogPath(logFilename));
+      logFile.delete();
+   }
 
-      try {
-         FileWriter fileWriter = new FileWriter(logFilename, false);
-         fileWriter.close();
-      } catch (IOException ex) {
+   public static void archiveCurrentLogs() {
+      File logDirectory = new File(Logging.getLogPath());
+      File[] logFiles = logDirectory.listFiles(file -> file.isFile());
+
+      int fileIndex = logFiles != null ? logFiles.length : 0;
+      File activeLogFile = new File(Logging.getLogPath("de.vdvcount.app.log"));
+      File archiveLogFile = new File(Logging.getLogPath(String.format("de.vdvcount.app.log.%d", fileIndex)));
+
+      if (fileIndex != 0 && activeLogFile.exists()) {
+         activeLogFile.renameTo(archiveLogFile);
       }
    }
 

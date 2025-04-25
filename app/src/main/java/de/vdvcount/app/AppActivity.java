@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import java.security.InvalidKeyException;
+import java.util.Map;
 import java.util.UUID;
 
 import androidx.databinding.DataBindingUtil;
@@ -111,15 +112,15 @@ public class AppActivity extends AppCompatActivity {
 
     public void sendLogs() {
         Runnable runnable = () -> {
-
             try {
-                RemoteRepository repository = RemoteRepository.getInstance();
-                if (repository.performHealthCheck()) {
-                    Logging.i(this.getClass().getName(), "Sending logs to remote server");
+                Logging.i(this.getClass().getName(), "Sending logs to remote server");
+                Logging.archiveCurrentLogs();
 
-                    String logs = Logging.getCurrentLogs();
-                    if (repository.postLogs(logs)) {
-                        Logging.clearCurrentLogs();
+                RemoteRepository repository = RemoteRepository.getInstance();
+                Map<String, String> archivedLogs = Logging.getArchivedLogs();
+                for (Map.Entry<String, String> archivedLog : archivedLogs.entrySet()) {
+                    if (repository.postLogs(archivedLog.getValue())) {
+                        Logging.removeArchivedLog(archivedLog.getKey());
                     }
                 }
             } catch (Exception ex) {
