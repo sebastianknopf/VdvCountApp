@@ -3,6 +3,7 @@ package de.vdvcount.app.ui.counting;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,9 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.navigation.NavController;
+
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
+
+import de.vdvcount.app.App;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.CountingSequenceListAdapter;
@@ -107,9 +114,32 @@ public class CountingFragment extends Fragment {
 
     private void initViewEvents() {
         this.dataBinding.btnSave.setOnClickListener(view -> {
-            this.viewModel.addPassengerCountingEvent(this.currentStopSequence, this.countingSequenceListAdapter.getCountingSequenceList());
+            String[] permissions = {
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.CAMERA
+            };
 
+            Permissions.check(this.getContext(), permissions, null, null, new PermissionHandler() {
+                @Override
+                public void onGranted() {
+                    viewModel.addPassengerCountingEvent(
+                            currentStopSequence,
+                            countingSequenceListAdapter.getCountingSequenceList()
+                    );
+                }
 
+                @Override
+                public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                    super.onDenied(context, deniedPermissions);
+
+                    Logging.w(getClass().getName(), "Location permission refused");
+
+                    viewModel.addPassengerCountingEvent(
+                            currentStopSequence,
+                            countingSequenceListAdapter.getCountingSequenceList()
+                    );
+                }
+            });
         });
     }
 
