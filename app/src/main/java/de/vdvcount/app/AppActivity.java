@@ -34,6 +34,9 @@ public class AppActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Status.setBoolean(Status.TERMINATED, false);
+        Logging.i(this.getClass().getName(), "Application starting");
+
         this.actionBarTapCount = 0;
         this.actionBarTapCountResetRunnable = () -> {
             this.actionBarTapCount = 0;
@@ -53,8 +56,6 @@ public class AppActivity extends AppCompatActivity {
 
         // check former app termination state
         boolean terminated = Status.getBoolean(Status.TERMINATED, false);
-        Status.setBoolean(Status.TERMINATED, false);
-
         if (!terminated && !Status.getString(Status.STATUS, Status.Values.INITIAL).equals(Status.Values.INITIAL)) {
             Logging.i(this.getClass().getName(), "Application was killed by user or system before");
 
@@ -71,7 +72,9 @@ public class AppActivity extends AppCompatActivity {
         Status.setBoolean(Status.TERMINATED, true);
         Logging.i(this.getClass().getName(), "Application terminating");
 
-        this.sendLogs();
+        if (!Status.getString(Status.STATUS, Status.Values.INITIAL).equals(Status.Values.INITIAL)) {
+            this.sendLogs();
+        }
     }
 
     public NavController getNavigationController() {
