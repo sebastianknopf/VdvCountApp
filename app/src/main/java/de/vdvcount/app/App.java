@@ -18,7 +18,8 @@ public class App extends Application {
         App.staticContext = this.getApplicationContext();
 
         Logging.i(getClass().getName(), "Application startup - Running static context constructor");
-        Logging.d(getClass().getName(), "Debug configuration " + BuildConfig.DEBUG);
+        Logging.i(getClass().getName(), String.format("Application version %s", BuildConfig.VERSION_NAME));
+        Logging.i(getClass().getName(), "Debug configuration " + BuildConfig.DEBUG);
     }
 
     public static Context getStaticContext() {
