@@ -154,6 +154,7 @@ public class RemoteRepository {
 
             Call<Void> call = this.remoteApiClient.postResults(resultGuid, countedTrip.mapApiObject());
             Logging.d(this.getClass().getName(), String.format("Performing request [%s] %s", call.request().method(), call.request().url()));
+            Logging.i(this.getClass().getName(), String.format("Result UUID is %s", resultGuid));
 
             Response<Void> response = call.execute();
 
