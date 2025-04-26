@@ -1,10 +1,9 @@
 package de.vdvcount.app.model;
 
-import com.google.firebase.components.BuildConfig;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import de.vdvcount.app.BuildConfig;
 import de.vdvcount.app.common.ApiObjectMapper;
 import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.remote.CountedStopTimeObject;
