@@ -2,28 +2,20 @@ package de.vdvcount.app.common;
 
 import android.util.Log;
 
-import com.google.firebase.components.BuildConfig;
-
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import de.vdvcount.app.App;
+import de.vdvcount.app.BuildConfig;
 
 public class Logging {
 
@@ -123,9 +115,8 @@ public class Logging {
    }
 
    public static void d(String tag, String message) {
-      Logging.addLogEntry("DEBUG", tag, message);
-
       if (BuildConfig.DEBUG) {
+         Logging.addLogEntry("DEBUG", tag, message);
          Log.d(tag, message);
       }
    }
