@@ -1,6 +1,7 @@
 package de.vdvcount.app.model;
 
-import java.security.InvalidKeyException;
+import com.google.firebase.components.BuildConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import de.vdvcount.app.remote.PassengerCountingEventObject;
 
 public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObject> {
 
+    private String vcaVersion;
     private String deviceId;
     private String vehicleId;
     private List<CountedStopTime> countedStopTimes;
@@ -23,6 +25,9 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
     }
 
     public static CountedTrip from(Trip trip) {
+        String vcaVersion = BuildConfig.VERSION_NAME;
+        String deviceId = Secret.getSecretString(Secret.DEVICE_ID, null);
+
         CountedTrip countedTrip = new CountedTrip();
         countedTrip.setTripId(trip.getTripId());
         countedTrip.setLine(trip.getLine());
@@ -31,6 +36,9 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         countedTrip.setInternationalId(trip.getInternationalId());
         countedTrip.setOperationDay(trip.getOperationDay());
         countedTrip.setNextTripId(trip.getNextTripId());
+        countedTrip.setVcaVersion(vcaVersion);
+        countedTrip.setDeviceId(deviceId);
+        countedTrip.setVehicleId(null);
 
         for (StopTime stopTime : trip.getStopTimes()) {
             countedTrip.getCountedStopTimes().add(CountedStopTime.from(stopTime));
@@ -47,6 +55,14 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
     @Override
     public void setStopTimes(List<StopTime> stopTimes) {
         throw new RuntimeException("Method setStopTimes not available for CountedTrip object!");
+    }
+
+    public String getVcaVersion() {
+        return this.vcaVersion;
+    }
+
+    public void setVcaVersion(String vcaVersion) {
+        this.vcaVersion = vcaVersion;
     }
 
     public String getDeviceId() {
@@ -83,7 +99,6 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
 
     @Override
     public CountedTripObject mapApiObject() {
-        String deviceId = Secret.getSecretString(Secret.DEVICE_ID, null);;
 
         CountedTripObject apiObject = new CountedTripObject();
         apiObject.setTripId(this.getTripId());
@@ -93,8 +108,8 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         apiObject.setInternationalId(this.getInternationalId());
         apiObject.setOperationDay(this.getOperationDay());
         apiObject.setNextTripId(this.getNextTripId());
+        apiObject.setVcaVersion(this.getVcaVersion());
         apiObject.setDeviceId(this.getDeviceId());
-        apiObject.setDeviceId(deviceId);
         apiObject.setVehicleId(this.getVehicleId());
 
         List<CountedStopTimeObject> countedStopTimes = new ArrayList<>();
