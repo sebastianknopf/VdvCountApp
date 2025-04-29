@@ -24,6 +24,7 @@ import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.StopListAdapter;
+import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.databinding.FragmentStopSelectBinding;
 
 public class StationSelectFragment extends Fragment {
@@ -131,6 +132,8 @@ public class StationSelectFragment extends Fragment {
                 stopInputDebounceRunnable = () -> {
                     String lookupName = editable.toString().trim();
 
+                    Logging.i(getClass().getName(), String.format("Searching stations matching %s", lookupName));
+
                     if (!lookupName.isEmpty()) {
                         viewModel.loadStationsByLookupName(lookupName);
                     }
@@ -151,6 +154,12 @@ public class StationSelectFragment extends Fragment {
 
     private void initObserverEvents() {
         this.viewModel.getStations().observe(this.getViewLifecycleOwner(), stations -> {
+            if (stations != null) {
+                Logging.i(this.getClass().getName(), String.format("Found %d station results", stations.size()));
+            } else {
+                Logging.w(this.getClass().getName(), "Observed stations result is null");
+            }
+
             this.stopListAdapter.setStationList(stations);
         });
     }

@@ -21,6 +21,7 @@ import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.CountedStopTimeListAdapter;
+import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.OnItemClickListener;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
@@ -82,12 +83,16 @@ public class TripDetailsFragment extends Fragment {
 
         if (Status.getInt(Status.CURRENT_TRIP_ID, -1) != -1 && Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1) != -1) {
             if (Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.READY)) {
+                Logging.i(this.getClass().getName(), String.format("Starting new CountedTrip (trip ID %d) object", Status.getInt(Status.CURRENT_TRIP_ID, -1)));
+
                 this.viewModel.startCountedTrip(
                         Status.getInt(Status.CURRENT_TRIP_ID, -1),
                         Status.getString(Status.CURRENT_VEHICLE_ID, ""),
                         Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
                 );
             } else {
+                Logging.i(this.getClass().getName(), "Already in state COUNTING - Loading CountedTrip object");
+
                 this.viewModel.loadCountedTrip();
             }
         }
@@ -122,6 +127,8 @@ public class TripDetailsFragment extends Fragment {
 
         this.dataBinding.btnQuit.setOnClickListener(view -> {
             CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
+
+            Logging.i(this.getClass().getName(), String.format("Closing CountedTrip (trip ID %d)", countedTrip.getTripId()));
 
             this.viewModel.closeCountedTrip();
 

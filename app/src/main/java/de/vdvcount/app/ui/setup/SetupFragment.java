@@ -28,6 +28,7 @@ import androidx.navigation.NavController;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.ScanActivity;
+import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentSetupBinding;
 
@@ -78,13 +79,18 @@ public class SetupFragment extends Fragment {
 
         this.navigationController = appActivity.getNavigationController();
 
+        Logging.d(this.getClass().getName(), "Starting SetupFragment");
+
         if (Status.getString(Status.STATUS, Status.Values.INITIAL).equals(Status.Values.READY)) {
+            Logging.i(this.getClass().getName(), "Current status is READY - Redirecting to DepartureFragment");
+
             // navigate to main fragment here
             SetupFragmentDirections.ActionSetupFragmentToDepartureFragment action = SetupFragmentDirections.actionSetupFragmentToDepartureFragment();
             this.navigationController.navigate(action);
         } else if (Status.getString(Status.STATUS, Status.Values.INITIAL).equals(Status.Values.COUNTING)) {
-            // navigate to counting fragment here
+            Logging.i(this.getClass().getName(), "Current status is COUNTING - Redirecting to TripDetailsFragment");
 
+            // navigate to counting fragment here
             SetupFragmentDirections.ActionSetupFragmentToTripDetailsFragment action = SetupFragmentDirections.actionSetupFragmentToTripDetailsFragment();
             this.navigationController.navigate(action);
         }
@@ -130,11 +136,15 @@ public class SetupFragment extends Fragment {
     public void initObserverEvents() {
         this.viewModel.getSetupSuccessful().observe(this.getViewLifecycleOwner(), setupSuccessful -> {
             if (setupSuccessful) {
+                Logging.i(this.getClass().getName(), "Setup performed successfully - Redirecting to DepartureFragment");
+
                 Toast.makeText(this.requireContext(), R.string.setup_performed_successfully, Toast.LENGTH_LONG).show();
 
                 // if everything worked until here, setup is complete, navigate to stop select fragment
                 this.navigationController.navigate(R.id.action_setupFragment_to_departureFragment);
             } else {
+                Logging.e(this.getClass().getName(), "Setup failed due to errors");
+
                 // that did not work - inform the user about the error
                 Toast.makeText(this.requireContext(), R.string.setup_failed, Toast.LENGTH_LONG).show();
             }

@@ -57,14 +57,14 @@ public class TripDetailsViewModel extends ViewModel {
             CountedTrip countedTrip = filesystemRepository.loadCountedTrip();
 
             RemoteRepository remoteRepository = RemoteRepository.getInstance();
-            remoteRepository.postResults(countedTrip);
+            if (remoteRepository.postResults(countedTrip)) {
+                filesystemRepository.closeCountedTrip();
 
-            filesystemRepository.closeCountedTrip();
-
-            Status.setString(Status.STATUS, Status.Values.READY);
-            Status.setInt(Status.CURRENT_TRIP_ID, -1);
-            Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
-            Status.setString(Status.CURRENT_VEHICLE_ID, "");
+                Status.setString(Status.STATUS, Status.Values.READY);
+                Status.setInt(Status.CURRENT_TRIP_ID, -1);
+                Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
+                Status.setString(Status.CURRENT_VEHICLE_ID, "");
+            }
         };
 
         Thread thread = new Thread(runnable);

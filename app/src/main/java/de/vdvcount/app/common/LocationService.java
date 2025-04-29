@@ -32,15 +32,17 @@ public class LocationService {
                     latch.countDown();
                  })
                  .addOnFailureListener(e -> {
+                    Logging.e(LocationService.class.getName(), "FusedLocationClient::onFailureListener", e);
                     latch.countDown();
                  });
 
-         boolean completed = latch.await(2000, TimeUnit.MILLISECONDS);
+         int timeout = 2000;
+         boolean completed = latch.await(timeout, TimeUnit.MILLISECONDS);
          if (!completed) {
-            // TODO add logging call here
+            Logging.w(LocationService.class.getName(), String.format("CountDownLatch cancelled after %d ms, using last known location", timeout));
          }
       } catch (Exception e) {
-         // TODO add logging call here
+         Logging.e(LocationService.class.getName(), "Failed to update current location", e);
       }
 
       return result[0];

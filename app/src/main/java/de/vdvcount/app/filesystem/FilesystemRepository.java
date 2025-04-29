@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 import de.vdvcount.app.App;
+import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.model.Trip;
 import de.vdvcount.app.remote.CountedTripObject;
@@ -41,6 +42,9 @@ public class FilesystemRepository {
         countedTrip.setVehicleId(vehicleId);
 
         this.updateCountedTrip(countedTrip);
+
+        Logging.i(this.getClass().getName(), "Generated new CountedTrip object");
+
         return countedTrip;
     }
 
@@ -60,8 +64,10 @@ public class FilesystemRepository {
 
             PrintStream printStream = new PrintStream(fos);
             printStream.print(countedTripData);
-        } catch (IOException e) {
 
+            Logging.i(this.getClass().getName(), "Updated CountedTrip object in local storage");
+        } catch (IOException e) {
+            Logging.e(this.getClass().getName(), "Failed to update CountedTrip object in local storage", e);
         } finally {
             try {
                 if (fos != null) {
@@ -77,6 +83,7 @@ public class FilesystemRepository {
         File file = new File(countedTripFilename);
 
         if (!file.exists()) {
+            Logging.w(this.getClass().getName(), "CountedTrip object not existent in local storage");
             return null;
         }
 
@@ -87,6 +94,7 @@ public class FilesystemRepository {
             ios = new FileInputStream(file);
             ios.read(buffer);
         } catch(IOException e) {
+            Logging.e(this.getClass().getName(), "Failed to load CountedTrip object from local storage", e);
             return null;
         } finally {
             try {
@@ -102,6 +110,8 @@ public class FilesystemRepository {
 
         CountedTripObject countedTripObject = gson.fromJson(countedTripObjectJson, CountedTripObject.class);
 
+        Logging.i(this.getClass().getName(), "Loaded CountedTrip object from local storage");
+
         return countedTripObject.mapDomainModel();
     }
 
@@ -109,6 +119,8 @@ public class FilesystemRepository {
         String countedTripFilename = this.getCountedTripFilename();
         File file = new File(countedTripFilename);
         file.delete();
+
+        Logging.i(this.getClass().getName(), "Removed CountedTrip object from local storage");
     }
 
     private void verifyFileSystemStructure() {
@@ -131,7 +143,7 @@ public class FilesystemRepository {
         StringBuilder fileNameBuilder = new StringBuilder();
         fileNameBuilder.append(this.getAppDataPath());
         fileNameBuilder.append(File.separator);
-        fileNameBuilder.append("countedTrip.json");
+        fileNameBuilder.append("de.vdvcount.app.countedtrip.json");
 
         return fileNameBuilder.toString();
     }
