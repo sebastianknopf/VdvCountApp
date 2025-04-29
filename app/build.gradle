@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     id 'androidx.navigation.safeargs'
+    id 'com.gladed.androidgitversion' version '0.4.14'
 }
 
 android {
@@ -11,8 +12,9 @@ android {
         applicationId "de.vdvcount.app"
         minSdk 24
         targetSdk 34
-        versionCode 1
-        versionName "0.1.0"
+
+        versionCode androidGitVersion.code()
+        versionName androidGitVersion.name()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
