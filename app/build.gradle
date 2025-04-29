@@ -4,6 +4,10 @@ plugins {
     id 'com.gladed.androidgitversion' version '0.4.14'
 }
 
+androidGitVersion {
+    format '%tag%%.devcount%%+commit%'
+}
+
 android {
     namespace 'de.vdvcount.app'
     compileSdk 34
