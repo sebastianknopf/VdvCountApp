@@ -1,0 +1,44 @@
+name: OSS License Report
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  license-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # important: Allow to modify the repository
+    steps:
+      - name: checkout-repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: setup-jdk
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: setup-keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore.jks
+      - name: setup-gradle.properties
+        run: |
+          echo "RELEASE_STORE_FILE=${{ github.workspace }}/keystore.jks" >> local.properties
+          echo "RELEASE_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> local.properties
+          echo "RELEASE_KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> local.properties
+          echo "RELEASE_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> local.properties
+      - name: setup-gradle-wrapper
+        run: chmod +x ./gradlew
+      - name: run-gradle-license-report
+        run: ./gradlew licenseDebugReport
+      - name: run-copy-license-report
+        run: |
+          mkdir -p licenses
+          cp app/build/reports/licenses/licenseDebugReport.txt licenses/licenses.txt
+      - name: run-update-licenses-repository
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add licenses/licenses.txt
+          git diff --cached --quiet || git commit -m "Updated OSS license report"
+          git push origin HEAD:$GITHUB_HEAD_REF
