@@ -3,10 +3,20 @@ plugins {
 
     id 'androidx.navigation.safeargs'
     id 'com.gladed.androidgitversion' version '0.4.14'
+    id 'com.jaredsburrows.license' version '0.9.8'
 }
 
 androidGitVersion {
     format '%tag%%.devcount%%+commit%'
+}
+
+licenseReport {
+    generateCsvReport = false
+    generateHtmlReport = false
+    generateJsonReport = false
+    generateTextReport = true
+
+    showVersions = true
 }
 
 android {
