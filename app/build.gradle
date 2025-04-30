@@ -23,6 +23,31 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            def props = new Properties()
+            def localPropsFile = rootProject.file("local.properties")
+            if (localPropsFile.exists()) {
+                props.load(new FileInputStream(localPropsFile))
+            }
+
+            storeFile file(props.getProperty("RELEASE_STORE_FILE"))
+            storePassword props.getProperty("RELEASE_STORE_PASSWORD")
+            keyAlias props.getProperty("RELEASE_KEY_ALIAS")
+            keyPassword props.getProperty("RELEASE_KEY_PASSWORD")
+        }
+    }
+
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == "release") {
+            variant.outputs.all { output ->
+                def versionName = variant.versionName
+                def baseName = "app-${variant.name}-${versionName}.apk"
+                outputFileName = baseName
+            }
+        }
+    }
+
     buildFeatures {
         buildConfig true
     }
@@ -32,6 +57,8 @@ android {
 
         }
         release {
+            signingConfig signingConfigs.release
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
