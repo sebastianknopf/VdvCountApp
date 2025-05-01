@@ -11,10 +11,16 @@ import de.vdvcount.app.remote.RemoteRepository;
 
 public class TripDetailsViewModel extends ViewModel {
 
+    private MutableLiveData<TripDetailsFragment.State> state;
     private MutableLiveData<CountedTrip> countedTrip;
 
     public TripDetailsViewModel() {
+        this.state = new MutableLiveData<>(TripDetailsFragment.State.READY);
         this.countedTrip = new MutableLiveData<>();
+    }
+
+    public LiveData<TripDetailsFragment.State> getState() {
+        return this.state;
     }
 
     public LiveData<CountedTrip> getCountedTrip() {
@@ -23,18 +29,25 @@ public class TripDetailsViewModel extends ViewModel {
 
     public void startCountedTrip(int tripId, String vehicleId, int startStopSequence) {
         Runnable runnable = () -> {
+            this.state.postValue(TripDetailsFragment.State.LOADING);
+
             RemoteRepository remoteRepository = RemoteRepository.getInstance();
             Trip trip = remoteRepository.getTripByTripId(tripId);
 
-            FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
-            CountedTrip countedTrip = filesystemRepository.startCountedTrip(trip, vehicleId);
+            if (trip != null) {
+                FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
+                CountedTrip countedTrip = filesystemRepository.startCountedTrip(trip, vehicleId);
 
-            this.countedTrip.postValue(countedTrip);
+                this.countedTrip.postValue(countedTrip);
+                this.state.postValue(TripDetailsFragment.State.READY);
 
-            Status.setString(Status.STATUS, Status.Values.COUNTING);
-            Status.setInt(Status.CURRENT_TRIP_ID, tripId);
-            Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, startStopSequence);
-            Status.setString(Status.CURRENT_VEHICLE_ID, vehicleId);
+                Status.setString(Status.STATUS, Status.Values.COUNTING);
+                Status.setInt(Status.CURRENT_TRIP_ID, tripId);
+                Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, startStopSequence);
+                Status.setString(Status.CURRENT_VEHICLE_ID, vehicleId);
+            } else {
+                this.state.postValue(TripDetailsFragment.State.ERROR);
+            }
         };
 
         Thread thread = new Thread(runnable);
@@ -53,6 +66,8 @@ public class TripDetailsViewModel extends ViewModel {
 
     public void closeCountedTrip() {
         Runnable runnable = () -> {
+            this.state.postValue(TripDetailsFragment.State.LOADING);
+
             FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
             CountedTrip countedTrip = filesystemRepository.loadCountedTrip();
 
@@ -60,10 +75,14 @@ public class TripDetailsViewModel extends ViewModel {
             if (remoteRepository.postResults(countedTrip)) {
                 filesystemRepository.closeCountedTrip();
 
+                this.state.postValue(TripDetailsFragment.State.READY);
+
                 Status.setString(Status.STATUS, Status.Values.READY);
                 Status.setInt(Status.CURRENT_TRIP_ID, -1);
                 Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
                 Status.setString(Status.CURRENT_VEHICLE_ID, "");
+            } else {
+                this.state.postValue(TripDetailsFragment.State.ERROR);
             }
         };
 
