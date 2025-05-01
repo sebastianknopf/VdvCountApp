@@ -40,10 +40,12 @@
     <string name="app_name">VdvCountApp</string>
     <string name="app_reset_counter">Noch %dx zum Zurücksetzen.</string>
     <string name="str_continue">Weiter</string>
+    <string name="str_retry">Erneut versuchen</string>
     <string name="str_door">Tür %s</string>
     <string name="str_slash">/</string>
     <string name="str_minus">-</string>
     <string name="str_plus">+</string>
+    <string name="str_network_load_error">Während der Anfrage ist ein Fehler aufgetreten. Bitte prüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut.</string>
 
     <string name="str_format_time">HH:mm</string>
 </resources>
