@@ -18,6 +18,7 @@ import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.ActivityAppBinding;
 import de.vdvcount.app.remote.RemoteRepository;
+import de.vdvcount.app.security.Cipher;
 
 public class AppActivity extends AppCompatActivity {
 
@@ -49,8 +50,12 @@ public class AppActivity extends AppCompatActivity {
         this.navigationController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
         // generate device ID if not already existing
+        // device ID is null on very first start and "" on every start after reset
+        // see #31 for more information
         String deviceId = Secret.getSecretString(Secret.DEVICE_ID, null);
-        if (deviceId == null) {
+        if (deviceId == null || deviceId.isEmpty()) {
+            Cipher.generateSecretKey(Cipher.DEFAULT_KEY);
+
             Secret.setSecretString(Secret.DEVICE_ID, UUID.randomUUID().toString());
         }
 
@@ -96,6 +101,10 @@ public class AppActivity extends AppCompatActivity {
                 this.actionBarTapCountToast.show();
             } else if (this.actionBarTapCount >= 10) {
                 Status.setString(Status.STATUS, Status.Values.INITIAL);
+
+                // set device ID to "" in order to mark the state as "reset" for the next app startup
+                // see more information in #31
+                Secret.setSecretString(Secret.DEVICE_ID, "");
 
                 Secret.setSecretString(Secret.API_ENDPOINT, "");
                 Secret.setSecretString(Secret.API_USERNAME, "");
