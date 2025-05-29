@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,7 @@ public class DoorListAdapter extends RecyclerView.Adapter<DoorListAdapter.ViewHo
     public List<String> getSelectedDoorList() {
         List<String> selectedDoorList = new ArrayList<>();
 
+        Collections.sort(this.selectedDoorIndices);
         for (int index : this.selectedDoorIndices) {
             selectedDoorList.add(this.doorList.get(index));
         }
