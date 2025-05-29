@@ -26,8 +26,6 @@ public class SetupViewModel extends ViewModel {
 
     public void setupApplication(String setupString) {
         Runnable runnable = () -> {
-            Cipher.generateSecretKey(Cipher.DEFAULT_KEY);
-
             try {
                 URI uri = new URI(setupString);
                 URI sanitizedUri = new URI(
