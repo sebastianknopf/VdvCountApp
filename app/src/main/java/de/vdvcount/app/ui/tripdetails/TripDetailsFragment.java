@@ -127,18 +127,6 @@ public class TripDetailsFragment extends Fragment {
         });
 
         this.dataBinding.btnQuit.setOnClickListener(view -> {
-            /*CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
-            if (countedTrip != null) {
-                CountedStopTime countedStopTime = countedTrip.getCountedStopTimes().get(countedTrip.getCountedStopTimes().size() - 1);
-                this.countedTripLastStopId = countedStopTime.getStop().getParentId();
-                this.countedTripLastStopName = countedStopTime.getStop().getName();
-            }
-
-            Logging.i(this.getClass().getName(), String.format("Closing CountedTrip (trip ID %d)", countedTrip.getTripId()));
-
-            this.closeTripRequested = true;
-            this.viewModel.closeCountedTrip();*/
-
             NavDirections action = TripDetailsFragmentDirections.actionTripDetailsFragmentToTripClosingFragment();
 
             this.navigationController.navigate(action);
@@ -154,19 +142,7 @@ public class TripDetailsFragment extends Fragment {
                         Status.getString(Status.CURRENT_VEHICLE_ID, ""),
                         Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
                 );
-            } /*else { // TODO: remove unused code
-                CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
-                if (countedTrip != null) {
-                    CountedStopTime countedStopTime = countedTrip.getCountedStopTimes().get(countedTrip.getCountedStopTimes().size() - 1);
-                    this.countedTripLastStopId = countedStopTime.getStop().getParentId();
-                    this.countedTripLastStopName = countedStopTime.getStop().getName();
-                }
-
-                Logging.i(this.getClass().getName(), "Retry requested - Trying to close CountedTrip again");
-
-                this.closeTripRequested = true;
-                this.viewModel.closeCountedTrip();
-            }*/
+            }
         });
     }
 

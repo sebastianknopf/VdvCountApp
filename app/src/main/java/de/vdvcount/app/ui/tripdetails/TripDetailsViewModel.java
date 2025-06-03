@@ -63,31 +63,4 @@ public class TripDetailsViewModel extends ViewModel {
         Thread thread = new Thread(runnable);
         thread.start();
     }
-
-    // TODO: remove unused code
-    /*public void closeCountedTrip() {
-        Runnable runnable = () -> {
-            this.state.postValue(TripDetailsFragment.State.LOADING);
-
-            FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
-            CountedTrip countedTrip = filesystemRepository.loadCountedTrip();
-
-            RemoteRepository remoteRepository = RemoteRepository.getInstance();
-            if (remoteRepository.postResults(countedTrip)) {
-                filesystemRepository.closeCountedTrip();
-
-                this.state.postValue(TripDetailsFragment.State.READY);
-
-                Status.setString(Status.STATUS, Status.Values.READY);
-                Status.setInt(Status.CURRENT_TRIP_ID, -1);
-                Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
-                Status.setString(Status.CURRENT_VEHICLE_ID, "");
-            } else {
-                this.state.postValue(TripDetailsFragment.State.ERROR);
-            }
-        };
-
-        Thread thread = new Thread(runnable);
-        thread.start();
-    }*/
 }
