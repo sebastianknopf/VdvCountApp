@@ -70,4 +70,11 @@ public class TripClosingFragment extends Fragment {
     private void initObserverEvents() {
 
     }
+
+    public enum State {
+        READY,
+        LOADING,
+        ERROR,
+        DONE
+    }
 }

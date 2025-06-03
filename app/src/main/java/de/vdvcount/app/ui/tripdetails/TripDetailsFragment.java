@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.CountedStopTimeListAdapter;
@@ -125,7 +127,7 @@ public class TripDetailsFragment extends Fragment {
         });
 
         this.dataBinding.btnQuit.setOnClickListener(view -> {
-            CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
+            /*CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
             if (countedTrip != null) {
                 CountedStopTime countedStopTime = countedTrip.getCountedStopTimes().get(countedTrip.getCountedStopTimes().size() - 1);
                 this.countedTripLastStopId = countedStopTime.getStop().getParentId();
@@ -135,7 +137,11 @@ public class TripDetailsFragment extends Fragment {
             Logging.i(this.getClass().getName(), String.format("Closing CountedTrip (trip ID %d)", countedTrip.getTripId()));
 
             this.closeTripRequested = true;
-            this.viewModel.closeCountedTrip();
+            this.viewModel.closeCountedTrip();*/
+
+            NavDirections action = TripDetailsFragmentDirections.actionTripDetailsFragmentToTripClosingFragment();
+
+            this.navigationController.navigate(action);
         });
 
         this.dataBinding.btnRetry.setOnClickListener(view -> {
@@ -148,7 +154,7 @@ public class TripDetailsFragment extends Fragment {
                         Status.getString(Status.CURRENT_VEHICLE_ID, ""),
                         Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
                 );
-            } else {
+            } /*else { // TODO: remove unused code
                 CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
                 if (countedTrip != null) {
                     CountedStopTime countedStopTime = countedTrip.getCountedStopTimes().get(countedTrip.getCountedStopTimes().size() - 1);
@@ -160,7 +166,7 @@ public class TripDetailsFragment extends Fragment {
 
                 this.closeTripRequested = true;
                 this.viewModel.closeCountedTrip();
-            }
+            }*/
         });
     }
 

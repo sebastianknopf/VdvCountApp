@@ -64,7 +64,8 @@ public class TripDetailsViewModel extends ViewModel {
         thread.start();
     }
 
-    public void closeCountedTrip() {
+    // TODO: remove unused code
+    /*public void closeCountedTrip() {
         Runnable runnable = () -> {
             this.state.postValue(TripDetailsFragment.State.LOADING);
 
@@ -88,6 +89,5 @@ public class TripDetailsViewModel extends ViewModel {
 
         Thread thread = new Thread(runnable);
         thread.start();
-    }
-
+    }*/
 }
