@@ -29,6 +29,9 @@
     <string name="trip_details_title">Zählfahrt</string>
     <string name="trip_details_quit">Fahrt abschließen</string>
 
+    <!-- TripClosingFragment -->
+    <string name="trip_closing_title">Fahrtabschluss</string>
+
     <!-- CountingFragment -->
     <string name="counting_title">Zählung</string>
     <string name="counting_save">Zählung beenden</string>
