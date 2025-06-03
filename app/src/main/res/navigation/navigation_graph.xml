@@ -135,6 +135,9 @@
         <action
             android:id="@+id/action_tripDetailsFragment_to_countingFragment"
             app:destination="@id/countingFragment" />
+        <action
+            android:id="@+id/action_tripDetailsFragment_to_tripClosingFragment"
+            app:destination="@id/tripClosingFragment" />
     </fragment>
     <fragment
         android:id="@+id/countingFragment"
@@ -172,5 +175,16 @@
         <argument
             android:name="countedDoorIds"
             app:argType="string[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/tripClosingFragment"
+        android:name="de.vdvcount.app.ui.tripclosing.TripClosingFragment"
+        android:label="TripClosingFragment" >
+        <action
+            android:id="@+id/action_tripClosingFragment_to_departureFragment"
+            app:destination="@id/departureFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph.xml"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
