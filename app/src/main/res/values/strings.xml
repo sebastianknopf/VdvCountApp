@@ -31,6 +31,10 @@
 
     <!-- TripClosingFragment -->
     <string name="trip_closing_title">Fahrtabschluss</string>
+    <string name="trip_closing_stay_vehicle_message">Weiterfahrt im selben Fahrzeug</string>
+    <string name="trip_closing_success_message">Die Fahrt wurde erfolgreich beendet!</string>
+    <string name="trip_closing_close_trip">Fahrt abschließen</string>
+    <string name="trip_closing_next_trip">Folgefahrt auswählen</string>
 
     <!-- CountingFragment -->
     <string name="counting_title">Zählung</string>
