@@ -21,7 +21,7 @@ public class TripClosingViewModel extends ViewModel {
         return this.state;
     }
 
-    public void closeCountedTrip() {
+    public void closeCountedTrip(boolean stayInVehicle) {
         Runnable runnable = () -> {
             this.state.postValue(TripClosingFragment.State.LOADING);
 

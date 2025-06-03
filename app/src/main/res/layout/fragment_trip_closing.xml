@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/app_default_spacing"
-            android:visibility="@{viewModel.state == TripClosingFragment.State.READY || viewModel.state == TripClosingFragment.State.LOADING ? View.VISIBLE : View.GONE}">
+            android:visibility="@{viewModel.state == TripClosingFragment.State.READY ? View.VISIBLE : View.GONE}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -56,6 +56,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.state == TripClosingFragment.State.LOADING ? View.VISIBLE : View.GONE}">
+
+            <ProgressBar
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="160dp"
+                android:layout_centerInParent="true"
+                style="?android:attr/progressBarStyleLarge" />
+
+        </RelativeLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -103,6 +116,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/pgbDoneCountdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/app_large_spacing"
+                android:layout_marginStart="@dimen/app_large_spacing"
+                android:layout_marginEnd="@dimen/app_large_spacing"
+                android:progress="100"
+                app:layout_constraintTop_toBottomOf="@id/lblSuccessMessage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

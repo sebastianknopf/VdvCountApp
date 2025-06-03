@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import android.widget.CompoundButton;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.common.Logging;
+import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripClosingBinding;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
 import de.vdvcount.app.filesystem.FilesystemRepository;
@@ -122,21 +124,48 @@ public class TripClosingFragment extends Fragment {
 
             this.closeTripRequested = true;
 
-            this.viewModel.closeCountedTrip();
+            this.viewModel.closeCountedTrip(
+                    this.dataBinding.cbxStayInVehicle.isChecked()
+            );
+        });
+
+        this.dataBinding.btnRetry.setOnClickListener(view -> {
+            Logging.i(this.getClass().getName(), "Retry requested - Trying to close CountedTrip again");
+
+            this.closeTripRequested = true;
+
+            this.viewModel.closeCountedTrip(
+                    this.dataBinding.cbxStayInVehicle.isChecked()
+            );
         });
     }
 
     private void initObserverEvents() {
         this.viewModel.getState().observe(this.getViewLifecycleOwner(), state -> {
-            if (state == TripClosingFragment.State.DONE) {
-
+            if (state == State.DONE || state == State.LOADING || state == State.ERROR) {
                 AppActivity appActivity = (AppActivity) this.getActivity();
                 appActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
 
+            if (state == TripClosingFragment.State.DONE) {
+                final int countDownMillis = 2000;
+
+                // count down until trip is finally closed
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                     TripClosingFragmentDirections.ActionTripClosingFragmentToDepartureFragment action = TripClosingFragmentDirections.actionTripClosingFragmentToDepartureFragment();
                     this.navigationController.navigate(action);
-                }, 3000);
+                }, countDownMillis);
+
+                new CountDownTimer(countDownMillis, 10) {
+                    public void onTick(long millisUntilFinished) {
+                        int progress = (int) (millisUntilFinished * 100 / countDownMillis);
+                        dataBinding.pgbDoneCountdown.setProgress(progress);
+                    }
+
+                    public void onFinish() {
+                        dataBinding.pgbDoneCountdown.setProgress(0);
+                    }
+                }.start();
             }
         });
     }
