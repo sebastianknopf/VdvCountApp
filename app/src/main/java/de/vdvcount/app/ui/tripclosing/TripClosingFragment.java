@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,6 +19,7 @@ import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.databinding.FragmentTripClosingBinding;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
+import de.vdvcount.app.ui.counting.CountingFragmentDirections;
 import de.vdvcount.app.ui.tripdetails.TripDetailsViewModel;
 
 public class TripClosingFragment extends Fragment {
@@ -61,6 +63,18 @@ public class TripClosingFragment extends Fragment {
         this.setHasOptionsMenu(true);
 
         this.navigationController = appActivity.getNavigationController();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            TripClosingFragmentDirections.ActionTripClosingFragmentToTripDetailsFragment action = TripClosingFragmentDirections.actionTripClosingFragmentToTripDetailsFragment();
+            this.navigationController.navigate(action);
+
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private void initViewEvents() {

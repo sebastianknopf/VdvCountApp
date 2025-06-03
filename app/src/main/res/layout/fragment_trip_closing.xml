@@ -25,6 +25,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="@dimen/app_default_spacing"
             android:visibility="@{viewModel.state == TripClosingFragment.State.READY || viewModel.state == TripClosingFragment.State.LOADING ? View.VISIBLE : View.GONE}">
 
             <LinearLayout
@@ -33,8 +34,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/btnCloseTrip">
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/cbxStayInVehicle"
