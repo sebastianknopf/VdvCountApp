@@ -55,6 +55,7 @@ public class TripDetailsViewModel extends ViewModel {
                     Status.setBoolean(Status.STAY_IN_VEHICLE, false);
                     Status.setString(Status.LAST_PCE, null);
                     Status.setString(Status.LAST_VEHICLE_ID, null);
+                    Status.setStringArray(Status.LAST_COUNTED_DOOR_IDS, new String[] {});
                 }
 
                 this.countedTrip.postValue(countedTrip);

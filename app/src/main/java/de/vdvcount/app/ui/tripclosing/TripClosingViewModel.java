@@ -54,7 +54,10 @@ public class TripClosingViewModel extends ViewModel {
                 Status.setString(Status.CURRENT_VEHICLE_ID, "");
 
                 if (stayInVehicle) {
+                    String[] countedDoorIds = Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {});
+
                     Status.setString(Status.LAST_VEHICLE_ID, countedTrip.getVehicleId());
+                    Status.setStringArray(Status.LAST_COUNTED_DOOR_IDS, countedDoorIds);
                     Status.setBoolean(Status.STAY_IN_VEHICLE, true);
                 }
             } else {

@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -185,7 +186,8 @@ public class TripParamsFragment extends Fragment {
                         this.dataBinding.edtVehicle.setText(vehicleId);
                         this.dataBinding.edtVehicle.addTextChangedListener(this.vehicleIdTextWatcher);
 
-                        this.createDoorList(vehicle.get());
+                        String[] selectedDoorIds = Status.getStringArray(Status.LAST_COUNTED_DOOR_IDS, new String[] {});
+                        this.createDoorList(vehicle.get(), selectedDoorIds);
 
                         this.validateInputs();
                     }
@@ -211,12 +213,17 @@ public class TripParamsFragment extends Fragment {
         this.dataBinding.btnContinue.setEnabled(inputsValid);
     }
 
-    private void createDoorList(Vehicle vehicle) {
+    private void createDoorList(Vehicle vehicle, String[] selectedDoorIds) {
         List<String> doorList = new ArrayList<>();
         for (int d = 1; d <= vehicle.getNumDoors(); d++) {
             doorList.add(String.valueOf(d));
         }
         this.doorListAdapter.setDoorList(doorList);
+        this.doorListAdapter.setSelectedDoorList(Arrays.asList(selectedDoorIds));
+    }
+
+    private void createDoorList(Vehicle vehicle) {
+        this.createDoorList(vehicle, new String[] {});
     }
 
 }
