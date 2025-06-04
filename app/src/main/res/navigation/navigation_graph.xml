@@ -113,12 +113,6 @@
         android:id="@+id/tripDetailsFragment"
         android:name="de.vdvcount.app.ui.tripdetails.TripDetailsFragment"
         android:label="TripDetailsFragment" >
-        <action
-            android:id="@+id/action_tripDetailsFragment_to_departureFragment"
-            app:destination="@id/departureFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/navigation_graph.xml"
-            app:popUpToInclusive="true" />
         <argument
             android:name="tripId"
             app:argType="integer" />
@@ -208,5 +202,14 @@
                 app:argType="string[]"
                 app:nullable="true" />
         </action>
+        <argument
+            android:name="lastStationId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="lastStationName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>
