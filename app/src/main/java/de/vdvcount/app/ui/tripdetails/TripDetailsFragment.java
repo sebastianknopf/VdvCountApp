@@ -34,11 +34,6 @@ public class TripDetailsFragment extends Fragment {
 
     private CountedStopTimeListAdapter countedStopTimeListAdapter;
 
-    private int countedTripLastStopId = -1;
-    private String countedTripLastStopName = null;
-    private boolean startTripRequested = false;
-    private boolean closeTripRequested = false;
-
     public static TripDetailsFragment newInstance() {
         return new TripDetailsFragment();
     }
@@ -85,7 +80,6 @@ public class TripDetailsFragment extends Fragment {
             if (Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.READY)) {
                 Logging.i(this.getClass().getName(), String.format("Starting new CountedTrip (trip ID %d) object", Status.getInt(Status.CURRENT_TRIP_ID, -1)));
 
-                this.startTripRequested = true;
                 this.viewModel.startCountedTrip(
                         Status.getInt(Status.CURRENT_TRIP_ID, -1),
                         Status.getString(Status.CURRENT_VEHICLE_ID, ""),
@@ -127,7 +121,12 @@ public class TripDetailsFragment extends Fragment {
         });
 
         this.dataBinding.btnQuit.setOnClickListener(view -> {
-            NavDirections action = TripDetailsFragmentDirections.actionTripDetailsFragmentToTripClosingFragment();
+            CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
+            CountedStopTime lastCountedStopTime = countedTrip.getCountedStopTimes().get(countedTrip.getCountedStopTimes().size() - 1);
+
+            TripDetailsFragmentDirections.ActionTripDetailsFragmentToTripClosingFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToTripClosingFragment();
+            action.setLastStationId(lastCountedStopTime.getStop().getParentId());
+            action.setLastStationName(lastCountedStopTime.getStop().getName());
 
             this.navigationController.navigate(action);
         });
@@ -136,7 +135,6 @@ public class TripDetailsFragment extends Fragment {
             if (Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.READY)) {
                 Logging.i(this.getClass().getName(), "Retry requested - Trying to load CountedTrip again");
 
-                this.startTripRequested = true;
                 this.viewModel.startCountedTrip(
                         Status.getInt(Status.CURRENT_TRIP_ID, -1),
                         Status.getString(Status.CURRENT_VEHICLE_ID, ""),
@@ -147,16 +145,6 @@ public class TripDetailsFragment extends Fragment {
     }
 
     private void initObserverEvents() {
-        this.viewModel.getState().observe(this.getViewLifecycleOwner(), state -> {
-            if (this.closeTripRequested && state == State.READY) {
-                TripDetailsFragmentDirections.ActionTripDetailsFragmentToDepartureFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToDepartureFragment();
-                action.setStationId(this.countedTripLastStopId);
-                action.setStationName(this.countedTripLastStopName);
-
-                this.navigationController.navigate(action);
-            }
-        });
-
         this.viewModel.getCountedTrip().observe(this.getViewLifecycleOwner(), countedTrip -> {
             if (countedTrip != null) {
                 this.countedStopTimeListAdapter.setCountedStopTimeList(countedTrip.getCountedStopTimes());

@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -19,21 +18,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.common.Logging;
-import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripClosingBinding;
-import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
-import de.vdvcount.app.filesystem.FilesystemRepository;
-import de.vdvcount.app.model.CountedStopTime;
-import de.vdvcount.app.model.CountedTrip;
-import de.vdvcount.app.ui.counting.CountingFragmentDirections;
-import de.vdvcount.app.ui.tripdetails.TripDetailsFragment;
-import de.vdvcount.app.ui.tripdetails.TripDetailsFragmentDirections;
-import de.vdvcount.app.ui.tripdetails.TripDetailsViewModel;
 
 public class TripClosingFragment extends Fragment {
 
@@ -42,7 +31,8 @@ public class TripClosingFragment extends Fragment {
 
     private NavController navigationController;
 
-
+    private int lastStationId = -1;
+    private String lastStationName = null;
     private boolean closeTripRequested = false;
 
     public static TripClosingFragment newInstance() {
@@ -53,6 +43,15 @@ public class TripClosingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_trip_closing, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
+
+        TripClosingFragmentArgs args = TripClosingFragmentArgs.fromBundle(this.getArguments());
+        if (args.getLastStationId() != -1) {
+            this.lastStationId = args.getLastStationId();
+        }
+
+        if (args.getLastStationName() != null) {
+            this.lastStationName = args.getLastStationName();
+        }
 
         return this.dataBinding.getRoot();
     }
@@ -153,6 +152,9 @@ public class TripClosingFragment extends Fragment {
                 // count down until trip is finally closed
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                     TripClosingFragmentDirections.ActionTripClosingFragmentToDepartureFragment action = TripClosingFragmentDirections.actionTripClosingFragmentToDepartureFragment();
+                    action.setStationId(lastStationId);
+                    action.setStationName(lastStationName);
+
                     this.navigationController.navigate(action);
                 }, countDownMillis);
 
