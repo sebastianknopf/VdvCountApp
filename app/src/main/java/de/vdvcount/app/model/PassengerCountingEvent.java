@@ -1,10 +1,14 @@
 package de.vdvcount.app.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import de.vdvcount.app.common.ApiObjectMapper;
+import de.vdvcount.app.remote.CountedTripObject;
 import de.vdvcount.app.remote.CountingSequenceObject;
 import de.vdvcount.app.remote.PassengerCountingEventObject;
 
@@ -83,5 +87,19 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
         apiObject.setCountingSequences(countingSequences);
 
         return apiObject;
+    }
+
+    public String serialize() {
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        String data = gson.toJson(this.mapApiObject());
+
+        return data;
+    }
+
+    public static PassengerCountingEvent deserialize(String json) {
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        PassengerCountingEventObject passengerCountingEventObject = gson.fromJson(json, PassengerCountingEventObject.class);
+
+        return passengerCountingEventObject.mapDomainModel();
     }
 }
