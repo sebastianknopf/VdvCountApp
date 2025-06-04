@@ -50,6 +50,16 @@ public class DoorListAdapter extends RecyclerView.Adapter<DoorListAdapter.ViewHo
         return selectedDoorList;
     }
 
+    public void setSelectedDoorList(List<String> selectedDoorList) {
+        for (String selectedDoorId : selectedDoorList) {
+            this.selectedDoorIndices.add(
+                    this.doorList.indexOf(selectedDoorId)
+            );
+        }
+
+        this.notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -61,6 +71,7 @@ public class DoorListAdapter extends RecyclerView.Adapter<DoorListAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String obj = this.doorList.get(position);
         holder.setDoorId(obj);
+        holder.setSelected(this.selectedDoorIndices.contains(position));
         holder.setOnItemSelectListener((item, selected) -> {
             if (selected) {
                 this.selectedDoorIndices.add(item);
@@ -105,6 +116,10 @@ public class DoorListAdapter extends RecyclerView.Adapter<DoorListAdapter.ViewHo
 
         public void setDoorId(String doorId) {
             this.itemBinding.setDoorId(doorId);
+        }
+
+        public void setSelected(boolean selected) {
+            this.itemBinding.cbxDoorSelected.setChecked(selected);
         }
 
         public void setOnItemSelectListener(OnItemSelectListener<Integer> onItemSelectListener) {
