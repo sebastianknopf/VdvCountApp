@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.filesystem.FilesystemRepository;
 import de.vdvcount.app.model.CountedTrip;
+import de.vdvcount.app.model.CountingSequence;
+import de.vdvcount.app.model.PassengerCountingEvent;
 import de.vdvcount.app.model.Trip;
 import de.vdvcount.app.remote.RemoteRepository;
 
@@ -37,6 +39,23 @@ public class TripDetailsViewModel extends ViewModel {
             if (trip != null) {
                 FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
                 CountedTrip countedTrip = filesystemRepository.startCountedTrip(trip, vehicleId);
+
+                if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
+                    String passengerCountingEventJson = Status.getString(Status.LAST_PCE, null);
+                    if (passengerCountingEventJson != null) {
+                        PassengerCountingEvent passengerCountingEvent = PassengerCountingEvent.deserialize(passengerCountingEventJson);
+                        for (CountingSequence cs : passengerCountingEvent.getCountingSequences()) {
+                            cs.setOut(0);
+                        }
+
+                        countedTrip.getCountedStopTimes().get(0).getPassengerCountingEvents().add(passengerCountingEvent);
+                        filesystemRepository.updateCountedTrip(countedTrip);
+                    }
+
+                    Status.setBoolean(Status.STAY_IN_VEHICLE, false);
+                    Status.setString(Status.LAST_PCE, null);
+                    Status.setString(Status.LAST_VEHICLE_ID, null);
+                }
 
                 this.countedTrip.postValue(countedTrip);
                 this.state.postValue(TripDetailsFragment.State.READY);
