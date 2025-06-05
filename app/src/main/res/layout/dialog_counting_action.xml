@@ -42,7 +42,7 @@
                 android:layout_margin="@dimen/app_default_spacing"
                 android:layout_weight="1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                android:text="Zählung" />
+                android:text="@string/dialog_counting_action_counting" />
             
         </LinearLayout>
 
@@ -69,7 +69,7 @@
                 android:layout_margin="@dimen/app_default_spacing"
                 android:layout_weight="1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                android:text="Zwischenhalt" />
+                android:text="@string/dialog_counting_action_additional_stop" />
 
         </LinearLayout>
 
