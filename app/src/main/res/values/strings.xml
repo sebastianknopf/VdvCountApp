@@ -41,6 +41,7 @@
     <string name="counting_title">Zählung</string>
     <string name="counting_save">Zählung beenden</string>
     <string name="counting_stop_info">Zählung an der Haltestelle %s</string>
+    <string name="counting_additional_stop_info">Zählung an einem Zwischenhalt</string>
     <string name="counting_in">Einsteiger</string>
     <string name="counting_out">Aussteiger</string>
 

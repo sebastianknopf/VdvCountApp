@@ -39,14 +39,16 @@ public class CountingFragment extends Fragment {
     private NavController navigationController;
 
     private int currentStopSequence;
+    private int currentAfterStopSequence;
     private String[] currentCountedDoorIds;
-    private CountingSequenceListAdapter countingSequenceListAdapter;
+    private final CountingSequenceListAdapter countingSequenceListAdapter;
 
     public static CountingFragment newInstance() {
         return new CountingFragment();
     }
 
     public CountingFragment() {
+        this.currentAfterStopSequence = -1;
         this.countingSequenceListAdapter = new CountingSequenceListAdapter();
     }
 
@@ -58,17 +60,21 @@ public class CountingFragment extends Fragment {
         this.dataBinding.lstCountingSequences.setAdapter(this.countingSequenceListAdapter);
 
         CountingFragmentArgs args = CountingFragmentArgs.fromBundle(this.getArguments());
-        if (args.getStopName() != null) {
-            this.dataBinding.lblStopInfo.setText(this.getString(R.string.counting_stop_info, args.getStopName()));
+        if (args.getAfterStopSequence() == -1) {
+            if (args.getStopName() != null) {
+                this.dataBinding.lblStopInfo.setText(this.getString(R.string.counting_stop_info, args.getStopName()));
+            }
+
+            if (args.getStopSequence() != -1) {
+                this.currentStopSequence = args.getStopSequence();
+            }
+        } else {
+            this.dataBinding.lblStopInfo.setText(R.string.counting_additional_stop_info);
+
+            this.currentAfterStopSequence = args.getAfterStopSequence();
         }
 
-        if (args.getStopSequence() != -1) {
-            this.currentStopSequence = args.getStopSequence();
-        }
-
-        if (args.getCountedDoorIds() != null) {
-            this.currentCountedDoorIds = args.getCountedDoorIds();
-        }
+        this.currentCountedDoorIds = args.getCountedDoorIds();
 
         return this.dataBinding.getRoot();
     }
@@ -122,10 +128,7 @@ public class CountingFragment extends Fragment {
             Permissions.check(this.getContext(), permissions, null, null, new PermissionHandler() {
                 @Override
                 public void onGranted() {
-                    viewModel.addPassengerCountingEvent(
-                            currentStopSequence,
-                            countingSequenceListAdapter.getCountingSequenceList()
-                    );
+                    addPassengerCountingEvent();
                 }
 
                 @Override
@@ -134,10 +137,7 @@ public class CountingFragment extends Fragment {
 
                     Logging.w(getClass().getName(), "Location permission refused");
 
-                    viewModel.addPassengerCountingEvent(
-                            currentStopSequence,
-                            countingSequenceListAdapter.getCountingSequenceList()
-                    );
+                    addPassengerCountingEvent();
                 }
             });
         });
@@ -150,6 +150,20 @@ public class CountingFragment extends Fragment {
                 this.navigationController.navigate(action);
             }
         });
+    }
+
+    private void addPassengerCountingEvent() {
+        if (this.currentAfterStopSequence == -1) {
+            this.viewModel.addPassengerCountingEvent(
+                    this.currentStopSequence,
+                    this.countingSequenceListAdapter.getCountingSequenceList()
+            );
+        } else {
+            this.viewModel.addUnmatchedPassengerCountingEvent(
+                    this.currentAfterStopSequence,
+                    this.countingSequenceListAdapter.getCountingSequenceList()
+            );
+        }
     }
 
     public enum State {
