@@ -44,6 +44,9 @@
     <string name="counting_in">Einsteiger</string>
     <string name="counting_out">Aussteiger</string>
 
+    <!-- Counting Action Dialog -->
+    <string name="dialog_counting_action_title">Wählen Sie eine Aktion</string>
+
     <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>
     <string name="app_reset_counter">Noch %dx zum Zurücksetzen.</string>
