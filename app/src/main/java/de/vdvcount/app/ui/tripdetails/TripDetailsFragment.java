@@ -30,6 +30,7 @@ import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
 import de.vdvcount.app.dialog.CountingActionDialog;
 import de.vdvcount.app.model.CountedStopTime;
 import de.vdvcount.app.model.CountedTrip;
+import de.vdvcount.app.model.PassengerCountingEvent;
 
 public class TripDetailsFragment extends Fragment {
 
@@ -159,9 +160,19 @@ public class TripDetailsFragment extends Fragment {
 
                     // additional stops after the last stops are not allowed
                     if (countedStopTime.getSequence() < lastCountedStopTime.getSequence()) {
-                        this.showActionDialog(countedStopTime, true, true, true);
+                        if (!countedStopTime.getPassengerCountingEvents().isEmpty()) {
+                            PassengerCountingEvent passengerCountingEvent = countedStopTime.getPassengerCountingEvents().get(0);
+
+                            if (passengerCountingEvent.isRunThrough()) {
+                                this.showActionDialog(countedStopTime, false, true, false);
+                            } else {
+                                this.showActionDialog(countedStopTime, true, true, false);
+                            }
+                        } else {
+                            this.showActionDialog(countedStopTime, true, true, true);
+                        }
                     } else {
-                        this.showActionDialog(countedStopTime, true, false, true);
+                        this.showActionDialog(countedStopTime, true, false, false);
                     }
                 });
             }
