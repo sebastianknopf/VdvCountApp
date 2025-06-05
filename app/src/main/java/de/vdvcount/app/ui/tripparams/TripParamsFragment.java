@@ -189,6 +189,11 @@ public class TripParamsFragment extends Fragment {
                         String[] selectedDoorIds = Status.getStringArray(Status.LAST_COUNTED_DOOR_IDS, new String[] {});
                         this.createDoorList(vehicle.get(), selectedDoorIds);
 
+                        // disable edtVehicle and lstDoors; the user is not allowed to change them, if they're set before
+                        // disabling the list entries is done by using the adapter...
+                        this.dataBinding.edtVehicle.setEnabled(false);
+                        this.doorListAdapter.setEnabled(false);
+
                         this.validateInputs();
                     }
                 }
