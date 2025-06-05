@@ -20,6 +20,7 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
     private List<CountingSequence> countingSequences;
 
     public PassengerCountingEvent() {
+        this.afterStopSequence = -1;
         this.countingSequences = new ArrayList<>();
     }
 
