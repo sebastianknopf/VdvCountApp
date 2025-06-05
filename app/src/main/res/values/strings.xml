@@ -58,6 +58,7 @@
     <string name="str_minus">-</string>
     <string name="str_plus">+</string>
     <string name="str_network_load_error">Während der Anfrage ist ein Fehler aufgetreten. Bitte prüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut.</string>
+    <string name="str_additional_stop">Zwischenhalt</string>
 
     <string name="str_format_time">HH:mm</string>
 </resources>

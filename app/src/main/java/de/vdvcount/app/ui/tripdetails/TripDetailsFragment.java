@@ -14,11 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
-import de.vdvcount.app.adapter.CountedStopTimeListAdapter;
+import de.vdvcount.app.adapter.CountedTripAdapter;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
@@ -33,14 +32,14 @@ public class TripDetailsFragment extends Fragment {
 
     private NavController navigationController;
 
-    private CountedStopTimeListAdapter countedStopTimeListAdapter;
+    private CountedTripAdapter countedTripAdapter;
 
     public static TripDetailsFragment newInstance() {
         return new TripDetailsFragment();
     }
 
     public TripDetailsFragment() {
-        this.countedStopTimeListAdapter = new CountedStopTimeListAdapter();
+        this.countedTripAdapter = new CountedTripAdapter();
     }
 
     @Override
@@ -48,7 +47,7 @@ public class TripDetailsFragment extends Fragment {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_trip_details, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
 
-        this.dataBinding.lstCountedStopTimes.setAdapter(this.countedStopTimeListAdapter);
+        this.dataBinding.lstCountedStopTimes.setAdapter(this.countedTripAdapter);
 
         TripDetailsFragmentArgs args = TripDetailsFragmentArgs.fromBundle(this.getArguments());
         if (args.getTripId() != -1) {
@@ -111,7 +110,7 @@ public class TripDetailsFragment extends Fragment {
     }
 
     private void initViewEvents() {
-        this.countedStopTimeListAdapter.setOnItemClickListener(countedStopTime -> {
+        this.countedTripAdapter.setOnItemClickListener(countedStopTime -> {
             this.showActionDialog(countedStopTime, true, true);
         });
 
@@ -142,7 +141,7 @@ public class TripDetailsFragment extends Fragment {
     private void initObserverEvents() {
         this.viewModel.getCountedTrip().observe(this.getViewLifecycleOwner(), countedTrip -> {
             if (countedTrip != null) {
-                this.countedStopTimeListAdapter.setCountedStopTimeList(countedTrip.getCountedStopTimes());
+                this.countedTripAdapter.setCountedTrip(countedTrip);
             }
         });
     }
