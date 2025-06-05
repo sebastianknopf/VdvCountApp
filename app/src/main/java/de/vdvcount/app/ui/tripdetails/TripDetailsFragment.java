@@ -153,10 +153,11 @@ public class TripDetailsFragment extends Fragment {
         if (actionCountingEnabled) {
             dialog.setOnActionCountingClickListener(view -> {
                 TripDetailsFragmentDirections.ActionTripDetailsFragmentToCountingFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToCountingFragment(
-                        countedStopTime.getStop().getName(),
-                        countedStopTime.getSequence(),
                         Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {})
                 );
+
+                action.setStopName(countedStopTime.getStop().getName());
+                action.setStopSequence(countedStopTime.getSequence());
 
                 this.navigationController.navigate(action);
             });
@@ -164,7 +165,13 @@ public class TripDetailsFragment extends Fragment {
 
         if (actionAdditionalStopEnabled) {
             dialog.setOnActionAdditionalStopClickListener(view -> {
+                TripDetailsFragmentDirections.ActionTripDetailsFragmentToCountingFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToCountingFragment(
+                        Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {})
+                );
 
+                action.setAfterStopSequence(countedStopTime.getSequence());
+
+                this.navigationController.navigate(action);
             });
         }
 

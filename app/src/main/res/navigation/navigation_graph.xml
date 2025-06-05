@@ -128,7 +128,19 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_tripDetailsFragment_to_countingFragment"
-            app:destination="@id/countingFragment" />
+            app:destination="@id/countingFragment" >
+            <argument
+                android:name="stopName"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+            <argument
+                android:name="stopSequence"
+                android:defaultValue="-1" />
+            <argument
+                android:name="afterStopSequence"
+                android:defaultValue="-1" />
+        </action>
         <action
             android:id="@+id/action_tripDetailsFragment_to_tripClosingFragment"
             app:destination="@id/tripClosingFragment" />
@@ -165,6 +177,9 @@
             app:nullable="true" />
         <argument
             android:name="stopSequence"
+            app:argType="integer" />
+        <argument
+            android:name="afterStopSequence"
             app:argType="integer" />
         <argument
             android:name="countedDoorIds"
