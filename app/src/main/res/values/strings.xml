@@ -47,6 +47,7 @@
 
     <!-- Counting Action Dialog -->
     <string name="dialog_counting_action_title">Wählen Sie eine Aktion</string>
+    <string name="dialog_counting_action_run_through">Durchfahrt</string>
 
     <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>

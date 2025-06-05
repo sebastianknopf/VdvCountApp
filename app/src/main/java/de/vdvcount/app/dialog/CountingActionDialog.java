@@ -20,6 +20,7 @@ public class CountingActionDialog {
 
     private View.OnClickListener onActionCountingClickListener;
     private View.OnClickListener onActionAdditionalStopClickListener;
+    private View.OnClickListener onActionRunThroughListener;
 
     public CountingActionDialog(Context context) {
         this.context = context;
@@ -31,6 +32,10 @@ public class CountingActionDialog {
 
     public void setOnActionAdditionalStopClickListener(View.OnClickListener listener) {
         this.onActionAdditionalStopClickListener = listener;
+    }
+
+    public void setOnActionRunThroughListener(View.OnClickListener listener) {
+        this.onActionRunThroughListener = listener;
     }
 
     public void show() {
@@ -61,6 +66,17 @@ public class CountingActionDialog {
             });
         } else {
             dataBinding.layoutActionAdditionalStop.setVisibility(View.GONE);
+        }
+
+        if (this.onActionRunThroughListener != null) {
+            dataBinding.layoutActionRunThrough.setVisibility(View.VISIBLE);
+            dataBinding.layoutActionRunThrough.setOnClickListener(view -> {
+                alertDialog.hide();
+
+                this.onActionRunThroughListener.onClick(view);
+            });
+        } else {
+            dataBinding.layoutActionRunThrough.setVisibility(View.GONE);
         }
 
         alertDialog.show();
