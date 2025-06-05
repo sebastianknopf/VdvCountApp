@@ -31,7 +31,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -40,7 +40,10 @@
                     android:id="@+id/cbxStayInVehicle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/trip_closing_stay_vehicle_message"
+                    android:layout_marginTop="@dimen/app_large_spacing"
+                    android:paddingStart="@dimen/app_default_spacing"
+                    android:paddingEnd="@dimen/app_default_spacing"
+                    android:text="@string/trip_closing_stay_vehicle"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
             </LinearLayout>

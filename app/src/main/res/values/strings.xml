@@ -20,6 +20,7 @@
     <!-- TripParamsFragment -->
     <string name="trip_params_title">Fahrtdetails</string>
     <string name="trip_params_trip_info">Zählung auf der Linie %s nach %s, Abfahrt um %s Uhr</string>
+    <string name="trip_params_stay_in_vehicle_info">Die Fahrzeug- und Türauswahl wurde aus der vorhergehenden Fahrt übernommen.</string>
     <string name="trip_params_vehicle">Fahrzeug</string>
     <string name="trip_params_doors">Gezählte Türen</string>
     <string name="trip_params_object_classes">Gezählte Objektklassen</string>
@@ -31,7 +32,7 @@
 
     <!-- TripClosingFragment -->
     <string name="trip_closing_title">Fahrtabschluss</string>
-    <string name="trip_closing_stay_vehicle_message">Weiterfahrt im selben Fahrzeug</string>
+    <string name="trip_closing_stay_vehicle">Die Folgefahrt wird ohne Pause oder Leerfahrt vom selben Fahrzeug durchgeführt</string>
     <string name="trip_closing_success_message">Die Fahrt wurde erfolgreich beendet!</string>
     <string name="trip_closing_close_trip">Fahrt abschließen</string>
     <string name="trip_closing_next_trip">Folgefahrt auswählen</string>
