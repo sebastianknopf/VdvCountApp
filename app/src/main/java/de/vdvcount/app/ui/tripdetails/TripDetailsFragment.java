@@ -22,6 +22,7 @@ import de.vdvcount.app.adapter.CountedStopTimeListAdapter;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
+import de.vdvcount.app.dialog.CountingActionDialog;
 import de.vdvcount.app.model.CountedStopTime;
 import de.vdvcount.app.model.CountedTrip;
 
@@ -111,13 +112,7 @@ public class TripDetailsFragment extends Fragment {
 
     private void initViewEvents() {
         this.countedStopTimeListAdapter.setOnItemClickListener(countedStopTime -> {
-            TripDetailsFragmentDirections.ActionTripDetailsFragmentToCountingFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToCountingFragment(
-                countedStopTime.getStop().getName(),
-                countedStopTime.getSequence(),
-                Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {})
-            );
-
-            this.navigationController.navigate(action);
+            this.showActionDialog(countedStopTime, true, true);
         });
 
         this.dataBinding.btnQuit.setOnClickListener(view -> {
@@ -150,6 +145,30 @@ public class TripDetailsFragment extends Fragment {
                 this.countedStopTimeListAdapter.setCountedStopTimeList(countedTrip.getCountedStopTimes());
             }
         });
+    }
+
+    private void showActionDialog(final CountedStopTime countedStopTime, boolean actionCountingEnabled, boolean actionAdditionalStopEnabled) {
+        CountingActionDialog dialog = new CountingActionDialog(this.requireContext());
+
+        if (actionCountingEnabled) {
+            dialog.setOnActionCountingClickListener(view -> {
+                TripDetailsFragmentDirections.ActionTripDetailsFragmentToCountingFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToCountingFragment(
+                        countedStopTime.getStop().getName(),
+                        countedStopTime.getSequence(),
+                        Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {})
+                );
+
+                this.navigationController.navigate(action);
+            });
+        }
+
+        if (actionAdditionalStopEnabled) {
+            dialog.setOnActionAdditionalStopClickListener(view -> {
+
+            });
+        }
+
+        dialog.show();
     }
 
     public enum State {
