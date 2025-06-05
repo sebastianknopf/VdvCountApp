@@ -73,6 +73,16 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
         return sum;
     }
 
+    public boolean isRunThrough() {
+        for (CountingSequence countingSequence : this.getCountingSequences()) {
+            if (countingSequence.getDoorId().equals("0") && countingSequence.getCountBeginTimestamp().getTime() == countingSequence.getCountEndTimestamp().getTime()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public PassengerCountingEventObject mapApiObject() {
         PassengerCountingEventObject apiObject = new PassengerCountingEventObject();
