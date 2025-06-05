@@ -97,13 +97,14 @@ public class TripDetailsViewModel extends ViewModel {
             CountedTrip countedTrip = repository.loadCountedTrip();
 
             Location location = LocationService.requestCurrentLocation();
+            Date timestamp = new Date();
 
             CountingSequence countingSequence = new CountingSequence();
             countingSequence.setDoorId("0");
             countingSequence.setCountingAreaId("1");
             countingSequence.setObjectClass("Adult");
-            countingSequence.setCountBeginTimestamp(new Date());
-            countingSequence.setCountEndTimestamp(new Date());
+            countingSequence.setCountBeginTimestamp(timestamp);
+            countingSequence.setCountEndTimestamp(timestamp);
 
             PassengerCountingEvent pce = new PassengerCountingEvent();
             pce.setCountingSequences(List.of(countingSequence));
