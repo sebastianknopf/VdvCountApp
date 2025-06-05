@@ -1,8 +1,20 @@
 package de.vdvcount.app.ui.tripdetails;
 
+import android.location.Location;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import de.vdvcount.app.common.LocationService;
+import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.filesystem.FilesystemRepository;
 import de.vdvcount.app.model.CountedTrip;
@@ -10,6 +22,7 @@ import de.vdvcount.app.model.CountingSequence;
 import de.vdvcount.app.model.PassengerCountingEvent;
 import de.vdvcount.app.model.Trip;
 import de.vdvcount.app.remote.RemoteRepository;
+import de.vdvcount.app.ui.counting.CountingFragment;
 
 public class TripDetailsViewModel extends ViewModel {
 
@@ -68,6 +81,46 @@ public class TripDetailsViewModel extends ViewModel {
             } else {
                 this.state.postValue(TripDetailsFragment.State.ERROR);
             }
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
+
+    public void addRunThroughPassengerCountingEvent(int stopSequence) {
+        Logging.i(this.getClass().getName(), "Adding run-through PCE");
+
+        Runnable runnable = () -> {
+            this.state.postValue(TripDetailsFragment.State.LOADING);
+
+            FilesystemRepository repository = FilesystemRepository.getInstance();
+            CountedTrip countedTrip = repository.loadCountedTrip();
+
+            Location location = LocationService.requestCurrentLocation();
+
+            CountingSequence countingSequence = new CountingSequence();
+            countingSequence.setDoorId("0");
+            countingSequence.setCountingAreaId("1");
+            countingSequence.setObjectClass("Adult");
+            countingSequence.setCountBeginTimestamp(new Date());
+            countingSequence.setCountEndTimestamp(new Date());
+
+            PassengerCountingEvent pce = new PassengerCountingEvent();
+            pce.setCountingSequences(List.of(countingSequence));
+
+            if (location != null) {
+                pce.setLatitude(location.getLatitude());
+                pce.setLongitude(location.getLongitude());
+            } else {
+                Logging.w(this.getClass().getName(), "Location object is null, no location assigned with this PCE");
+            }
+
+            countedTrip.getCountedStopTimes().get(stopSequence - 1).getPassengerCountingEvents().add(pce);
+
+            repository.updateCountedTrip(countedTrip);
+
+            this.countedTrip.postValue(countedTrip);
+            this.state.postValue(TripDetailsFragment.State.READY);
         };
 
         Thread thread = new Thread(runnable);

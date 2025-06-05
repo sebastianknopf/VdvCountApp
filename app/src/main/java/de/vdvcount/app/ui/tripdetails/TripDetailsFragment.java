@@ -3,6 +3,7 @@ package de.vdvcount.app.ui.tripdetails;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.navigation.NavController;
+
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
+
+import java.util.ArrayList;
 
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
@@ -153,16 +159,16 @@ public class TripDetailsFragment extends Fragment {
 
                     // additional stops after the last stops are not allowed
                     if (countedStopTime.getSequence() < lastCountedStopTime.getSequence()) {
-                        this.showActionDialog(countedStopTime, true, true);
+                        this.showActionDialog(countedStopTime, true, true, true);
                     } else {
-                        this.showActionDialog(countedStopTime, true, false);
+                        this.showActionDialog(countedStopTime, true, false, true);
                     }
                 });
             }
         });
     }
 
-    private void showActionDialog(final CountedStopTime countedStopTime, boolean actionCountingEnabled, boolean actionAdditionalStopEnabled) {
+    private void showActionDialog(final CountedStopTime countedStopTime, boolean actionCountingEnabled, boolean actionAdditionalStopEnabled, boolean actionRunThroughEnabled) {
         CountingActionDialog dialog = new CountingActionDialog(this.requireContext());
 
         if (actionCountingEnabled) {
@@ -187,6 +193,31 @@ public class TripDetailsFragment extends Fragment {
                 action.setAfterStopSequence(countedStopTime.getSequence());
 
                 this.navigationController.navigate(action);
+            });
+        }
+
+        if (actionRunThroughEnabled) {
+            dialog.setOnActionRunThroughListener(view -> {
+                String[] permissions = {
+                        android.Manifest.permission.ACCESS_FINE_LOCATION,
+                        android.Manifest.permission.CAMERA
+                };
+
+                Permissions.check(this.getContext(), permissions, null, null, new PermissionHandler() {
+                    @Override
+                    public void onGranted() {
+                        viewModel.addRunThroughPassengerCountingEvent(countedStopTime.getSequence());
+                    }
+
+                    @Override
+                    public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                        super.onDenied(context, deniedPermissions);
+
+                        Logging.w(getClass().getName(), "Location permission refused");
+
+                        viewModel.addRunThroughPassengerCountingEvent(countedStopTime.getSequence());
+                    }
+                });
             });
         }
 
