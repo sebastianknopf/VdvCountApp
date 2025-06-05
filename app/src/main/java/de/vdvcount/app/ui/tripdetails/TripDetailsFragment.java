@@ -110,9 +110,12 @@ public class TripDetailsFragment extends Fragment {
     }
 
     private void initViewEvents() {
-        this.countedTripAdapter.setOnItemClickListener(countedStopTime -> {
+        // this viewEvent can only be initialized with a countedTrip object present in the viewModel
+        // hence, the initialisation is done in initObserverEvents()
+        // see #20 for more information
+        /*this.countedTripAdapter.setOnItemClickListener(countedStopTime -> {
             this.showActionDialog(countedStopTime, true, true);
-        });
+        });*/
 
         this.dataBinding.btnQuit.setOnClickListener(view -> {
             CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
@@ -142,6 +145,19 @@ public class TripDetailsFragment extends Fragment {
         this.viewModel.getCountedTrip().observe(this.getViewLifecycleOwner(), countedTrip -> {
             if (countedTrip != null) {
                 this.countedTripAdapter.setCountedTrip(countedTrip);
+
+                this.countedTripAdapter.setOnItemClickListener(countedStopTime -> {
+                    CountedStopTime lastCountedStopTime = countedTrip.getCountedStopTimes().get(
+                            countedTrip.getCountedStopTimes().size() - 1
+                    );
+
+                    // additional stops after the last stops are not allowed
+                    if (countedStopTime.getSequence() < lastCountedStopTime.getSequence()) {
+                        this.showActionDialog(countedStopTime, true, true);
+                    } else {
+                        this.showActionDialog(countedStopTime, true, false);
+                    }
+                });
             }
         });
     }
