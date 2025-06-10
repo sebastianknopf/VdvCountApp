@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
+import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.databinding.FragmentTripClosingBinding;
 
@@ -147,6 +148,10 @@ public class TripClosingFragment extends Fragment {
             }
 
             if (state == TripClosingFragment.State.DONE) {
+                // stop location updates in LocationService
+                // see #40 for more information
+                LocationService.stopLocationUpdates();
+
                 final int countDownMillis = 2000;
 
                 // count down until trip is finally closed

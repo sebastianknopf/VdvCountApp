@@ -1,9 +1,11 @@
 package de.vdvcount.app.ui.tripdetails;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.CountedTripAdapter;
+import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
@@ -116,6 +119,13 @@ public class TripDetailsFragment extends Fragment {
         this.navigationController = appActivity.getNavigationController();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        LocationService.startLocationUpdates();
+    }
+
     private void initViewEvents() {
         // this viewEvent can only be initialized with a countedTrip object present in the viewModel
         // hence, the initialisation is done in initObserverEvents()
@@ -175,6 +185,12 @@ public class TripDetailsFragment extends Fragment {
                         this.showActionDialog(countedStopTime, true, false, false);
                     }
                 });
+            }
+        });
+
+        LocationService.getLocation().observe(this.getViewLifecycleOwner(), location -> {
+            if (location != null) {
+                // still do nothing here... this is optional for recording WayPoints later
             }
         });
     }
