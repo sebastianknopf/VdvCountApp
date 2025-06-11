@@ -50,6 +50,16 @@ public class CountingViewModel extends ViewModel {
     }
 
     public void addPassengerCountingEvent(int stopSequence, List<CountingSequence> countingSequences) {
+        Logging.i(this.getClass().getName(), "Adding regular PCE");
+        this.addPassengerCountingEventInternal(stopSequence, countingSequences, false);
+    }
+
+    public void addUnmatchedPassengerCountingEvent(int afterStopSequence, List<CountingSequence> countingSequences) {
+        Logging.i(this.getClass().getName(), "Adding unmatched PCE");
+        this.addPassengerCountingEventInternal(afterStopSequence, countingSequences, true);
+    }
+
+    private void addPassengerCountingEventInternal(final int sequence, List<CountingSequence> countingSequences, boolean unmatched) {
         Runnable runnable = () -> {
             this.state.postValue(CountingFragment.State.STORING);
 
@@ -66,6 +76,7 @@ public class CountingViewModel extends ViewModel {
             Location location = LocationService.requestCurrentLocation();
 
             PassengerCountingEvent pce = new PassengerCountingEvent();
+            pce.setCountingSequences(countingSequences);
 
             if (location != null) {
                 pce.setLatitude(location.getLatitude());
@@ -74,10 +85,13 @@ public class CountingViewModel extends ViewModel {
                 Logging.w(this.getClass().getName(), "Location object is null, no location assigned with this PCE");
             }
 
-            pce.setAfterStopSequence(-1);
-            pce.setCountingSequences(countingSequences);
+            if (unmatched) {
+                pce.setAfterStopSequence(sequence);
+                countedTrip.getUnmatchedPassengerCountingEvents().add(pce);
+            } else {
+                countedTrip.getCountedStopTimes().get(sequence - 1).getPassengerCountingEvents().add(pce);
+            }
 
-            countedTrip.getCountedStopTimes().get(stopSequence - 1).getPassengerCountingEvents().add(pce);
             repository.updateCountedTrip(countedTrip);
 
             this.state.postValue(CountingFragment.State.STORED);

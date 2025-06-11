@@ -3,36 +3,86 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <import type="de.vdvcount.app.common.Status" />
+
+        <import type="android.view.View" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/layoutTripInfo"
+            android:id="@+id/layoutHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:padding="@dimen/app_default_spacing"
+            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/edtVehicleLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-            
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_margin="@dimen/app_default_spacing"
-                android:src="@drawable/ic_public_transport"
-                app:tint="?attr/defaultIconColor" />
 
-            <TextView
-                android:id="@+id/lblTripInfo"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/layoutTripInfo"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/app_default_spacing"
-                android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                tools:text="Zählung auf der Linie X nach Y, Abfahrt um 12:11 Uhr"/>
+                android:gravity="center_vertical"
+                android:padding="@dimen/app_default_spacing">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="@dimen/app_default_spacing"
+                    android:src="@drawable/ic_public_transport"
+                    app:tint="?attr/defaultIconColor" />
+
+                <TextView
+                    android:id="@+id/lblTripInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/app_default_spacing"
+                    android:layout_weight="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    tools:text="Zählung auf der Linie X nach Y, Abfahrt um 12:11 Uhr"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutStayInVehicleInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="@dimen/app_default_spacing"
+                android:visibility="@{Status.getBoolean(Status.STAY_IN_VEHICLE, false) ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toTopOf="@id/edtVehicleLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/app_default_spacing"
+                    android:layout_marginEnd="@dimen/app_default_spacing"
+                    android:layout_marginBottom="@dimen/app_default_spacing"
+                    android:src="@drawable/ic_info"
+                    app:tint="?attr/defaultIconColor" />
+
+                <TextView
+                    android:id="@+id/lblStayInVehicleInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/app_default_spacing"
+                    android:layout_marginEnd="@dimen/app_default_spacing"
+                    android:layout_marginBottom="@dimen/app_default_spacing"
+                    android:layout_weight="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:text="@string/trip_params_stay_in_vehicle_info" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -45,12 +95,13 @@
             android:layout_marginEnd="@dimen/app_default_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutTripInfo">
+            app:layout_constraintTop_toBottomOf="@id/layoutHeading">
 
             <de.vdvcount.app.view.TextInputAutoCompleteTextView
                 android:id="@+id/edtVehicle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
                 android:hint="@string/trip_params_vehicle"
                 style="@style/TextInputAutoCompleteTextViewStyle"/>
 

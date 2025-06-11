@@ -20,6 +20,7 @@
     <!-- TripParamsFragment -->
     <string name="trip_params_title">Fahrtdetails</string>
     <string name="trip_params_trip_info">Zählung auf der Linie %s nach %s, Abfahrt um %s Uhr</string>
+    <string name="trip_params_stay_in_vehicle_info">Die Fahrzeug- und Türauswahl wurde aus der vorhergehenden Fahrt übernommen.</string>
     <string name="trip_params_vehicle">Fahrzeug</string>
     <string name="trip_params_doors">Gezählte Türen</string>
     <string name="trip_params_object_classes">Gezählte Objektklassen</string>
@@ -29,12 +30,26 @@
     <string name="trip_details_title">Zählfahrt</string>
     <string name="trip_details_quit">Fahrt abschließen</string>
 
+    <!-- TripClosingFragment -->
+    <string name="trip_closing_title">Fahrtabschluss</string>
+    <string name="trip_closing_stay_vehicle">Die Folgefahrt wird ohne Pause oder Leerfahrt vom selben Fahrzeug durchgeführt</string>
+    <string name="trip_closing_success_message">Die Fahrt wurde erfolgreich beendet!</string>
+    <string name="trip_closing_close_trip">Fahrt abschließen</string>
+    <string name="trip_closing_next_trip">Folgefahrt auswählen</string>
+
     <!-- CountingFragment -->
     <string name="counting_title">Zählung</string>
     <string name="counting_save">Zählung beenden</string>
     <string name="counting_stop_info">Zählung an der Haltestelle %s</string>
+    <string name="counting_additional_stop_info">Zählung an einem Zwischenhalt</string>
     <string name="counting_in">Einsteiger</string>
     <string name="counting_out">Aussteiger</string>
+
+    <!-- Counting Action Dialog -->
+    <string name="dialog_counting_action_title">Wählen Sie eine Aktion</string>
+    <string name="dialog_counting_action_counting">Zählung</string>
+    <string name="dialog_counting_action_additional_stop">Zwischenhalt</string>
+    <string name="dialog_counting_action_run_through">Durchfahrt</string>
 
     <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>
@@ -46,6 +61,8 @@
     <string name="str_minus">-</string>
     <string name="str_plus">+</string>
     <string name="str_network_load_error">Während der Anfrage ist ein Fehler aufgetreten. Bitte prüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut.</string>
+    <string name="str_additional_stop">Zwischenhalt</string>
+    <string name="str_run_through">Durchfahrt</string>
 
     <string name="str_format_time">HH:mm</string>
 </resources>

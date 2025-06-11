@@ -20,12 +20,14 @@ public class DoorListAdapter extends RecyclerView.Adapter<DoorListAdapter.ViewHo
 
     private List<String> doorList;
     private List<Integer> selectedDoorIndices;
+    private boolean enabled;
 
     private OnItemSelectListener<String> onItemSelectListener;
 
     public DoorListAdapter() {
         this.doorList = new ArrayList<>();
         this.selectedDoorIndices = new ArrayList<>();
+        this.enabled = true;
     }
 
     public void setOnItemSelectListener(OnItemSelectListener<String> onItemSelectListener) {
@@ -50,6 +52,26 @@ public class DoorListAdapter extends RecyclerView.Adapter<DoorListAdapter.ViewHo
         return selectedDoorList;
     }
 
+    public void setSelectedDoorList(List<String> selectedDoorList) {
+        for (String selectedDoorId : selectedDoorList) {
+            this.selectedDoorIndices.add(
+                    this.doorList.indexOf(selectedDoorId)
+            );
+        }
+
+        this.notifyDataSetChanged();
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+
+        this.notifyDataSetChanged();
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -61,6 +83,8 @@ public class DoorListAdapter extends RecyclerView.Adapter<DoorListAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String obj = this.doorList.get(position);
         holder.setDoorId(obj);
+        holder.setSelected(this.selectedDoorIndices.contains(position));
+        holder.setEnabled(this.enabled);
         holder.setOnItemSelectListener((item, selected) -> {
             if (selected) {
                 this.selectedDoorIndices.add(item);
@@ -83,6 +107,7 @@ public class DoorListAdapter extends RecyclerView.Adapter<DoorListAdapter.ViewHo
 
         private final Context context;
         private final DoorItemBinding itemBinding;
+        private boolean enabled;
         private OnItemSelectListener<Integer> onItemSelectListener;
 
         public ViewHolder(Context context, DoorItemBinding itemBinding) {
@@ -90,6 +115,7 @@ public class DoorListAdapter extends RecyclerView.Adapter<DoorListAdapter.ViewHo
 
             this.context = context;
             this.itemBinding = itemBinding;
+            this.enabled = true;
 
             this.itemBinding.cbxDoorSelected.setOnCheckedChangeListener((compoundButton, checked) -> {
                 int index = this.getAdapterPosition();
@@ -99,12 +125,23 @@ public class DoorListAdapter extends RecyclerView.Adapter<DoorListAdapter.ViewHo
             });
 
             this.itemBinding.getRoot().setOnClickListener(view -> {
-                this.itemBinding.cbxDoorSelected.toggle();
+                if (this.enabled) {
+                    this.itemBinding.cbxDoorSelected.toggle();
+                }
             });
         }
 
         public void setDoorId(String doorId) {
             this.itemBinding.setDoorId(doorId);
+        }
+
+        public void setSelected(boolean selected) {
+            this.itemBinding.cbxDoorSelected.setChecked(selected);
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+            this.itemBinding.cbxDoorSelected.setEnabled(enabled);
         }
 
         public void setOnItemSelectListener(OnItemSelectListener<Integer> onItemSelectListener) {
