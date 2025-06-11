@@ -81,6 +81,10 @@ public class VehicleListAdapter extends ArrayAdapter<Vehicle> implements Filtera
         this.vehicleList = vehicleList;
     }
 
+    public List<Vehicle> getVehicles() {
+        return this.vehicleList;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         VehicleItemBinding dataBinding;

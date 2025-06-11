@@ -25,6 +25,7 @@ import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.StopListAdapter;
 import de.vdvcount.app.common.Logging;
+import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentStopSelectBinding;
 
 public class StationSelectFragment extends Fragment {
@@ -144,6 +145,16 @@ public class StationSelectFragment extends Fragment {
         });
 
         this.stopListAdapter.setOnItemClickListener(station -> {
+            // if the stay-in-vehicle flag is set but the user changes the stop, this is no trip connection anymore...
+            // reset the flag for this reason
+            // see #21 for more information
+            if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
+                Status.setBoolean(Status.STAY_IN_VEHICLE, false);
+                Status.setString(Status.LAST_PCE, null);
+                Status.setString(Status.LAST_VEHICLE_ID, null);
+                Status.setStringArray(Status.LAST_COUNTED_DOOR_IDS, new String[] {});
+            }
+
             StationSelectFragmentDirections.ActionStationSelectFragmentToDepartureFragment action = StationSelectFragmentDirections.actionStationSelectFragmentToDepartureFragment();
             action.setStationId(station.getId());
             action.setStationName(station.getName());

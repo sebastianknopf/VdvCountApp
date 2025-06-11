@@ -6,7 +6,7 @@ import java.util.List;
 import de.vdvcount.app.remote.CountedStopTimeObject;
 import de.vdvcount.app.remote.PassengerCountingEventObject;
 
-public class CountedStopTime extends StopTime {
+public class CountedStopTime extends StopTime implements ICountable {
 
     private List<PassengerCountingEvent> passengerCountingEvents;
 

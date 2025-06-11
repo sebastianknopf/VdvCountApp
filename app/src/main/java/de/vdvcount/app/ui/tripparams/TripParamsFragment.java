@@ -14,6 +14,7 @@ import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.DoorListAdapter;
 import de.vdvcount.app.adapter.VehicleListAdapter;
+import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripParamsBinding;
 import de.vdvcount.app.model.Vehicle;
 
@@ -25,7 +26,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class TripParamsFragment extends Fragment {
 
@@ -38,13 +41,30 @@ public class TripParamsFragment extends Fragment {
     private String currentVehicleId;
     private VehicleListAdapter vehicleListAdapter;
     private DoorListAdapter doorListAdapter;
+    private TextWatcher vehicleIdTextWatcher;
 
     public static TripParamsFragment newInstance() {
         return new TripParamsFragment();
     }
 
     public TripParamsFragment() {
+        this.vehicleIdTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                currentVehicleId = null;
+                doorListAdapter.setDoorList(new ArrayList<>());
+
+                validateInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        };
     }
 
     @Override
@@ -121,33 +141,13 @@ public class TripParamsFragment extends Fragment {
     }
 
     private void initViewEvents() {
-        this.dataBinding.edtVehicle.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                currentVehicleId = null;
-                doorListAdapter.setDoorList(new ArrayList<>());
-
-                validateInputs();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
+        this.dataBinding.edtVehicle.addTextChangedListener(this.vehicleIdTextWatcher);
 
         this.dataBinding.edtVehicle.setOnItemClickListener((adapterView, view, i, l) -> {
             Vehicle vehicle = this.vehicleListAdapter.getItem(i);
             this.currentVehicleId = vehicle.getName();
 
-            List<String> doorList = new ArrayList<>();
-            for (int d = 1; d <= vehicle.getNumDoors(); d++) {
-                doorList.add(String.valueOf(d));
-            }
-            this.doorListAdapter.setDoorList(doorList);
+            this.createDoorList(vehicle);
 
             this.validateInputs();
         });
@@ -171,6 +171,33 @@ public class TripParamsFragment extends Fragment {
     private void initObserverEvents() {
         this.viewModel.getVehicles().observe(this.getViewLifecycleOwner(), vehicles -> {
             this.vehicleListAdapter.setVehicles(vehicles);
+
+            if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
+                String vehicleId = Status.getString(Status.LAST_VEHICLE_ID, null);
+                if (vehicleId != null) {
+                    Optional<Vehicle> vehicle = this.vehicleListAdapter.getVehicles().stream().filter(v -> v.getName().equals(vehicleId)).findFirst();
+                    if (vehicle.isPresent()) {
+                        this.currentVehicleId = vehicleId;
+
+                        // TextWatcher of edtVehicle needs to be removed temporary as it resets the
+                        // internal field currentVehicleId which is then used to validate the input fields.
+                        // In this case, no vehicle is selected by user, but loaded programmatically.
+                        this.dataBinding.edtVehicle.removeTextChangedListener(this.vehicleIdTextWatcher);
+                        this.dataBinding.edtVehicle.setText(vehicleId);
+                        this.dataBinding.edtVehicle.addTextChangedListener(this.vehicleIdTextWatcher);
+
+                        String[] selectedDoorIds = Status.getStringArray(Status.LAST_COUNTED_DOOR_IDS, new String[] {});
+                        this.createDoorList(vehicle.get(), selectedDoorIds);
+
+                        // disable edtVehicle and lstDoors; the user is not allowed to change them, if they're set before
+                        // disabling the list entries is done by using the adapter...
+                        this.dataBinding.edtVehicle.setEnabled(false);
+                        this.doorListAdapter.setEnabled(false);
+
+                        this.validateInputs();
+                    }
+                }
+            }
         });
 
         this.viewModel.getObjectClasses().observe(this.getViewLifecycleOwner(), objectClasses -> {
@@ -189,6 +216,19 @@ public class TripParamsFragment extends Fragment {
         }
 
         this.dataBinding.btnContinue.setEnabled(inputsValid);
+    }
+
+    private void createDoorList(Vehicle vehicle, String[] selectedDoorIds) {
+        List<String> doorList = new ArrayList<>();
+        for (int d = 1; d <= vehicle.getNumDoors(); d++) {
+            doorList.add(String.valueOf(d));
+        }
+        this.doorListAdapter.setDoorList(doorList);
+        this.doorListAdapter.setSelectedDoorList(Arrays.asList(selectedDoorIds));
+    }
+
+    private void createDoorList(Vehicle vehicle) {
+        this.createDoorList(vehicle, new String[] {});
     }
 
 }

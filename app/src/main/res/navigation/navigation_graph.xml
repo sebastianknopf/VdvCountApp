@@ -113,12 +113,6 @@
         android:id="@+id/tripDetailsFragment"
         android:name="de.vdvcount.app.ui.tripdetails.TripDetailsFragment"
         android:label="TripDetailsFragment" >
-        <action
-            android:id="@+id/action_tripDetailsFragment_to_departureFragment"
-            app:destination="@id/departureFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/navigation_graph.xml"
-            app:popUpToInclusive="true" />
         <argument
             android:name="tripId"
             app:argType="integer" />
@@ -134,7 +128,22 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_tripDetailsFragment_to_countingFragment"
-            app:destination="@id/countingFragment" />
+            app:destination="@id/countingFragment" >
+            <argument
+                android:name="stopName"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+            <argument
+                android:name="stopSequence"
+                android:defaultValue="-1" />
+            <argument
+                android:name="afterStopSequence"
+                android:defaultValue="-1" />
+        </action>
+        <action
+            android:id="@+id/action_tripDetailsFragment_to_tripClosingFragment"
+            app:destination="@id/tripClosingFragment" />
     </fragment>
     <fragment
         android:id="@+id/countingFragment"
@@ -170,7 +179,52 @@
             android:name="stopSequence"
             app:argType="integer" />
         <argument
+            android:name="afterStopSequence"
+            app:argType="integer" />
+        <argument
             android:name="countedDoorIds"
             app:argType="string[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/tripClosingFragment"
+        android:name="de.vdvcount.app.ui.tripclosing.TripClosingFragment"
+        android:label="TripClosingFragment" >
+        <action
+            android:id="@+id/action_tripClosingFragment_to_departureFragment"
+            app:destination="@id/departureFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph.xml"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_tripClosingFragment_to_tripDetailsFragment"
+            app:destination="@id/tripDetailsFragment"
+            app:popUpTo="@id/tripDetailsFragment"
+            app:popUpToInclusive="true" >
+            <argument
+                android:name="tripId"
+                android:defaultValue="-1" />
+            <argument
+                android:name="vehicleId"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+            <argument
+                android:name="startStopSequence"
+                android:defaultValue="-1" />
+            <argument
+                android:name="countedDoorIds"
+                android:defaultValue="@null"
+                app:argType="string[]"
+                app:nullable="true" />
+        </action>
+        <argument
+            android:name="lastStationId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="lastStationName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>
