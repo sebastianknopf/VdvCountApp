@@ -8,6 +8,7 @@ import java.util.List;
 import de.vdvcount.app.model.CountedStopTime;
 import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.model.PassengerCountingEvent;
+import de.vdvcount.app.model.WayPoint;
 
 public class CountedTripObject extends TripObject {
 
@@ -21,10 +22,13 @@ public class CountedTripObject extends TripObject {
     private List<CountedStopTimeObject> countedStopTimes;
     @SerializedName("unmatched_passenger_counting_events")
     private List<PassengerCountingEventObject> unmatchedPassengerCountingEvents;
+    @SerializedName("way_points")
+    private List<WayPointObject> wayPoints;
 
     public CountedTripObject() {
         this.countedStopTimes = new ArrayList<>();
         this.unmatchedPassengerCountingEvents = new ArrayList<>();
+        this.wayPoints = new ArrayList<>();
     }
 
     @Override
@@ -77,6 +81,14 @@ public class CountedTripObject extends TripObject {
         this.unmatchedPassengerCountingEvents = unmatchedPassengerCountingEvents;
     }
 
+    public List<WayPointObject> getWayPoints() {
+        return wayPoints;
+    }
+
+    public void setWayPoints(List<WayPointObject> wayPoints) {
+        this.wayPoints = wayPoints;
+    }
+
     @Override
     public CountedTrip mapDomainModel() {
         CountedTrip domainModel = new CountedTrip();
@@ -103,6 +115,12 @@ public class CountedTripObject extends TripObject {
             unmatchedPassengerCountingEvents.add(obj.mapDomainModel());
         }
         domainModel.setUnmatchedPassengerCountingEvents(unmatchedPassengerCountingEvents);
+
+        List<WayPoint> wayPoints = new ArrayList<>();
+        for (WayPointObject obj : this.getWayPoints()) {
+            wayPoints.add(obj.mapDomainModel());
+        }
+        domainModel.setWayPoints(wayPoints);
 
         return domainModel;
     }
