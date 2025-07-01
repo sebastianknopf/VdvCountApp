@@ -190,7 +190,7 @@ public class TripDetailsFragment extends Fragment {
 
         LocationService.getLocation().observe(this.getViewLifecycleOwner(), location -> {
             if (location != null) {
-                // still do nothing here... this is optional for recording WayPoints later
+                this.viewModel.addWayPoint(location);
             }
         });
     }
