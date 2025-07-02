@@ -1,11 +1,9 @@
 package de.vdvcount.app.ui.tripdetails;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -142,6 +140,8 @@ public class TripDetailsFragment extends Fragment {
             action.setLastStationId(lastCountedStopTime.getStop().getParentId());
             action.setLastStationName(lastCountedStopTime.getStop().getName());
 
+            this.resetCurrentVerticalScrollPosition();
+
             this.navigationController.navigate(action);
         });
 
@@ -154,6 +154,12 @@ public class TripDetailsFragment extends Fragment {
                         Status.getString(Status.CURRENT_VEHICLE_ID, ""),
                         Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
                 );
+            }
+        });
+
+        this.dataBinding.scrollView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            if (this.getCurrentVerticalScrollPosition() != -1) {
+                this.dataBinding.scrollView.post(() -> this.dataBinding.scrollView.scrollTo(0, this.getCurrentVerticalScrollPosition()));
             }
         });
     }
@@ -200,6 +206,8 @@ public class TripDetailsFragment extends Fragment {
 
         if (actionCountingEnabled) {
             dialog.setOnActionCountingClickListener(view -> {
+                this.setCurrentVerticalScrollPosition();
+
                 TripDetailsFragmentDirections.ActionTripDetailsFragmentToCountingFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToCountingFragment(
                         Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {})
                 );
@@ -213,6 +221,8 @@ public class TripDetailsFragment extends Fragment {
 
         if (actionAdditionalStopEnabled) {
             dialog.setOnActionAdditionalStopClickListener(view -> {
+                this.setCurrentVerticalScrollPosition();
+
                 TripDetailsFragmentDirections.ActionTripDetailsFragmentToCountingFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToCountingFragment(
                         Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {})
                 );
@@ -225,6 +235,8 @@ public class TripDetailsFragment extends Fragment {
 
         if (actionRunThroughEnabled) {
             dialog.setOnActionRunThroughListener(view -> {
+                this.setCurrentVerticalScrollPosition();
+
                 String[] permissions = {
                         android.Manifest.permission.ACCESS_FINE_LOCATION,
                         android.Manifest.permission.CAMERA
@@ -249,6 +261,18 @@ public class TripDetailsFragment extends Fragment {
         }
 
         dialog.show();
+    }
+
+    private int getCurrentVerticalScrollPosition() {
+        return Status.getInt(Status.VIEW_TRIP_DETAILS_SCROLL_POSITION, -1);
+    }
+
+    private void resetCurrentVerticalScrollPosition() {
+        Status.setInt(Status.VIEW_TRIP_DETAILS_SCROLL_POSITION, -1);
+    }
+
+    private void setCurrentVerticalScrollPosition() {
+        Status.setInt(Status.VIEW_TRIP_DETAILS_SCROLL_POSITION, this.dataBinding.scrollView.getScrollY());
     }
 
     public enum State {
