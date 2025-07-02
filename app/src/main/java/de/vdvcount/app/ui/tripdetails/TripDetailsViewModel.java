@@ -149,9 +149,12 @@ public class TripDetailsViewModel extends ViewModel {
             FilesystemRepository repository = FilesystemRepository.getInstance();
             CountedTrip countedTrip = repository.loadCountedTrip();
 
-            countedTrip.getWayPoints().add(wayPoint);
-
-            repository.updateCountedTrip(countedTrip);
+            // the LocationService may be started before the initial request for the counted trip
+            // is proceeded. This would result in a NullReferenceException ...
+            if (countedTrip != null) {
+                countedTrip.getWayPoints().add(wayPoint);
+                repository.updateCountedTrip(countedTrip);
+            }
         };
 
         Thread thread = new Thread(runnable);
