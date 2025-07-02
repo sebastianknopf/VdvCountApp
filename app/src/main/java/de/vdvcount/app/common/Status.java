@@ -18,6 +18,8 @@ public class Status extends KeyValueStore {
     public final static String LAST_COUNTED_DOOR_IDS = "de.vdvcount.app.kvs.status.LAST_COUNTED_DOOR_IDS";
     public final static String STAY_IN_VEHICLE = "de.vdvcount.app.kvs.status.STAY_IN_VEHICLE";
 
+    public final static String VIEW_TRIP_DETAILS_SCROLL_POSITION = "de.vdvcount.app.kvs.status.VIEW_TRIP_DETAILS_SCROLL_POSITION";
+
     public static class Values {
         public final static String INITIAL = "INITIAL";
         public final static String READY = "READY";
