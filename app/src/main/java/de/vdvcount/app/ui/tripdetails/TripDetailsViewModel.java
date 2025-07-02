@@ -21,6 +21,7 @@ import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.model.CountingSequence;
 import de.vdvcount.app.model.PassengerCountingEvent;
 import de.vdvcount.app.model.Trip;
+import de.vdvcount.app.model.WayPoint;
 import de.vdvcount.app.remote.RemoteRepository;
 import de.vdvcount.app.ui.counting.CountingFragment;
 
@@ -132,6 +133,25 @@ public class TripDetailsViewModel extends ViewModel {
         Runnable runnable = () -> {
             FilesystemRepository repository = FilesystemRepository.getInstance();
             this.countedTrip.postValue(repository.loadCountedTrip());
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
+
+    public void addWayPoint(Location location) {
+        final WayPoint wayPoint = new WayPoint();
+        wayPoint.setLatitude(location.getLatitude());
+        wayPoint.setLongitude(location.getLongitude());
+        wayPoint.setTimestamp(new Date());
+
+        Runnable runnable = () -> {
+            FilesystemRepository repository = FilesystemRepository.getInstance();
+            CountedTrip countedTrip = repository.loadCountedTrip();
+
+            countedTrip.getWayPoints().add(wayPoint);
+
+            repository.updateCountedTrip(countedTrip);
         };
 
         Thread thread = new Thread(runnable);

@@ -104,7 +104,7 @@ public class LocationService {
 
       try {
          LocationRequest locationRequest = new LocationRequest
-                 .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
+                 .Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
                  .build();
 
          LocationService.fusedClient.requestLocationUpdates(
