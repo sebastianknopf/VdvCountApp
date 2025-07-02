@@ -9,6 +9,7 @@ import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.remote.CountedStopTimeObject;
 import de.vdvcount.app.remote.CountedTripObject;
 import de.vdvcount.app.remote.PassengerCountingEventObject;
+import de.vdvcount.app.remote.WayPointObject;
 
 public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObject> {
 
@@ -17,10 +18,12 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
     private String vehicleId;
     private List<CountedStopTime> countedStopTimes;
     private List<PassengerCountingEvent> unmatchedPassengerCountingEvents;
+    private List<WayPoint> wayPoints;
 
     public CountedTrip() {
         this.countedStopTimes = new ArrayList<>();
         this.unmatchedPassengerCountingEvents = new ArrayList<>();
+        this.wayPoints = new ArrayList<>();
     }
 
     public static CountedTrip from(Trip trip) {
@@ -96,6 +99,14 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         this.unmatchedPassengerCountingEvents = unmatchedPassengerCountingEvents;
     }
 
+    public List<WayPoint> getWayPoints() {
+        return wayPoints;
+    }
+
+    public void setWayPoints(List<WayPoint> wayPoints) {
+        this.wayPoints = wayPoints;
+    }
+
     @Override
     public CountedTripObject mapApiObject() {
 
@@ -122,6 +133,12 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
             unmatchedPassengerCountingEvents.add(obj.mapApiObject());
         }
         apiObject.setUnmatchedPassengerCountingEvents(unmatchedPassengerCountingEvents);
+
+        List<WayPointObject> wayPoints = new ArrayList<>();
+        for (WayPoint obj : this.getWayPoints()) {
+            wayPoints.add(obj.mapApiObject());
+        }
+        apiObject.setWayPoints(wayPoints);
 
         return apiObject;
     }
