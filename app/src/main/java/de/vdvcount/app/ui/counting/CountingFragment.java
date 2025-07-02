@@ -120,6 +120,11 @@ public class CountingFragment extends Fragment {
 
     private void initViewEvents() {
         this.dataBinding.btnSave.setOnClickListener(view -> {
+
+            this.dataBinding.btnSave.setFocusable(true);
+            this.dataBinding.btnSave.requestFocus();
+            this.dataBinding.btnSave.setFocusable(false);
+
             String[] permissions = {
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.CAMERA
