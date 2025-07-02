@@ -71,9 +71,9 @@ public class CountingSequenceListAdapter extends RecyclerView.Adapter<CountingSe
                 this.requestViewFocus(this.itemBinding.btnDecreaseIn);
 
                 int in = this.countingSequence.getIn();
-                if (in > 0) {
-                    this.countingSequence.setIn(--in);
-                }
+                in = Math.max(Math.min(--in, 999), 0);
+
+                this.countingSequence.setIn(in);
 
                 this.updateInOutView();
             });
@@ -93,7 +93,9 @@ public class CountingSequenceListAdapter extends RecyclerView.Adapter<CountingSe
                 this.requestViewFocus(this.itemBinding.btnIncreaseIn);
 
                 int in = this.countingSequence.getIn();
-                this.countingSequence.setIn(++in);
+                in = Math.max(Math.min(++in, 999), 0);
+
+                this.countingSequence.setIn(in);
 
                 this.updateInOutView();
             });
@@ -102,9 +104,9 @@ public class CountingSequenceListAdapter extends RecyclerView.Adapter<CountingSe
                 this.requestViewFocus(this.itemBinding.btnDecreaseOut);
 
                 int out = this.countingSequence.getOut();
-                if (out > 0) {
-                    this.countingSequence.setOut(--out);
-                }
+                out = Math.max(Math.min(--out, 999), 0);
+
+                this.countingSequence.setOut(out);
 
                 this.updateInOutView();
             });
@@ -124,7 +126,9 @@ public class CountingSequenceListAdapter extends RecyclerView.Adapter<CountingSe
                 this.requestViewFocus(this.itemBinding.btnIncreaseOut);
 
                 int out = this.countingSequence.getOut();
-                this.countingSequence.setOut(++out);
+                out = Math.max(Math.min(++out, 999), 0);
+
+                this.countingSequence.setOut(out);
 
                 this.updateInOutView();
             });
