@@ -49,16 +49,7 @@ public class LocationService {
             super.onLocationAvailability(locationAvailability);
 
             boolean locationAvailable = locationAvailability.isLocationAvailable();
-            if (locationAvailable) {
-               Logging.i(LocationService.class.getName(), "Location is available");
-
-               LocationService.locationAvailable.postValue(true);
-               LocationService.locationAvailabilityHandler.removeCallbacks(LocationService.locationAvailabilityRunnable);
-            } else {
-               Logging.i(LocationService.class.getName(), "Location is not available");
-
-               LocationService.locationAvailabilityHandler.postDelayed(LocationService.locationAvailabilityRunnable, 30000);
-            }
+            LocationService.handleLocationAvailability(locationAvailable);
          }
 
          @Override
@@ -136,6 +127,8 @@ public class LocationService {
                  Looper.getMainLooper()
          );
 
+         LocationService.handleLocationAvailability(false);
+
          LocationService.locationUpdatesActive = true;
       } catch (Exception e) {
          Logging.e(LocationService.class.getName(), "Failed to register location updates", e);
@@ -151,5 +144,18 @@ public class LocationService {
 
       LocationService.fusedClient.removeLocationUpdates(locationCallback);
       LocationService.locationUpdatesActive = false;
+   }
+
+   private static void handleLocationAvailability(boolean locationAvailable) {
+      if (locationAvailable) {
+         Logging.i(LocationService.class.getName(), "Location is available");
+
+         LocationService.locationAvailable.postValue(true);
+         LocationService.locationAvailabilityHandler.removeCallbacks(LocationService.locationAvailabilityRunnable);
+      } else {
+         Logging.i(LocationService.class.getName(), "Location is not available");
+
+         LocationService.locationAvailabilityHandler.postDelayed(LocationService.locationAvailabilityRunnable, 15000);
+      }
    }
 }
