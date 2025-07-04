@@ -20,7 +20,7 @@
             android:id="@+id/lblDoorId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/app_large_spacing"
+            android:layout_marginTop="@dimen/app_medium_spacing"
             android:layout_marginStart="@dimen/app_default_spacing"
             android:layout_marginEnd="@dimen/app_default_spacing"
             android:text="@{@string/str_door(countingSequence.doorId)}"
@@ -40,14 +40,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:gravity="center"
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDecreaseIn"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:text="@string/str_minus"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -62,15 +61,14 @@
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:inputType="number"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
+                android:maxLength="3"
                 android:background="#00000000"
                 tools:text="0" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnIncreaseIn"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:text="@string/str_plus"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -80,7 +78,6 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/app_default_spacing"
             android:text="@string/counting_out"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.Material3.LabelMedium" />
@@ -95,8 +92,8 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDecreaseOut"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:text="@string/str_minus"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -111,15 +108,14 @@
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:inputType="number"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
+                android:maxLength="3"
                 android:background="#00000000"
                 tools:text="0" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnIncreaseOut"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:text="@string/str_plus"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
