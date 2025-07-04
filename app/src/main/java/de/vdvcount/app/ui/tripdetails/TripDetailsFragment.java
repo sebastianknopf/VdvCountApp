@@ -149,8 +149,6 @@ public class TripDetailsFragment extends Fragment {
                 filter,
                 ContextCompat.RECEIVER_NOT_EXPORTED
         );
-
-        this.handleLocationAvailability();
     }
 
     @Override
