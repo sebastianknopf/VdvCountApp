@@ -9,25 +9,27 @@ import androidx.databinding.DataBindingUtil;
 import de.vdvcount.app.R;
 import de.vdvcount.app.databinding.DialogGpsWarningBinding;
 
-public class GpsWarningDialog {
+public class LocationWarningDialog {
 
     private Context context;
     private DialogGpsWarningBinding dataBinding;
     private AlertDialog alertDialog;
 
-    public GpsWarningDialog(Context context) {
+    public LocationWarningDialog(Context context) {
         this.context = context;
-    }
 
-    public void show() {
         this.dataBinding = DataBindingUtil.inflate(LayoutInflater.from(this.context), R.layout.dialog_gps_warning, null, false);
 
         this.alertDialog = new AlertDialog.Builder(this.context)
                 .setView(this.dataBinding.getRoot())
                 .setCancelable(false)
                 .create();
+    }
 
-        this.alertDialog.show();
+    public void show() {
+        if (this.alertDialog != null) {
+            this.alertDialog.show();
+        }
     }
 
     public void hide() {

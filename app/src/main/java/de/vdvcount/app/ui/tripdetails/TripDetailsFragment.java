@@ -8,7 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
@@ -35,7 +34,7 @@ import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
 import de.vdvcount.app.dialog.CountingActionDialog;
-import de.vdvcount.app.dialog.GpsWarningDialog;
+import de.vdvcount.app.dialog.LocationWarningDialog;
 import de.vdvcount.app.model.CountedStopTime;
 import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.model.PassengerCountingEvent;
@@ -49,7 +48,7 @@ public class TripDetailsFragment extends Fragment {
 
     private CountedTripAdapter countedTripAdapter;
     private BroadcastReceiver locationChangedReceiver;
-    private GpsWarningDialog gpsWarningDialog;
+    private LocationWarningDialog locationWarningDialog;
 
     public static TripDetailsFragment newInstance() {
         return new TripDetailsFragment();
@@ -119,7 +118,7 @@ public class TripDetailsFragment extends Fragment {
         }
 
         // must be initialized here to ensure that the context is already initialized
-        this.gpsWarningDialog = new GpsWarningDialog(this.getContext());
+        this.locationWarningDialog = new LocationWarningDialog(this.getContext());
 
         this.initViewEvents();
         this.initObserverEvents();
@@ -149,6 +148,11 @@ public class TripDetailsFragment extends Fragment {
                 filter,
                 ContextCompat.RECEIVER_NOT_EXPORTED
         );
+
+        // this call is additionally required for checking the GPS state
+        // because when GPS is disabled while the fragment resumes, there will
+        // be no call of the broadcast receiver
+        this.handleLocationAvailability();
     }
 
     @Override
@@ -325,14 +329,14 @@ public class TripDetailsFragment extends Fragment {
         if (this.isLocationEnabled()) {
             LocationService.getInstance().startLocationUpdates();
 
-            if (this.gpsWarningDialog != null) {
-                this.gpsWarningDialog.hide();
+            if (this.locationWarningDialog != null) {
+                this.locationWarningDialog.hide();
             }
         } else {
             LocationService.getInstance().stopLocationUpdates();
 
-            if (this.gpsWarningDialog != null) {
-                this.gpsWarningDialog.show();
+            if (this.locationWarningDialog != null) {
+                this.locationWarningDialog.show();
             }
         }
     }
