@@ -45,8 +45,8 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDecreaseIn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:text="@string/str_minus"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -67,8 +67,8 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnIncreaseIn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:text="@string/str_plus"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -92,8 +92,8 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDecreaseOut"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:text="@string/str_minus"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -114,8 +114,8 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnIncreaseOut"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:text="@string/str_plus"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
