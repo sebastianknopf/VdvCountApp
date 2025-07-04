@@ -7,18 +7,18 @@ import android.view.LayoutInflater;
 import androidx.databinding.DataBindingUtil;
 
 import de.vdvcount.app.R;
-import de.vdvcount.app.databinding.DialogGpsWarningBinding;
+import de.vdvcount.app.databinding.DialogLocationWarningBinding;
 
 public class LocationWarningDialog {
 
     private Context context;
-    private DialogGpsWarningBinding dataBinding;
+    private DialogLocationWarningBinding dataBinding;
     private AlertDialog alertDialog;
 
     public LocationWarningDialog(Context context) {
         this.context = context;
 
-        this.dataBinding = DataBindingUtil.inflate(LayoutInflater.from(this.context), R.layout.dialog_gps_warning, null, false);
+        this.dataBinding = DataBindingUtil.inflate(LayoutInflater.from(this.context), R.layout.dialog_location_warning, null, false);
 
         this.alertDialog = new AlertDialog.Builder(this.context)
                 .setView(this.dataBinding.getRoot())
