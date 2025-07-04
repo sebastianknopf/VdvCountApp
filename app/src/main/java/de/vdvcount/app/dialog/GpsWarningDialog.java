@@ -13,6 +13,7 @@ public class GpsWarningDialog {
 
     private Context context;
     private DialogGpsWarningBinding dataBinding;
+    private AlertDialog alertDialog;
 
     public GpsWarningDialog(Context context) {
         this.context = context;
@@ -21,11 +22,17 @@ public class GpsWarningDialog {
     public void show() {
         this.dataBinding = DataBindingUtil.inflate(LayoutInflater.from(this.context), R.layout.dialog_gps_warning, null, false);
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(this.context)
+        this.alertDialog = new AlertDialog.Builder(this.context)
                 .setView(this.dataBinding.getRoot())
-                .setCancelable(true)
+                .setCancelable(false)
                 .create();
 
-        alertDialog.show();
+        this.alertDialog.show();
+    }
+
+    public void hide() {
+        if (this.alertDialog != null) {
+            this.alertDialog.dismiss();
+        }
     }
 }

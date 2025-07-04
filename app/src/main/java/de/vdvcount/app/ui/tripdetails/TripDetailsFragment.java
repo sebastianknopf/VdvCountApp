@@ -29,6 +29,7 @@ import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
 import de.vdvcount.app.dialog.CountingActionDialog;
+import de.vdvcount.app.dialog.GpsWarningDialog;
 import de.vdvcount.app.model.CountedStopTime;
 import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.model.PassengerCountingEvent;
@@ -41,6 +42,7 @@ public class TripDetailsFragment extends Fragment {
     private NavController navigationController;
 
     private CountedTripAdapter countedTripAdapter;
+    private GpsWarningDialog gpsWarningDialog;
 
     public static TripDetailsFragment newInstance() {
         return new TripDetailsFragment();
@@ -100,6 +102,9 @@ public class TripDetailsFragment extends Fragment {
             }
         }
 
+        // must be initialized here to ensure that the context is already initialized
+        this.gpsWarningDialog = new GpsWarningDialog(this.getContext());
+
         this.initViewEvents();
         this.initObserverEvents();
     }
@@ -125,13 +130,6 @@ public class TripDetailsFragment extends Fragment {
     }
 
     private void initViewEvents() {
-        // this viewEvent can only be initialized with a countedTrip object present in the viewModel
-        // hence, the initialisation is done in initObserverEvents()
-        // see #20 for more information
-        /*this.countedTripAdapter.setOnItemClickListener(countedStopTime -> {
-            this.showActionDialog(countedStopTime, true, true);
-        });*/
-
         this.dataBinding.btnQuit.setOnClickListener(view -> {
             CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
             CountedStopTime lastCountedStopTime = countedTrip.getCountedStopTimes().get(countedTrip.getCountedStopTimes().size() - 1);
@@ -197,6 +195,16 @@ public class TripDetailsFragment extends Fragment {
         LocationService.getLocation().observe(this.getViewLifecycleOwner(), location -> {
             if (location != null) {
                 this.viewModel.addWayPoint(location);
+            }
+        });
+
+        LocationService.getLocationAvailable().observe(this.getViewLifecycleOwner(), locationAvailable -> {
+            if (locationAvailable != null) {
+                if (!locationAvailable) {
+                    gpsWarningDialog.show();
+                } else {
+                    gpsWarningDialog.hide();
+                }
             }
         });
     }

@@ -28,6 +28,7 @@ public class LocationService {
    private static boolean locationUpdatesActive;
 
    private static MutableLiveData<Location> location;
+   private static MutableLiveData<Boolean> locationAvailable;
 
    static {
       fusedClient = LocationServices.getFusedLocationProviderClient(App.getStaticContext());
@@ -41,6 +42,8 @@ public class LocationService {
             } else {
                Logging.i(LocationService.class.getName(), "Location is not available");
             }
+
+            LocationService.locationAvailable.postValue(locationAvailability.isLocationAvailable());
          }
 
          @Override
@@ -59,10 +62,15 @@ public class LocationService {
       };
 
       location = new MutableLiveData<>(null);
+      locationAvailable = new MutableLiveData<>(null);
    }
 
    public static LiveData<Location> getLocation() {
       return LocationService.location;
+   }
+
+   public static LiveData<Boolean> getLocationAvailable() {
+      return LocationService.locationAvailable;
    }
 
    @SuppressLint("MissingPermission")
