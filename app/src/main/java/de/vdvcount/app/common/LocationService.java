@@ -1,11 +1,16 @@
 package de.vdvcount.app.common;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
-import android.os.Handler;
+import android.location.LocationManager;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -30,13 +35,12 @@ public class LocationService {
 
    private FusedLocationProviderClient fusedClient;
    private LocationCallback locationCallback;
+
+   private BroadcastReceiver locationChangedReceiver;
    private boolean locationUpdatesActive;
 
    private MutableLiveData<Location> location;
    private MutableLiveData<Boolean> locationAvailable;
-
-   private Runnable locationAvailabilityRunnable;
-   private Handler locationAvailabilityHandler;
 
    public static LocationService getInstance() {
       if (singleInstance == null) {
@@ -49,19 +53,10 @@ public class LocationService {
    public LocationService() {
       this.fusedClient = LocationServices.getFusedLocationProviderClient(App.getStaticContext());
 
-      this.locationAvailabilityRunnable = () -> {
-         this.locationAvailable.postValue(false);
-      };
-
-      this.locationAvailabilityHandler = new Handler();
-
       this.locationCallback = new LocationCallback() {
          @Override
          public void onLocationAvailability(@NonNull LocationAvailability locationAvailability) {
             super.onLocationAvailability(locationAvailability);
-
-            boolean locationAvailable = locationAvailability.isLocationAvailable();
-            handleLocationAvailability(locationAvailable);
          }
 
          @Override
@@ -89,6 +84,29 @@ public class LocationService {
 
    public LiveData<Boolean> getLocationAvailable() {
       return this.locationAvailable;
+   }
+
+   public void requireLocationEnabled(Context context) {
+      this.locationChangedReceiver = new BroadcastReceiver() {
+         @Override
+         public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null && intent.getAction().equals(LocationService.LOCATION_CHANGED_BROADCAST)) {
+               LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+               boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+               boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+               locationAvailable.postValue(isGpsEnabled || isNetworkEnabled);
+            }
+         }
+      };
+
+      IntentFilter filter = new IntentFilter(LocationService.LOCATION_CHANGED_BROADCAST);
+      ContextCompat.registerReceiver(
+              context,
+              this.locationChangedReceiver,
+              filter,
+              ContextCompat.RECEIVER_NOT_EXPORTED
+      );
    }
 
    @SuppressLint("MissingPermission")
@@ -139,8 +157,6 @@ public class LocationService {
                  Looper.getMainLooper()
          );
 
-         this.handleLocationAvailability(false);
-
          this.locationUpdatesActive = true;
       } catch (Exception e) {
          Logging.e(LocationService.class.getName(), "Failed to register location updates", e);
@@ -156,18 +172,5 @@ public class LocationService {
 
       this.fusedClient.removeLocationUpdates(locationCallback);
       this.locationUpdatesActive = false;
-   }
-
-   private void handleLocationAvailability(boolean locationAvailable) {
-      if (locationAvailable) {
-         Logging.i(LocationService.class.getName(), "Location is available");
-
-         this.locationAvailable.postValue(true);
-         this.locationAvailabilityHandler.removeCallbacks(this.locationAvailabilityRunnable);
-      } else {
-         Logging.i(LocationService.class.getName(), "Location is not available");
-
-         this.locationAvailabilityHandler.postDelayed(this.locationAvailabilityRunnable, 15000);
-      }
    }
 }

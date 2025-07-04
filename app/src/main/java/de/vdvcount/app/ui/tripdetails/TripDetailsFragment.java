@@ -47,7 +47,6 @@ public class TripDetailsFragment extends Fragment {
     private NavController navigationController;
 
     private CountedTripAdapter countedTripAdapter;
-    private BroadcastReceiver locationChangedReceiver;
     private LocationWarningDialog locationWarningDialog;
 
     public static TripDetailsFragment newInstance() {
@@ -56,15 +55,6 @@ public class TripDetailsFragment extends Fragment {
 
     public TripDetailsFragment() {
         this.countedTripAdapter = new CountedTripAdapter();
-
-        this.locationChangedReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction() != null && intent.getAction().equals(LocationService.LOCATION_CHANGED_BROADCAST)) {
-                    handleLocationAvailability();
-                }
-            }
-        };
     }
 
     @Override
@@ -141,25 +131,12 @@ public class TripDetailsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        IntentFilter filter = new IntentFilter(LocationService.LOCATION_CHANGED_BROADCAST);
-        ContextCompat.registerReceiver(
-                this.requireContext(),
-                this.locationChangedReceiver,
-                filter,
-                ContextCompat.RECEIVER_NOT_EXPORTED
-        );
-
         // this call is additionally required for checking the GPS state
         // because when GPS is disabled while the fragment resumes, there will
         // be no call of the broadcast receiver
-        this.handleLocationAvailability();
-    }
+        //this.handleLocationAvailability();
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        this.requireContext().unregisterReceiver(this.locationChangedReceiver);
+        LocationService.getInstance().requireLocationEnabled(this.requireContext());
     }
 
     private void initViewEvents() {
@@ -232,15 +209,11 @@ public class TripDetailsFragment extends Fragment {
             }
         });
 
-        /*locationService.getLocationAvailable().observe(this.getViewLifecycleOwner(), locationAvailable -> {
+        locationService.getLocationAvailable().observe(this.getViewLifecycleOwner(), locationAvailable -> {
             if (locationAvailable != null) {
-                if (!locationAvailable) {
-                    gpsWarningDialog.show();
-                } else {
-                    gpsWarningDialog.hide();
-                }
+                handleLocationAvailability(locationAvailable);
             }
-        });*/
+        });
     }
 
     private void showActionDialog(final CountedStopTime countedStopTime, boolean actionCountingEnabled, boolean actionAdditionalStopEnabled, boolean actionRunThroughEnabled) {
@@ -317,16 +290,8 @@ public class TripDetailsFragment extends Fragment {
         Status.setInt(Status.VIEW_TRIP_DETAILS_SCROLL_POSITION, this.dataBinding.scrollView.getScrollY());
     }
 
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) this.requireContext().getSystemService(Context.LOCATION_SERVICE);
-        boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-        return isGpsEnabled || isNetworkEnabled;
-    }
-
-    private void handleLocationAvailability() {
-        if (this.isLocationEnabled()) {
+    private void handleLocationAvailability(boolean locationAvailable) {
+        if (locationAvailable) {
             LocationService.getInstance().startLocationUpdates();
 
             if (this.locationWarningDialog != null) {
