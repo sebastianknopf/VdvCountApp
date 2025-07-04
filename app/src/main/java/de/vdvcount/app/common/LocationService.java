@@ -2,6 +2,7 @@ package de.vdvcount.app.common;
 
 import android.annotation.SuppressLint;
 import android.location.Location;
+import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
@@ -30,20 +31,34 @@ public class LocationService {
    private static MutableLiveData<Location> location;
    private static MutableLiveData<Boolean> locationAvailable;
 
+   private static Runnable locationAvailabilityRunnable;
+   private static Handler locationAvailabilityHandler;
+
    static {
       fusedClient = LocationServices.getFusedLocationProviderClient(App.getStaticContext());
+
+      locationAvailabilityRunnable = () -> {
+         LocationService.locationAvailable.postValue(false);
+      };
+
+      locationAvailabilityHandler = new Handler();
+
       locationCallback = new LocationCallback() {
          @Override
          public void onLocationAvailability(@NonNull LocationAvailability locationAvailability) {
             super.onLocationAvailability(locationAvailability);
 
-            if (locationAvailability.isLocationAvailable()) {
+            boolean locationAvailable = locationAvailability.isLocationAvailable();
+            if (locationAvailable) {
                Logging.i(LocationService.class.getName(), "Location is available");
+
+               LocationService.locationAvailable.postValue(true);
+               LocationService.locationAvailabilityHandler.removeCallbacks(LocationService.locationAvailabilityRunnable);
             } else {
                Logging.i(LocationService.class.getName(), "Location is not available");
-            }
 
-            LocationService.locationAvailable.postValue(locationAvailability.isLocationAvailable());
+               LocationService.locationAvailabilityHandler.postDelayed(LocationService.locationAvailabilityRunnable, 30000);
+            }
          }
 
          @Override
