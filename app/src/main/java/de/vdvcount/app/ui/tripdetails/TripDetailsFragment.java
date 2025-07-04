@@ -1,10 +1,15 @@
 package de.vdvcount.app.ui.tripdetails;
 
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -43,6 +48,7 @@ public class TripDetailsFragment extends Fragment {
     private NavController navigationController;
 
     private CountedTripAdapter countedTripAdapter;
+    private BroadcastReceiver locationChangedReceiver;
     private GpsWarningDialog gpsWarningDialog;
 
     public static TripDetailsFragment newInstance() {
@@ -51,6 +57,15 @@ public class TripDetailsFragment extends Fragment {
 
     public TripDetailsFragment() {
         this.countedTripAdapter = new CountedTripAdapter();
+
+        this.locationChangedReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction() != null && intent.getAction().equals(LocationService.LOCATION_CHANGED_BROADCAST)) {
+                    handleLocationAvailability();
+                }
+            }
+        };
     }
 
     @Override
@@ -127,7 +142,22 @@ public class TripDetailsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        LocationService.getInstance().startLocationUpdates();
+        IntentFilter filter = new IntentFilter(LocationService.LOCATION_CHANGED_BROADCAST);
+        ContextCompat.registerReceiver(
+                this.requireContext(),
+                this.locationChangedReceiver,
+                filter,
+                ContextCompat.RECEIVER_NOT_EXPORTED
+        );
+
+        this.handleLocationAvailability();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        this.requireContext().unregisterReceiver(this.locationChangedReceiver);
     }
 
     private void initViewEvents() {
@@ -200,7 +230,7 @@ public class TripDetailsFragment extends Fragment {
             }
         });
 
-        locationService.getLocationAvailable().observe(this.getViewLifecycleOwner(), locationAvailable -> {
+        /*locationService.getLocationAvailable().observe(this.getViewLifecycleOwner(), locationAvailable -> {
             if (locationAvailable != null) {
                 if (!locationAvailable) {
                     gpsWarningDialog.show();
@@ -208,7 +238,7 @@ public class TripDetailsFragment extends Fragment {
                     gpsWarningDialog.hide();
                 }
             }
-        });
+        });*/
     }
 
     private void showActionDialog(final CountedStopTime countedStopTime, boolean actionCountingEnabled, boolean actionAdditionalStopEnabled, boolean actionRunThroughEnabled) {
@@ -283,6 +313,30 @@ public class TripDetailsFragment extends Fragment {
 
     private void setCurrentVerticalScrollPosition() {
         Status.setInt(Status.VIEW_TRIP_DETAILS_SCROLL_POSITION, this.dataBinding.scrollView.getScrollY());
+    }
+
+    private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) this.requireContext().getSystemService(Context.LOCATION_SERVICE);
+        boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        return isGpsEnabled || isNetworkEnabled;
+    }
+
+    private void handleLocationAvailability() {
+        if (this.isLocationEnabled()) {
+            LocationService.getInstance().startLocationUpdates();
+
+            if (this.gpsWarningDialog != null) {
+                this.gpsWarningDialog.hide();
+            }
+        } else {
+            LocationService.getInstance().stopLocationUpdates();
+
+            if (this.gpsWarningDialog != null) {
+                this.gpsWarningDialog.show();
+            }
+        }
     }
 
     public enum State {

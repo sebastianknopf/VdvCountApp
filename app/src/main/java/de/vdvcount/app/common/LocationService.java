@@ -24,6 +24,8 @@ import de.vdvcount.app.App;
 
 public class LocationService {
 
+   public final static String LOCATION_CHANGED_BROADCAST = "android.location.PROVIDERS_CHANGED";
+
    private static LocationService singleInstance;
 
    private FusedLocationProviderClient fusedClient;
