@@ -91,11 +91,7 @@ public class LocationService {
          @Override
          public void onReceive(Context context, Intent intent) {
             if (intent.getAction() != null && intent.getAction().equals(LocationService.LOCATION_CHANGED_BROADCAST)) {
-               LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-               boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-               boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-               locationAvailable.postValue(isGpsEnabled || isNetworkEnabled);
+               updateLocationAvailability(context);
             }
          }
       };
@@ -107,6 +103,12 @@ public class LocationService {
               filter,
               ContextCompat.RECEIVER_NOT_EXPORTED
       );
+
+      // this first call is required to set the initial location availability
+      // the broadcast receiver runs first time when the location state is changed
+      // if the location state is OFF when the broadcast receiver is registered,
+      // no update would be fired an vice-versa
+      this.updateLocationAvailability(context);
    }
 
    @SuppressLint("MissingPermission")
@@ -172,5 +174,13 @@ public class LocationService {
 
       this.fusedClient.removeLocationUpdates(locationCallback);
       this.locationUpdatesActive = false;
+   }
+
+   private void updateLocationAvailability(Context context) {
+      LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+      boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+      boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+      this.locationAvailable.postValue(isGpsEnabled || isNetworkEnabled);
    }
 }
