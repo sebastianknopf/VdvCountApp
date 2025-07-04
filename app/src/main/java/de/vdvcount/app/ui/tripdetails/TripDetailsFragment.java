@@ -4,6 +4,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -126,7 +127,7 @@ public class TripDetailsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        LocationService.startLocationUpdates();
+        LocationService.getInstance().startLocationUpdates();
     }
 
     private void initViewEvents() {
@@ -192,13 +193,14 @@ public class TripDetailsFragment extends Fragment {
             }
         });
 
-        LocationService.getLocation().observe(this.getViewLifecycleOwner(), location -> {
+        LocationService locationService = LocationService.getInstance();
+        locationService.getLocation().observe(this.getViewLifecycleOwner(), location -> {
             if (location != null) {
                 this.viewModel.addWayPoint(location);
             }
         });
 
-        LocationService.getLocationAvailable().observe(this.getViewLifecycleOwner(), locationAvailable -> {
+        locationService.getLocationAvailable().observe(this.getViewLifecycleOwner(), locationAvailable -> {
             if (locationAvailable != null) {
                 if (!locationAvailable) {
                     gpsWarningDialog.show();

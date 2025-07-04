@@ -73,7 +73,7 @@ public class CountingViewModel extends ViewModel {
             FilesystemRepository repository = FilesystemRepository.getInstance();
             CountedTrip countedTrip = repository.loadCountedTrip();
 
-            Location location = LocationService.requestCurrentLocation();
+            Location location = LocationService.getInstance().requestCurrentLocation();
 
             PassengerCountingEvent pce = new PassengerCountingEvent();
             pce.setCountingSequences(countingSequences);

@@ -24,32 +24,42 @@ import de.vdvcount.app.App;
 
 public class LocationService {
 
-   private static FusedLocationProviderClient fusedClient;
-   private static LocationCallback locationCallback;
-   private static boolean locationUpdatesActive;
+   private static LocationService singleInstance;
 
-   private static MutableLiveData<Location> location;
-   private static MutableLiveData<Boolean> locationAvailable;
+   private FusedLocationProviderClient fusedClient;
+   private LocationCallback locationCallback;
+   private boolean locationUpdatesActive;
 
-   private static Runnable locationAvailabilityRunnable;
-   private static Handler locationAvailabilityHandler;
+   private MutableLiveData<Location> location;
+   private MutableLiveData<Boolean> locationAvailable;
 
-   static {
-      fusedClient = LocationServices.getFusedLocationProviderClient(App.getStaticContext());
+   private Runnable locationAvailabilityRunnable;
+   private Handler locationAvailabilityHandler;
 
-      locationAvailabilityRunnable = () -> {
-         LocationService.locationAvailable.postValue(false);
+   public static LocationService getInstance() {
+      if (singleInstance == null) {
+         singleInstance = new LocationService();
+      }
+
+      return singleInstance;
+   }
+
+   public LocationService() {
+      this.fusedClient = LocationServices.getFusedLocationProviderClient(App.getStaticContext());
+
+      this.locationAvailabilityRunnable = () -> {
+         this.locationAvailable.postValue(false);
       };
 
-      locationAvailabilityHandler = new Handler();
+      this.locationAvailabilityHandler = new Handler();
 
-      locationCallback = new LocationCallback() {
+      this.locationCallback = new LocationCallback() {
          @Override
          public void onLocationAvailability(@NonNull LocationAvailability locationAvailability) {
             super.onLocationAvailability(locationAvailability);
 
             boolean locationAvailable = locationAvailability.isLocationAvailable();
-            LocationService.handleLocationAvailability(locationAvailable);
+            handleLocationAvailability(locationAvailable);
          }
 
          @Override
@@ -63,29 +73,29 @@ public class LocationService {
                Logging.w(LocationService.class.getName(), "Periodic location update returned null");
             }
 
-            LocationService.location.postValue(locationResult.getLastLocation());
+            location.postValue(locationResult.getLastLocation());
          }
       };
 
-      location = new MutableLiveData<>(null);
-      locationAvailable = new MutableLiveData<>(null);
+      this.location = new MutableLiveData<>(null);
+      this.locationAvailable = new MutableLiveData<>(null);
    }
 
-   public static LiveData<Location> getLocation() {
-      return LocationService.location;
+   public LiveData<Location> getLocation() {
+      return this.location;
    }
 
-   public static LiveData<Boolean> getLocationAvailable() {
-      return LocationService.locationAvailable;
+   public LiveData<Boolean> getLocationAvailable() {
+      return this.locationAvailable;
    }
 
    @SuppressLint("MissingPermission")
-   public static Location requestCurrentLocation() {
+   public Location requestCurrentLocation() {
       final CountDownLatch latch = new CountDownLatch(1);
       final Location[] result = new Location[1];
 
       try {
-         LocationService.fusedClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
+         this.fusedClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
                  .addOnSuccessListener(location -> {
                     result[0] = location;
                     latch.countDown();
@@ -108,10 +118,10 @@ public class LocationService {
    }
 
    @SuppressLint("MissingPermission")
-   public static void startLocationUpdates() {
+   public void startLocationUpdates() {
       Logging.i(LocationService.class.getName(), "Requesting periodic location updates");
 
-      if (LocationService.locationUpdatesActive) {
+      if (this.locationUpdatesActive) {
          Logging.i(LocationService.class.getName(), "Periodic location updates already requested and active");
          return;
       }
@@ -121,41 +131,41 @@ public class LocationService {
                  .Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
                  .build();
 
-         LocationService.fusedClient.requestLocationUpdates(
+         this.fusedClient.requestLocationUpdates(
                  locationRequest,
-                 locationCallback,
+                 this.locationCallback,
                  Looper.getMainLooper()
          );
 
-         LocationService.handleLocationAvailability(false);
+         this.handleLocationAvailability(false);
 
-         LocationService.locationUpdatesActive = true;
+         this.locationUpdatesActive = true;
       } catch (Exception e) {
          Logging.e(LocationService.class.getName(), "Failed to register location updates", e);
       }
    }
 
-   public static void stopLocationUpdates() {
+   public void stopLocationUpdates() {
       Logging.i(LocationService.class.getName(), "Stopping periodic location updates");
 
-      if (!LocationService.locationUpdatesActive) {
+      if (!this.locationUpdatesActive) {
          return;
       }
 
-      LocationService.fusedClient.removeLocationUpdates(locationCallback);
-      LocationService.locationUpdatesActive = false;
+      this.fusedClient.removeLocationUpdates(locationCallback);
+      this.locationUpdatesActive = false;
    }
 
-   private static void handleLocationAvailability(boolean locationAvailable) {
+   private void handleLocationAvailability(boolean locationAvailable) {
       if (locationAvailable) {
          Logging.i(LocationService.class.getName(), "Location is available");
 
-         LocationService.locationAvailable.postValue(true);
-         LocationService.locationAvailabilityHandler.removeCallbacks(LocationService.locationAvailabilityRunnable);
+         this.locationAvailable.postValue(true);
+         this.locationAvailabilityHandler.removeCallbacks(this.locationAvailabilityRunnable);
       } else {
          Logging.i(LocationService.class.getName(), "Location is not available");
 
-         LocationService.locationAvailabilityHandler.postDelayed(LocationService.locationAvailabilityRunnable, 15000);
+         this.locationAvailabilityHandler.postDelayed(this.locationAvailabilityRunnable, 15000);
       }
    }
 }
