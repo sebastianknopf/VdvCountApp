@@ -51,6 +51,10 @@
     <string name="dialog_counting_action_additional_stop">Zwischenhalt</string>
     <string name="dialog_counting_action_run_through">Durchfahrt</string>
 
+    <!-- GPS Warning Dialog -->
+    <string name="dialog_gps_warning_title">Kein Standort</string>
+    <string name="dialog_gps_warning_message">Bitte aktivieren Sie den Gerätestandort und achten Sie auf ausreichenden Satellitenempfang, um die Zählung fortzusetzen.</string>
+
     <!-- Common Strings -->
     <string name="app_name">VdvCountApp</string>
     <string name="app_reset_counter">Noch %dx zum Zurücksetzen.</string>

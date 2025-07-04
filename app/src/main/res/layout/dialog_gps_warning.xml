@@ -15,36 +15,19 @@
             android:paddingStart="@dimen/app_large_spacing"
             android:paddingEnd="@dimen/app_large_spacing"
             android:padding="@dimen/app_medium_spacing"
-            android:text="@string/dialog_counting_action_title"
+            android:text="@string/dialog_gps_warning_title"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:id="@+id/layoutActionRunThrough"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/app_default_spacing"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_margin="@dimen/app_default_spacing"
-                android:src="@drawable/ic_run_through"
-                app:tint="?attr/defaultIconColor" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/app_default_spacing"
-                android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                android:text="@string/dialog_counting_action_run_through" />
-
-        </LinearLayout>
+            android:paddingStart="@dimen/app_large_spacing"
+            android:paddingEnd="@dimen/app_large_spacing"
+            android:paddingBottom="@dimen/app_large_spacing"
+            android:padding="@dimen/app_medium_spacing"
+            android:text="@string/dialog_gps_warning_message"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
     </LinearLayout>
 
