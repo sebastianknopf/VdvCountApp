@@ -14,7 +14,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/app_large_spacing"
             android:paddingEnd="@dimen/app_large_spacing"
-            android:padding="@dimen/app_medium_spacing"
+            android:paddingBottom="@dimen/app_default_spacing"
+            android:paddingTop="@dimen/app_medium_spacing"
             android:text="@string/dialog_gps_warning_title"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:textStyle="bold" />
@@ -25,7 +26,7 @@
             android:paddingStart="@dimen/app_large_spacing"
             android:paddingEnd="@dimen/app_large_spacing"
             android:paddingBottom="@dimen/app_large_spacing"
-            android:padding="@dimen/app_medium_spacing"
+            android:paddingTop="@dimen/app_default_spacing"
             android:text="@string/dialog_gps_warning_message"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
