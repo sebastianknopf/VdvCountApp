@@ -40,12 +40,31 @@ public class VehicleListAdapter extends ArrayAdapter<Vehicle> implements Filtera
 
                 if (constraint != null) {
                     ArrayList<Vehicle> suggestions = new ArrayList<Vehicle>();
+
+                    // see #44 for information: vehicle search should be done in two steps:
+                    // first attempt: try search with 'startsWith' function
+                    // second attempt: if 1st attempt brought no results, try the second one
+                    // using 'contains' function
+
+                    // 1st attempt
                     for (Vehicle vehicle : vehicleList) {
                         String normalizedVehicleName = normalizeVehicleName(vehicle.getName());
                         String normalizedConstraint = normalizeVehicleName(constraint.toString());
 
-                        if (normalizedVehicleName.contains(normalizedConstraint)) {
+                        if (normalizedVehicleName.startsWith(normalizedConstraint)) {
                             suggestions.add(vehicle);
+                        }
+                    }
+
+                    // 2nd attempt
+                    if (suggestions.isEmpty()) {
+                        for (Vehicle vehicle : vehicleList) {
+                            String normalizedVehicleName = normalizeVehicleName(vehicle.getName());
+                            String normalizedConstraint = normalizeVehicleName(constraint.toString());
+
+                            if (normalizedVehicleName.contains(normalizedConstraint)) {
+                                suggestions.add(vehicle);
+                            }
                         }
                     }
 
