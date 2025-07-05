@@ -27,8 +27,10 @@ import de.vdvcount.app.App;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.CountingSequenceListAdapter;
+import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.databinding.FragmentCountingBinding;
+import de.vdvcount.app.dialog.LocationWarningDialog;
 import de.vdvcount.app.model.CountingSequence;
 
 public class CountingFragment extends Fragment {
@@ -42,6 +44,8 @@ public class CountingFragment extends Fragment {
     private int currentAfterStopSequence;
     private String[] currentCountedDoorIds;
     private final CountingSequenceListAdapter countingSequenceListAdapter;
+    private LocationWarningDialog locationWarningDialog;
+
 
     public static CountingFragment newInstance() {
         return new CountingFragment();
@@ -89,6 +93,9 @@ public class CountingFragment extends Fragment {
         List<CountingSequence> countingSequenceContainers = this.viewModel.generateCountingSequenceContainers(this.currentCountedDoorIds);
         this.countingSequenceListAdapter.setCountingSequenceList(countingSequenceContainers);
 
+        // must be initialized here to ensure that the context is already initialized
+        this.locationWarningDialog = new LocationWarningDialog(this.getContext());
+
         this.initViewEvents();
         this.initObserverEvents();
     }
@@ -104,6 +111,13 @@ public class CountingFragment extends Fragment {
         this.setHasOptionsMenu(true);
 
         this.navigationController = appActivity.getNavigationController();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        LocationService.getInstance().requireLocationEnabled(this.requireContext());
     }
 
     @Override
@@ -155,6 +169,13 @@ public class CountingFragment extends Fragment {
                 this.navigationController.navigate(action);
             }
         });
+
+        LocationService locationService = LocationService.getInstance();
+        locationService.getLocationAvailable().observe(this.getViewLifecycleOwner(), locationAvailable -> {
+            if (locationAvailable != null) {
+                handleLocationAvailability(locationAvailable);
+            }
+        });
     }
 
     private void addPassengerCountingEvent() {
@@ -168,6 +189,18 @@ public class CountingFragment extends Fragment {
                     this.currentAfterStopSequence,
                     this.countingSequenceListAdapter.getCountingSequenceList()
             );
+        }
+    }
+
+    private void handleLocationAvailability(boolean locationAvailable) {
+        if (locationAvailable) {
+            if (this.locationWarningDialog != null) {
+                this.locationWarningDialog.hide();
+            }
+        } else {
+            if (this.locationWarningDialog != null) {
+                this.locationWarningDialog.show();
+            }
         }
     }
 

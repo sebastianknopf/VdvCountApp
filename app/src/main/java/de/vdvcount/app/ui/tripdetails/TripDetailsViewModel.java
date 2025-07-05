@@ -97,7 +97,7 @@ public class TripDetailsViewModel extends ViewModel {
             FilesystemRepository repository = FilesystemRepository.getInstance();
             CountedTrip countedTrip = repository.loadCountedTrip();
 
-            Location location = LocationService.requestCurrentLocation();
+            Location location = LocationService.getInstance().requestCurrentLocation();
             Date timestamp = new Date();
 
             CountingSequence countingSequence = new CountingSequence();

@@ -1,9 +1,14 @@
 package de.vdvcount.app.ui.tripdetails;
 
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,6 +34,7 @@ import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripDetailsBinding;
 import de.vdvcount.app.dialog.CountingActionDialog;
+import de.vdvcount.app.dialog.LocationWarningDialog;
 import de.vdvcount.app.model.CountedStopTime;
 import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.model.PassengerCountingEvent;
@@ -41,6 +47,7 @@ public class TripDetailsFragment extends Fragment {
     private NavController navigationController;
 
     private CountedTripAdapter countedTripAdapter;
+    private LocationWarningDialog locationWarningDialog;
 
     public static TripDetailsFragment newInstance() {
         return new TripDetailsFragment();
@@ -100,6 +107,9 @@ public class TripDetailsFragment extends Fragment {
             }
         }
 
+        // must be initialized here to ensure that the context is already initialized
+        this.locationWarningDialog = new LocationWarningDialog(this.getContext());
+
         this.initViewEvents();
         this.initObserverEvents();
     }
@@ -121,17 +131,15 @@ public class TripDetailsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        LocationService.startLocationUpdates();
+        // this call is additionally required for checking the GPS state
+        // because when GPS is disabled while the fragment resumes, there will
+        // be no call of the broadcast receiver
+        //this.handleLocationAvailability();
+
+        LocationService.getInstance().requireLocationEnabled(this.requireContext());
     }
 
     private void initViewEvents() {
-        // this viewEvent can only be initialized with a countedTrip object present in the viewModel
-        // hence, the initialisation is done in initObserverEvents()
-        // see #20 for more information
-        /*this.countedTripAdapter.setOnItemClickListener(countedStopTime -> {
-            this.showActionDialog(countedStopTime, true, true);
-        });*/
-
         this.dataBinding.btnQuit.setOnClickListener(view -> {
             CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
             CountedStopTime lastCountedStopTime = countedTrip.getCountedStopTimes().get(countedTrip.getCountedStopTimes().size() - 1);
@@ -194,9 +202,16 @@ public class TripDetailsFragment extends Fragment {
             }
         });
 
-        LocationService.getLocation().observe(this.getViewLifecycleOwner(), location -> {
+        LocationService locationService = LocationService.getInstance();
+        locationService.getLocation().observe(this.getViewLifecycleOwner(), location -> {
             if (location != null) {
                 this.viewModel.addWayPoint(location);
+            }
+        });
+
+        locationService.getLocationAvailable().observe(this.getViewLifecycleOwner(), locationAvailable -> {
+            if (locationAvailable != null) {
+                handleLocationAvailability(locationAvailable);
             }
         });
     }
@@ -273,6 +288,22 @@ public class TripDetailsFragment extends Fragment {
 
     private void setCurrentVerticalScrollPosition() {
         Status.setInt(Status.VIEW_TRIP_DETAILS_SCROLL_POSITION, this.dataBinding.scrollView.getScrollY());
+    }
+
+    private void handleLocationAvailability(boolean locationAvailable) {
+        if (locationAvailable) {
+            LocationService.getInstance().startLocationUpdates();
+
+            if (this.locationWarningDialog != null) {
+                this.locationWarningDialog.hide();
+            }
+        } else {
+            LocationService.getInstance().stopLocationUpdates();
+
+            if (this.locationWarningDialog != null) {
+                this.locationWarningDialog.show();
+            }
+        }
     }
 
     public enum State {
