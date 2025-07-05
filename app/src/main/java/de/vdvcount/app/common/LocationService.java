@@ -1,10 +1,16 @@
 package de.vdvcount.app.common;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -23,24 +29,34 @@ import de.vdvcount.app.App;
 
 public class LocationService {
 
-   private static FusedLocationProviderClient fusedClient;
-   private static LocationCallback locationCallback;
-   private static boolean locationUpdatesActive;
+   public final static String LOCATION_CHANGED_BROADCAST = "android.location.PROVIDERS_CHANGED";
 
-   private static MutableLiveData<Location> location;
+   private static LocationService singleInstance;
 
-   static {
-      fusedClient = LocationServices.getFusedLocationProviderClient(App.getStaticContext());
-      locationCallback = new LocationCallback() {
+   private FusedLocationProviderClient fusedClient;
+   private LocationCallback locationCallback;
+
+   private BroadcastReceiver locationChangedReceiver;
+   private boolean locationUpdatesActive;
+
+   private MutableLiveData<Location> location;
+   private MutableLiveData<Boolean> locationAvailable;
+
+   public static LocationService getInstance() {
+      if (singleInstance == null) {
+         singleInstance = new LocationService();
+      }
+
+      return singleInstance;
+   }
+
+   public LocationService() {
+      this.fusedClient = LocationServices.getFusedLocationProviderClient(App.getStaticContext());
+
+      this.locationCallback = new LocationCallback() {
          @Override
          public void onLocationAvailability(@NonNull LocationAvailability locationAvailability) {
             super.onLocationAvailability(locationAvailability);
-
-            if (locationAvailability.isLocationAvailable()) {
-               Logging.i(LocationService.class.getName(), "Location is available");
-            } else {
-               Logging.i(LocationService.class.getName(), "Location is not available");
-            }
          }
 
          @Override
@@ -54,24 +70,54 @@ public class LocationService {
                Logging.w(LocationService.class.getName(), "Periodic location update returned null");
             }
 
-            LocationService.location.postValue(locationResult.getLastLocation());
+            location.postValue(locationResult.getLastLocation());
          }
       };
 
-      location = new MutableLiveData<>(null);
+      this.location = new MutableLiveData<>(null);
+      this.locationAvailable = new MutableLiveData<>(null);
    }
 
-   public static LiveData<Location> getLocation() {
-      return LocationService.location;
+   public LiveData<Location> getLocation() {
+      return this.location;
+   }
+
+   public LiveData<Boolean> getLocationAvailable() {
+      return this.locationAvailable;
+   }
+
+   public void requireLocationEnabled(Context context) {
+      this.locationChangedReceiver = new BroadcastReceiver() {
+         @Override
+         public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null && intent.getAction().equals(LocationService.LOCATION_CHANGED_BROADCAST)) {
+               updateLocationAvailability(context);
+            }
+         }
+      };
+
+      IntentFilter filter = new IntentFilter(LocationService.LOCATION_CHANGED_BROADCAST);
+      ContextCompat.registerReceiver(
+              context,
+              this.locationChangedReceiver,
+              filter,
+              ContextCompat.RECEIVER_NOT_EXPORTED
+      );
+
+      // this first call is required to set the initial location availability
+      // the broadcast receiver runs first time when the location state is changed
+      // if the location state is OFF when the broadcast receiver is registered,
+      // no update would be fired an vice-versa
+      this.updateLocationAvailability(context);
    }
 
    @SuppressLint("MissingPermission")
-   public static Location requestCurrentLocation() {
+   public Location requestCurrentLocation() {
       final CountDownLatch latch = new CountDownLatch(1);
       final Location[] result = new Location[1];
 
       try {
-         LocationService.fusedClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
+         this.fusedClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
                  .addOnSuccessListener(location -> {
                     result[0] = location;
                     latch.countDown();
@@ -94,10 +140,10 @@ public class LocationService {
    }
 
    @SuppressLint("MissingPermission")
-   public static void startLocationUpdates() {
+   public void startLocationUpdates() {
       Logging.i(LocationService.class.getName(), "Requesting periodic location updates");
 
-      if (LocationService.locationUpdatesActive) {
+      if (this.locationUpdatesActive) {
          Logging.i(LocationService.class.getName(), "Periodic location updates already requested and active");
          return;
       }
@@ -107,26 +153,34 @@ public class LocationService {
                  .Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
                  .build();
 
-         LocationService.fusedClient.requestLocationUpdates(
+         this.fusedClient.requestLocationUpdates(
                  locationRequest,
-                 locationCallback,
+                 this.locationCallback,
                  Looper.getMainLooper()
          );
 
-         LocationService.locationUpdatesActive = true;
+         this.locationUpdatesActive = true;
       } catch (Exception e) {
          Logging.e(LocationService.class.getName(), "Failed to register location updates", e);
       }
    }
 
-   public static void stopLocationUpdates() {
+   public void stopLocationUpdates() {
       Logging.i(LocationService.class.getName(), "Stopping periodic location updates");
 
-      if (!LocationService.locationUpdatesActive) {
+      if (!this.locationUpdatesActive) {
          return;
       }
 
-      LocationService.fusedClient.removeLocationUpdates(locationCallback);
-      LocationService.locationUpdatesActive = false;
+      this.fusedClient.removeLocationUpdates(locationCallback);
+      this.locationUpdatesActive = false;
+   }
+
+   private void updateLocationAvailability(Context context) {
+      LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+      boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+      boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+      this.locationAvailable.postValue(isGpsEnabled || isNetworkEnabled);
    }
 }

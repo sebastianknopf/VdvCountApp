@@ -150,7 +150,7 @@ public class TripClosingFragment extends Fragment {
             if (state == TripClosingFragment.State.DONE) {
                 // stop location updates in LocationService
                 // see #40 for more information
-                LocationService.stopLocationUpdates();
+                LocationService.getInstance().stopLocationUpdates();
 
                 final int countDownMillis = 2000;
 
