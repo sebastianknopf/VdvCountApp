@@ -144,6 +144,10 @@ public class StationSelectFragment extends Fragment {
             }
         });
 
+        this.dataBinding.imgClearStopName.setOnClickListener(view -> {
+            this.dataBinding.edtStopName.setText("");
+        });
+
         this.stopListAdapter.setOnItemClickListener(station -> {
             // if the stay-in-vehicle flag is set but the user changes the stop, this is no trip connection anymore...
             // reset the flag for this reason
