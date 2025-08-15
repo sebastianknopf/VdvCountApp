@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.Date;
+
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.filesystem.FilesystemRepository;
 import de.vdvcount.app.model.CountedStopTime;
@@ -38,6 +40,15 @@ public class TripClosingViewModel extends ViewModel {
                 if (passengerCountingEvent != null) {
                     for (CountingSequence cs : passengerCountingEvent.getCountingSequences()) {
                         cs.setIn(0);
+
+                        // see #57, PCEs with stayInVehicle flag should be cut-off at the half of their duration
+                        // this is done on CS level, because start and end timestamps are stored for each CS
+                        Date startTimestamp = cs.getCountBeginTimestamp();
+                        Date endTimestamp = cs.getCountEndTimestamp();
+
+                        long midpoint = (startTimestamp.getTime() + endTimestamp.getTime()) / 2;
+                        Date updatedEndDate = new Date(midpoint);
+                        cs.setCountEndTimestamp(updatedEndDate);
                     }
                 }
             }

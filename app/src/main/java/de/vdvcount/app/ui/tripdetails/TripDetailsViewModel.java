@@ -60,6 +60,15 @@ public class TripDetailsViewModel extends ViewModel {
                         PassengerCountingEvent passengerCountingEvent = PassengerCountingEvent.deserialize(passengerCountingEventJson);
                         for (CountingSequence cs : passengerCountingEvent.getCountingSequences()) {
                             cs.setOut(0);
+
+                            // see #57, PCEs with stayInVehicle flag should be re-started at the half of their duration + 1s
+                            // this is done on CS level, because start and end timestamps are stored for each CS
+                            Date startTimestamp = cs.getCountBeginTimestamp();
+                            Date endTimestamp = cs.getCountEndTimestamp();
+
+                            long midpoint = (startTimestamp.getTime() + endTimestamp.getTime()) / 2;
+                            Date updatedStartDate = new Date(midpoint + 1000);
+                            cs.setCountBeginTimestamp(updatedStartDate);
                         }
 
                         countedTrip.getCountedStopTimes().get(0).getPassengerCountingEvents().add(passengerCountingEvent);
