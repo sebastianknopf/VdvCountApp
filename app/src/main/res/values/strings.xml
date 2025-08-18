@@ -28,6 +28,7 @@
 
     <!-- TripDetailsFragment -->
     <string name="trip_details_title">Zählfahrt</string>
+    <string name="trip_details_cancel">Fahrt abbrechen</string>
     <string name="trip_details_quit">Fahrt abschließen</string>
 
     <!-- TripClosingFragment -->
