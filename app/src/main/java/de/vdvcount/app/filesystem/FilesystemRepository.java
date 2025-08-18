@@ -48,6 +48,12 @@ public class FilesystemRepository {
         return countedTrip;
     }
 
+    public void cancelCountedTrip() {
+        Logging.i(this.getClass().getName(), "Counted cancellation requested");
+
+        this.closeCountedTrip();
+    }
+
     public void updateCountedTrip(CountedTrip countedTrip) {
         String countedTripFilename = this.getCountedTripFilename();
 
@@ -118,7 +124,9 @@ public class FilesystemRepository {
     public void closeCountedTrip() {
         String countedTripFilename = this.getCountedTripFilename();
         File file = new File(countedTripFilename);
-        file.delete();
+        if (file.exists()) {
+            file.delete();
+        }
 
         Logging.i(this.getClass().getName(), "Removed CountedTrip object from local storage");
     }

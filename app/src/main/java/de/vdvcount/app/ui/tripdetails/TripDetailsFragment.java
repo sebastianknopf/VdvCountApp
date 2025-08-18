@@ -140,6 +140,13 @@ public class TripDetailsFragment extends Fragment {
     }
 
     private void initViewEvents() {
+        this.dataBinding.btnCancel.setOnClickListener(view -> {
+            this.viewModel.cancelCountedTrip();
+
+            TripDetailsFragmentDirections.ActionTripDetailsFragmentToDepartureFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToDepartureFragment();
+            this.navigationController.navigate(action);
+        });
+
         this.dataBinding.btnQuit.setOnClickListener(view -> {
             CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
             CountedStopTime lastCountedStopTime = countedTrip.getCountedStopTimes().get(countedTrip.getCountedStopTimes().size() - 1);
