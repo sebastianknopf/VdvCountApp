@@ -91,6 +91,7 @@
                 app:tint="?attr/defaultIconColor" />
 
             <TextView
+                android:id="@+id/lblRunThroughText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/app_default_spacing"

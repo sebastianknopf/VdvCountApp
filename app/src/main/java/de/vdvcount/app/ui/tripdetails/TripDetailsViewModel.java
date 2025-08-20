@@ -97,6 +97,21 @@ public class TripDetailsViewModel extends ViewModel {
         thread.start();
     }
 
+    public void cancelCountedTrip() {
+        Runnable runnable = () -> {
+            FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
+            filesystemRepository.cancelCountedTrip();
+
+            Status.setString(Status.STATUS, Status.Values.READY);
+            Status.setInt(Status.CURRENT_TRIP_ID, -1);
+            Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
+            Status.setString(Status.CURRENT_VEHICLE_ID, "");
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
+
     public void addRunThroughPassengerCountingEvent(int stopSequence) {
         Logging.i(this.getClass().getName(), "Adding run-through PCE");
 

@@ -9,4 +9,5 @@
     <color name="color_secondary_200">#CACACA</color>
     <color name="color_secondary_600">#9e9e9e</color>
     <color name="color_primary_selection">#E7C83D</color>
+    <color name="color_danger">#E01919</color>
 </resources>

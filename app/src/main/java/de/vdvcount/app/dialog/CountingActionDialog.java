@@ -33,7 +33,9 @@ public class CountingActionDialog {
 
         this.runThroughResetRunnable = () -> {
             this.secondRunThroughClick = false;
+
             this.dataBinding.layoutActionRunThrough.setBackgroundResource(this.getThemeResource(this.context, androidx.appcompat.R.attr.selectableItemBackground));
+            this.dataBinding.lblRunThroughText.setText(R.string.dialog_counting_action_run_through);
         };
 
         this.runThroughResetHandler = new Handler();
@@ -89,6 +91,7 @@ public class CountingActionDialog {
                     this.runThroughResetHandler.postDelayed(this.runThroughResetRunnable, 2000);
 
                     this.dataBinding.layoutActionRunThrough.setBackgroundColor(this.getThemeColor(this.context, androidx.appcompat.R.attr.colorPrimary));
+                    this.dataBinding.lblRunThroughText.setText(R.string.dialog_counting_action_run_through_confirmation);
                 } else {
                     this.runThroughResetHandler.removeCallbacks(this.runThroughResetRunnable);
 
