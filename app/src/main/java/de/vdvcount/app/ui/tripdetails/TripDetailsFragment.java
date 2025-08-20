@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,12 +50,23 @@ public class TripDetailsFragment extends Fragment {
     private CountedTripAdapter countedTripAdapter;
     private LocationWarningDialog locationWarningDialog;
 
+    private boolean secondCancellationClick;
+    private Runnable cancellationResetRunnable;
+    private Handler cancellationResetHandler;
+
     public static TripDetailsFragment newInstance() {
         return new TripDetailsFragment();
     }
 
     public TripDetailsFragment() {
         this.countedTripAdapter = new CountedTripAdapter();
+
+        this.cancellationResetRunnable = () -> {
+            this.secondCancellationClick = false;
+            this.dataBinding.btnCancel.setText(R.string.trip_details_cancel);
+        };
+
+        this.cancellationResetHandler = new Handler();
     }
 
     @Override
@@ -140,6 +152,22 @@ public class TripDetailsFragment extends Fragment {
     }
 
     private void initViewEvents() {
+        this.dataBinding.btnCancel.setOnClickListener(view -> {
+            if (!this.secondCancellationClick) {
+                this.secondCancellationClick = true;
+
+                this.cancellationResetHandler.postDelayed(this.cancellationResetRunnable, 2000);
+                this.dataBinding.btnCancel.setText(R.string.trip_details_cancel_confirmation);
+            } else {
+                this.cancellationResetHandler.removeCallbacks(this.cancellationResetRunnable);
+
+                this.viewModel.cancelCountedTrip();
+
+                TripDetailsFragmentDirections.ActionTripDetailsFragmentToDepartureFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToDepartureFragment();
+                this.navigationController.navigate(action);
+            }
+        });
+
         this.dataBinding.btnQuit.setOnClickListener(view -> {
             CountedTrip countedTrip = this.viewModel.getCountedTrip().getValue();
             CountedStopTime lastCountedStopTime = countedTrip.getCountedStopTimes().get(countedTrip.getCountedStopTimes().size() - 1);

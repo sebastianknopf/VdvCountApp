@@ -28,6 +28,8 @@
 
     <!-- TripDetailsFragment -->
     <string name="trip_details_title">Zählfahrt</string>
+    <string name="trip_details_cancel">Fahrt abbrechen</string>
+    <string name="trip_details_cancel_confirmation">Fahrt wirklich abbrechen?</string>
     <string name="trip_details_quit">Fahrt abschließen</string>
 
     <!-- TripClosingFragment -->
@@ -50,6 +52,7 @@
     <string name="dialog_counting_action_counting">Zählung</string>
     <string name="dialog_counting_action_additional_stop">Zwischenhalt</string>
     <string name="dialog_counting_action_run_through">Durchfahrt</string>
+    <string name="dialog_counting_action_run_through_confirmation">Durchfahrt erfassen?</string>
 
     <!-- GPS Warning Dialog -->
     <string name="dialog_gps_warning_title">Kein Standort</string>
