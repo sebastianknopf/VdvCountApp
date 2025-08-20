@@ -16,6 +16,7 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
     private String vcaVersion;
     private String deviceId;
     private String vehicleId;
+    private int vehicleNumDoors;
     private List<CountedStopTime> countedStopTimes;
     private List<PassengerCountingEvent> unmatchedPassengerCountingEvents;
     private List<WayPoint> wayPoints;
@@ -83,6 +84,14 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         this.vehicleId = vehicleId;
     }
 
+    public int getVehicleNumDoors() {
+        return this.vehicleNumDoors;
+    }
+
+    public void setVehicleNumDoors(int vehicleNumDoors) {
+        this.vehicleNumDoors = vehicleNumDoors;
+    }
+
     public List<CountedStopTime> getCountedStopTimes() {
         return this.countedStopTimes;
     }
@@ -121,6 +130,7 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         apiObject.setVcaVersion(this.getVcaVersion());
         apiObject.setDeviceId(this.getDeviceId());
         apiObject.setVehicleId(this.getVehicleId());
+        apiObject.setVehicleNumDoors(this.getVehicleNumDoors());
 
         List<CountedStopTimeObject> countedStopTimes = new ArrayList<>();
         for (CountedStopTime obj : this.getCountedStopTimes()) {
