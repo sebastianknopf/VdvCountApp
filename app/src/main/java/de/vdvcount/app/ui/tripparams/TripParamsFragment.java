@@ -39,6 +39,7 @@ public class TripParamsFragment extends Fragment {
 
     private int currentTripId;
     private String currentVehicleId;
+    private int currentVehicleNumDoors;
     private VehicleListAdapter vehicleListAdapter;
     private DoorListAdapter doorListAdapter;
     private TextWatcher vehicleIdTextWatcher;
@@ -56,6 +57,7 @@ public class TripParamsFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 currentVehicleId = null;
+                currentVehicleNumDoors = -1;
                 doorListAdapter.setDoorList(new ArrayList<>());
 
                 validateInputs();
@@ -146,6 +148,7 @@ public class TripParamsFragment extends Fragment {
         this.dataBinding.edtVehicle.setOnItemClickListener((adapterView, view, i, l) -> {
             Vehicle vehicle = this.vehicleListAdapter.getItem(i);
             this.currentVehicleId = vehicle.getName();
+            this.currentVehicleNumDoors = vehicle.getNumDoors();
 
             this.createDoorList(vehicle);
 
@@ -163,6 +166,8 @@ public class TripParamsFragment extends Fragment {
                     0,
                     this.doorListAdapter.getSelectedDoorList().toArray(new String[0])
             );
+
+            action.setVehicleNumDoors(this.currentVehicleNumDoors);
 
             this.navigationController.navigate(action);
         });

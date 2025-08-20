@@ -85,6 +85,10 @@ public class TripDetailsFragment extends Fragment {
             Status.setString(Status.CURRENT_VEHICLE_ID, args.getVehicleId());
         }
 
+        if (args.getVehicleNumDoors() != -1) {
+            Status.setInt(Status.CURRENT_VEHICLE_NUM_DOORS, args.getVehicleNumDoors());
+        }
+
         if (args.getStartStopSequence() != -1) {
             Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, args.getStartStopSequence());
         }
