@@ -120,6 +120,10 @@
             app:argType="string"
             app:nullable="true" />
         <argument
+            android:name="vehicleNumDoors"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
             android:name="startStopSequence"
             app:argType="integer" />
         <argument

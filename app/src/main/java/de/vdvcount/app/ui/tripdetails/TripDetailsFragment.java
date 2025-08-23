@@ -85,6 +85,10 @@ public class TripDetailsFragment extends Fragment {
             Status.setString(Status.CURRENT_VEHICLE_ID, args.getVehicleId());
         }
 
+        if (args.getVehicleNumDoors() != -1) {
+            Status.setInt(Status.CURRENT_VEHICLE_NUM_DOORS, args.getVehicleNumDoors());
+        }
+
         if (args.getStartStopSequence() != -1) {
             Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, args.getStartStopSequence());
         }
@@ -110,6 +114,7 @@ public class TripDetailsFragment extends Fragment {
                 this.viewModel.startCountedTrip(
                         Status.getInt(Status.CURRENT_TRIP_ID, -1),
                         Status.getString(Status.CURRENT_VEHICLE_ID, ""),
+                        Status.getInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1),
                         Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
                 );
             } else {
@@ -188,6 +193,7 @@ public class TripDetailsFragment extends Fragment {
                 this.viewModel.startCountedTrip(
                         Status.getInt(Status.CURRENT_TRIP_ID, -1),
                         Status.getString(Status.CURRENT_VEHICLE_ID, ""),
+                        Status.getInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1),
                         Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
                 );
             }

@@ -115,6 +115,7 @@ public class AppActivity extends AppCompatActivity {
                 Status.setInt(Status.CURRENT_TRIP_ID, -1);
                 Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
                 Status.setString(Status.CURRENT_VEHICLE_ID, null);
+                Status.setInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1);
                 Status.setStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {});
 
                 this.finish();
