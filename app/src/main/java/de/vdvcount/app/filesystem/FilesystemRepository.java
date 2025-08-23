@@ -37,9 +37,10 @@ public class FilesystemRepository {
         this.verifyFileSystemStructure();
     }
 
-    public CountedTrip startCountedTrip(Trip trip, String vehicleId) {
+    public CountedTrip startCountedTrip(Trip trip, String vehicleId, int vehicleNumDoors) {
         CountedTrip countedTrip = CountedTrip.from(trip);
         countedTrip.setVehicleId(vehicleId);
+        countedTrip.setVehicleNumDoors(vehicleNumDoors);
 
         this.updateCountedTrip(countedTrip);
 

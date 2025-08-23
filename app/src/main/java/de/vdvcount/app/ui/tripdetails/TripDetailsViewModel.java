@@ -43,7 +43,7 @@ public class TripDetailsViewModel extends ViewModel {
         return this.countedTrip;
     }
 
-    public void startCountedTrip(int tripId, String vehicleId, int startStopSequence) {
+    public void startCountedTrip(int tripId, String vehicleId, int vehicleNumDoors, int startStopSequence) {
         Runnable runnable = () -> {
             this.state.postValue(TripDetailsFragment.State.LOADING);
 
@@ -52,7 +52,7 @@ public class TripDetailsViewModel extends ViewModel {
 
             if (trip != null) {
                 FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
-                CountedTrip countedTrip = filesystemRepository.startCountedTrip(trip, vehicleId);
+                CountedTrip countedTrip = filesystemRepository.startCountedTrip(trip, vehicleId, vehicleNumDoors);
 
                 if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
                     String passengerCountingEventJson = Status.getString(Status.LAST_PCE, null);
@@ -88,6 +88,7 @@ public class TripDetailsViewModel extends ViewModel {
                 Status.setInt(Status.CURRENT_TRIP_ID, tripId);
                 Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, startStopSequence);
                 Status.setString(Status.CURRENT_VEHICLE_ID, vehicleId);
+                Status.setInt(Status.CURRENT_VEHICLE_NUM_DOORS, vehicleNumDoors);
             } else {
                 this.state.postValue(TripDetailsFragment.State.ERROR);
             }

@@ -18,6 +18,8 @@ public class CountedTripObject extends TripObject {
     private String deviceId;
     @SerializedName("vehicle_id")
     private String vehicleId;
+    @SerializedName("vehicle_num_doors")
+    private int vehicleNumDoors;
     @SerializedName("counted_stop_times")
     private List<CountedStopTimeObject> countedStopTimes;
     @SerializedName("unmatched_passenger_counting_events")
@@ -65,6 +67,14 @@ public class CountedTripObject extends TripObject {
         this.vehicleId = vehicleId;
     }
 
+    public int getVehicleNumDoors() {
+        return this.vehicleNumDoors;
+    }
+
+    public void setVehicleNumDoors(int vehicleNumDoors) {
+        this.vehicleNumDoors = vehicleNumDoors;
+    }
+
     public List<CountedStopTimeObject> getCountedStopTimes() {
         return this.countedStopTimes;
     }
@@ -103,6 +113,7 @@ public class CountedTripObject extends TripObject {
         domainModel.setVcaVersion(this.getVcaVersion());
         domainModel.setDeviceId(this.getDeviceId());
         domainModel.setVehicleId(this.getVehicleId());
+        domainModel.setVehicleNumDoors(this.getVehicleNumDoors());
 
         List<CountedStopTime> countedStopTimes = new ArrayList<>();
         for (CountedStopTimeObject obj : this.getCountedStopTimes()) {
