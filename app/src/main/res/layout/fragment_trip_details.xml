@@ -47,6 +47,20 @@
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"  />
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnNextTrip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/app_default_spacing"
+                        android:layout_marginStart="@dimen/app_default_spacing"
+                        android:layout_marginEnd="@dimen/app_default_spacing"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/trip_details_next_trip"
+                        app:layout_constraintTop_toBottomOf="@id/lstCountedStopTimes"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnCancel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -56,7 +70,7 @@
                         android:layout_marginBottom="8dp"
                         android:text="@string/trip_details_cancel"
                         app:backgroundTint="@color/color_danger"
-                        app:layout_constraintTop_toBottomOf="@id/lstCountedStopTimes"
+                        app:layout_constraintTop_toBottomOf="@id/btnNextTrip"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/btnQuit" />
