@@ -152,4 +152,15 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
 
         return apiObject;
     }
+
+    public PassengerCountingEvent getLastPce() {
+        CountedStopTime lastCountedStopTime = this.getCountedStopTimes().get(this.getCountedStopTimes().size() - 1);
+
+        PassengerCountingEvent lastPassengerCountingEvent = null;
+        if (!lastCountedStopTime.getPassengerCountingEvents().isEmpty()) {
+            lastPassengerCountingEvent = lastCountedStopTime.getPassengerCountingEvents().get(lastCountedStopTime.getPassengerCountingEvents().size() - 1);
+        }
+
+        return lastPassengerCountingEvent;
+    }
 }

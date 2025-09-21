@@ -113,4 +113,10 @@ public class PassengerCountingEvent implements ApiObjectMapper<PassengerCounting
 
         return passengerCountingEventObject.mapDomainModel();
     }
+
+    public PassengerCountingEvent copy()
+    {
+        String serialized = this.serialize();
+        return PassengerCountingEvent.deserialize(serialized);
+    }
 }
