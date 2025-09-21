@@ -120,7 +120,7 @@ public class TripDetailsViewModel extends ViewModel {
 
             // check whether we have a counted trip at all and the counted trip has a next trip ID set
             if (this.countedTrip.getValue() == null || this.countedTrip.getValue().getNextTripId() == 0) {
-                //return;
+                return;
             }
 
             this.state.postValue(TripDetailsFragment.State.LOADING);

@@ -260,8 +260,7 @@ public class TripDetailsFragment extends Fragment {
                 if (countedTrip.getNextTripId() != 0) {
                     this.dataBinding.btnNextTrip.setVisibility(View.VISIBLE);
                 } else {
-                    //this.dataBinding.btnNextTrip.setVisibility(View.GONE);
-                    this.dataBinding.btnNextTrip.setVisibility(View.VISIBLE);
+                    this.dataBinding.btnNextTrip.setVisibility(View.GONE);
                 }
             }
         });
