@@ -31,6 +31,10 @@ public class TripDetailsViewModel extends ViewModel {
     private MutableLiveData<TripDetailsFragment.State> state;
     private MutableLiveData<CountedTrip> countedTrip;
 
+    // hold a code for the last tried action
+    // this is used in the method retryLastAction()
+    private int lastActionCode = 0;
+
     public TripDetailsViewModel() {
         this.state = new MutableLiveData<>(TripDetailsFragment.State.READY);
         this.countedTrip = new MutableLiveData<>();
@@ -46,53 +50,17 @@ public class TripDetailsViewModel extends ViewModel {
 
     public void startCountedTrip(int tripId, String vehicleId, int vehicleNumDoors, int startStopSequence) {
         Runnable runnable = () -> {
-            this.state.postValue(TripDetailsFragment.State.LOADING);
+            this.internalStartCountedTrip(tripId, vehicleId, vehicleNumDoors, startStopSequence);
+        };
 
-            RemoteRepository remoteRepository = RemoteRepository.getInstance();
-            Trip trip = remoteRepository.getTripByTripId(tripId);
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
 
-            if (trip != null) {
-                FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
-                CountedTrip countedTrip = filesystemRepository.startCountedTrip(trip, vehicleId, vehicleNumDoors);
-
-                if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
-                    String passengerCountingEventJson = Status.getString(Status.LAST_PCE, null);
-                    if (passengerCountingEventJson != null) {
-                        PassengerCountingEvent passengerCountingEvent = PassengerCountingEvent.deserialize(passengerCountingEventJson);
-                        for (CountingSequence cs : passengerCountingEvent.getCountingSequences()) {
-                            cs.setOut(0);
-
-                            // see #57, PCEs with stayInVehicle flag should be re-started at the half of their duration + 1s
-                            // this is done on CS level, because start and end timestamps are stored for each CS
-                            Date startTimestamp = cs.getCountBeginTimestamp();
-                            Date endTimestamp = cs.getCountEndTimestamp();
-
-                            long midpoint = (startTimestamp.getTime() + endTimestamp.getTime()) / 2;
-                            Date updatedStartDate = new Date(midpoint + 1000);
-                            cs.setCountBeginTimestamp(updatedStartDate);
-                        }
-
-                        countedTrip.getCountedStopTimes().get(0).getPassengerCountingEvents().add(passengerCountingEvent);
-                        filesystemRepository.updateCountedTrip(countedTrip);
-                    }
-
-                    Status.setBoolean(Status.STAY_IN_VEHICLE, false);
-                    Status.setString(Status.LAST_PCE, null);
-                    Status.setString(Status.LAST_VEHICLE_ID, null);
-                    Status.setStringArray(Status.LAST_COUNTED_DOOR_IDS, new String[] {});
-                }
-
-                this.countedTrip.postValue(countedTrip);
-                this.state.postValue(TripDetailsFragment.State.READY);
-
-                Status.setString(Status.STATUS, Status.Values.COUNTING);
-                Status.setInt(Status.CURRENT_TRIP_ID, tripId);
-                Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, startStopSequence);
-                Status.setString(Status.CURRENT_VEHICLE_ID, vehicleId);
-                Status.setInt(Status.CURRENT_VEHICLE_NUM_DOORS, vehicleNumDoors);
-            } else {
-                this.state.postValue(TripDetailsFragment.State.ERROR);
-            }
+    public void loadCountedTrip() {
+        Runnable runnable = () -> {
+            FilesystemRepository repository = FilesystemRepository.getInstance();
+            this.countedTrip.postValue(repository.loadCountedTrip());
         };
 
         Thread thread = new Thread(runnable);
@@ -114,16 +82,22 @@ public class TripDetailsViewModel extends ViewModel {
         thread.start();
     }
 
-    public void closeCountedTripAndLoadNextTrip()
-    {
+    public void closeCountedTripAndLoadNextTrip() {
         Runnable runnable = () -> {
-
             // check whether we have a counted trip at all and the counted trip has a next trip ID set
             if (this.countedTrip.getValue() == null || this.countedTrip.getValue().getNextTripId() == 0) {
                 return;
             }
 
             this.state.postValue(TripDetailsFragment.State.LOADING);
+
+            // keep track of the last action we are trying to perform...
+            this.lastActionCode = 1;
+
+            // load all required status variables
+            String vehicleId = Status.getString(Status.CURRENT_VEHICLE_ID, null);
+            int vehicleNumDoors = Status.getInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1);
+            String[] countedDoorIds = Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {});
 
             // 1st step: close counted trip object by modifying the last PCE object
             // see comments below for documentation
@@ -133,7 +107,7 @@ public class TripDetailsViewModel extends ViewModel {
             // extract last PCE and modify it to show up as connected PCE
             // keep a copy of the PCE in order to modify it a second time when generating the new trip
             PassengerCountingEvent lastPassengerCountingEvent = lastCountedTrip.getLastPce();
-            PassengerCountingEvent sharedPassengerCountingEvent = lastPassengerCountingEvent.copy();
+            Status.setString(Status.LAST_PCE, lastPassengerCountingEvent != null ? lastPassengerCountingEvent.serialize() : null);
 
             if (lastPassengerCountingEvent != null) {
                 for (CountingSequence cs : lastPassengerCountingEvent.getCountingSequences()) {
@@ -154,45 +128,29 @@ public class TripDetailsViewModel extends ViewModel {
             RemoteRepository remoteRepository = RemoteRepository.getInstance();
             if (remoteRepository.postResults(lastCountedTrip)) {
                 filesystemRepository.closeCountedTrip();
+
+                // update status variables
+                // set CURRENT_TRIP_ID in order to keep track of which
+                // SHOULD be the next trip. In case of a retry, this variable is loaded again
+                // in retryLastAction() and is responsible for loading the correct next trip
+                Status.setInt(Status.CURRENT_TRIP_ID, lastCountedTrip.getNextTripId());
+
+                Status.setString(Status.LAST_VEHICLE_ID, vehicleId);
+                Status.setStringArray(Status.LAST_COUNTED_DOOR_IDS, countedDoorIds);
+                Status.setBoolean(Status.STAY_IN_VEHICLE, true);
+
+                // performing next action now...
+                this.lastActionCode = 0;
+
+                // load next trip here ...
+                this.internalStartCountedTrip(
+                        lastCountedTrip.getNextTripId(),
+                        vehicleId,
+                        vehicleNumDoors,
+                        0
+                );
             } else {
-                this.state.postValue(TripDetailsFragment.State.READY);
-                return;
-            }
-
-            // 1.5st step: load all required status variables
-            String vehicleId = Status.getString(Status.CURRENT_VEHICLE_ID, null);
-            int vehicleNumDoors = Status.getInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1);
-
-            // 2nd step: load the next trip by its ID and set the first PCE object
-            // we know that the next trip ID is set, as we have checked it before
-            int nextTripId = lastCountedTrip.getNextTripId();
-            Trip nextTrip = remoteRepository.getTripByTripId(nextTripId);
-            if (nextTrip != null) {
-                CountedTrip nextCountedTrip = filesystemRepository.startCountedTrip(nextTrip, vehicleId, vehicleNumDoors);
-
-                // now use the shared PCE and modify it for acting as first PCE of the next trip
-                for (CountingSequence cs : sharedPassengerCountingEvent.getCountingSequences()) {
-                    cs.setOut(0);
-
-                    // see #57, PCEs with stayInVehicle flag should be re-started at the half of their duration + 1s
-                    // this is done on CS level, because start and end timestamps are stored for each CS
-                    Date startTimestamp = cs.getCountBeginTimestamp();
-                    Date endTimestamp = cs.getCountEndTimestamp();
-
-                    long midpoint = (startTimestamp.getTime() + endTimestamp.getTime()) / 2;
-                    Date updatedStartDate = new Date(midpoint + 1000);
-                    cs.setCountBeginTimestamp(updatedStartDate);
-                }
-
-                // finally add the modified PCE to the next counted trip object and save everything
-                nextCountedTrip.getCountedStopTimes().get(0).getPassengerCountingEvents().add(sharedPassengerCountingEvent);
-                filesystemRepository.updateCountedTrip(nextCountedTrip);
-
-                // update data and status variables
-                Status.setInt(Status.CURRENT_TRIP_ID, nextTripId);
-
-                this.countedTrip.postValue(nextCountedTrip);
-                this.state.postValue(TripDetailsFragment.State.READY);
+                this.state.postValue(TripDetailsFragment.State.ERROR);
             }
         };
 
@@ -241,16 +199,6 @@ public class TripDetailsViewModel extends ViewModel {
         thread.start();
     }
 
-    public void loadCountedTrip() {
-        Runnable runnable = () -> {
-            FilesystemRepository repository = FilesystemRepository.getInstance();
-            this.countedTrip.postValue(repository.loadCountedTrip());
-        };
-
-        Thread thread = new Thread(runnable);
-        thread.start();
-    }
-
     public void addWayPoint(Location location) {
         final WayPoint wayPoint = new WayPoint();
         wayPoint.setLatitude(location.getLatitude());
@@ -271,5 +219,70 @@ public class TripDetailsViewModel extends ViewModel {
 
         Thread thread = new Thread(runnable);
         thread.start();
+    }
+
+    public void retryLastAction()
+    {
+        if (this.lastActionCode == 0) {
+            this.startCountedTrip(
+                    Status.getInt(Status.CURRENT_TRIP_ID, -1),
+                    Status.getString(Status.CURRENT_VEHICLE_ID, ""),
+                    Status.getInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1),
+                    Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
+            );
+        }
+        else if (this.lastActionCode == 1) {
+            this.closeCountedTripAndLoadNextTrip();
+        }
+    }
+
+    private void internalStartCountedTrip(int tripId, String vehicleId, int vehicleNumDoors, int startStopSequence) {
+        this.state.postValue(TripDetailsFragment.State.LOADING);
+
+        RemoteRepository remoteRepository = RemoteRepository.getInstance();
+        Trip trip = remoteRepository.getTripByTripId(tripId);
+
+        if (trip != null) {
+            FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
+            CountedTrip countedTrip = filesystemRepository.startCountedTrip(trip, vehicleId, vehicleNumDoors);
+
+            if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
+                String passengerCountingEventJson = Status.getString(Status.LAST_PCE, null);
+                if (passengerCountingEventJson != null) {
+                    PassengerCountingEvent passengerCountingEvent = PassengerCountingEvent.deserialize(passengerCountingEventJson);
+                    for (CountingSequence cs : passengerCountingEvent.getCountingSequences()) {
+                        cs.setOut(0);
+
+                        // see #57, PCEs with stayInVehicle flag should be re-started at the half of their duration + 1s
+                        // this is done on CS level, because start and end timestamps are stored for each CS
+                        Date startTimestamp = cs.getCountBeginTimestamp();
+                        Date endTimestamp = cs.getCountEndTimestamp();
+
+                        long midpoint = (startTimestamp.getTime() + endTimestamp.getTime()) / 2;
+                        Date updatedStartDate = new Date(midpoint + 1000);
+                        cs.setCountBeginTimestamp(updatedStartDate);
+                    }
+
+                    countedTrip.getCountedStopTimes().get(0).getPassengerCountingEvents().add(passengerCountingEvent);
+                    filesystemRepository.updateCountedTrip(countedTrip);
+                }
+
+                Status.setBoolean(Status.STAY_IN_VEHICLE, false);
+                Status.setString(Status.LAST_PCE, null);
+                Status.setString(Status.LAST_VEHICLE_ID, null);
+                Status.setStringArray(Status.LAST_COUNTED_DOOR_IDS, new String[] {});
+            }
+
+            this.countedTrip.postValue(countedTrip);
+            this.state.postValue(TripDetailsFragment.State.READY);
+
+            Status.setString(Status.STATUS, Status.Values.COUNTING);
+            Status.setInt(Status.CURRENT_TRIP_ID, tripId);
+            Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, startStopSequence);
+            Status.setString(Status.CURRENT_VEHICLE_ID, vehicleId);
+            Status.setInt(Status.CURRENT_VEHICLE_NUM_DOORS, vehicleNumDoors);
+        } else {
+            this.state.postValue(TripDetailsFragment.State.ERROR);
+        }
     }
 }

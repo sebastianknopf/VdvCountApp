@@ -209,15 +209,10 @@ public class TripDetailsFragment extends Fragment {
         });
 
         this.dataBinding.btnRetry.setOnClickListener(view -> {
-            if (Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.READY)) {
-                Logging.i(this.getClass().getName(), "Retry requested - Trying to load CountedTrip again");
-
-                this.viewModel.startCountedTrip(
-                        Status.getInt(Status.CURRENT_TRIP_ID, -1),
-                        Status.getString(Status.CURRENT_VEHICLE_ID, ""),
-                        Status.getInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1),
-                        Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
-                );
+            if (Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.READY)
+                            || Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.COUNTING)) {
+                Logging.i(this.getClass().getName(), "Retry requested - Trying to perform last action again");
+                this.viewModel.retryLastAction();
             }
         });
 
