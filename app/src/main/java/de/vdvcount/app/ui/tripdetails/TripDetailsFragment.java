@@ -175,6 +175,7 @@ public class TripDetailsFragment extends Fragment {
             } else {
                 this.nextTripResetHandler.removeCallbacks(this.nextTripResetRunnable);
 
+                Logging.i(this.getClass().getName(), "Switching to next connected trip ...");
                 this.viewModel.closeCountedTripAndLoadNextTrip();
             }
         });
@@ -188,6 +189,7 @@ public class TripDetailsFragment extends Fragment {
             } else {
                 this.cancellationResetHandler.removeCallbacks(this.cancellationResetRunnable);
 
+                Logging.i(this.getClass().getName(), "Cancelling current trip ...");
                 this.viewModel.cancelCountedTrip();
 
                 TripDetailsFragmentDirections.ActionTripDetailsFragmentToDepartureFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToDepartureFragment();
