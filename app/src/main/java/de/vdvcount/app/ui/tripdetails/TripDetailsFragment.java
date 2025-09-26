@@ -50,6 +50,10 @@ public class TripDetailsFragment extends Fragment {
     private CountedTripAdapter countedTripAdapter;
     private LocationWarningDialog locationWarningDialog;
 
+    private boolean secondNextTripClick;
+    private Runnable nextTripResetRunnable;
+    private Handler nextTripResetHandler;
+
     private boolean secondCancellationClick;
     private Runnable cancellationResetRunnable;
     private Handler cancellationResetHandler;
@@ -61,11 +65,16 @@ public class TripDetailsFragment extends Fragment {
     public TripDetailsFragment() {
         this.countedTripAdapter = new CountedTripAdapter();
 
+        this.nextTripResetRunnable = () -> {
+            this.secondNextTripClick = false;
+            this.dataBinding.btnNextTrip.setText(R.string.trip_details_next_trip);
+        };
+        this.nextTripResetHandler = new Handler();
+
         this.cancellationResetRunnable = () -> {
             this.secondCancellationClick = false;
             this.dataBinding.btnCancel.setText(R.string.trip_details_cancel);
         };
-
         this.cancellationResetHandler = new Handler();
     }
 
@@ -157,6 +166,20 @@ public class TripDetailsFragment extends Fragment {
     }
 
     private void initViewEvents() {
+        this.dataBinding.btnNextTrip.setOnClickListener(view -> {
+            if (!this.secondNextTripClick) {
+                this.secondNextTripClick = true;
+
+                this.nextTripResetHandler.postDelayed(this.nextTripResetRunnable, 2000);
+                this.dataBinding.btnNextTrip.setText(R.string.trip_details_next_trip_confirmation);
+            } else {
+                this.nextTripResetHandler.removeCallbacks(this.nextTripResetRunnable);
+
+                Logging.i(this.getClass().getName(), "Switching to next connected trip ...");
+                this.viewModel.closeCountedTripAndLoadNextTrip();
+            }
+        });
+
         this.dataBinding.btnCancel.setOnClickListener(view -> {
             if (!this.secondCancellationClick) {
                 this.secondCancellationClick = true;
@@ -166,6 +189,7 @@ public class TripDetailsFragment extends Fragment {
             } else {
                 this.cancellationResetHandler.removeCallbacks(this.cancellationResetRunnable);
 
+                Logging.i(this.getClass().getName(), "Cancelling current trip ...");
                 this.viewModel.cancelCountedTrip();
 
                 TripDetailsFragmentDirections.ActionTripDetailsFragmentToDepartureFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToDepartureFragment();
@@ -187,15 +211,10 @@ public class TripDetailsFragment extends Fragment {
         });
 
         this.dataBinding.btnRetry.setOnClickListener(view -> {
-            if (Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.READY)) {
-                Logging.i(this.getClass().getName(), "Retry requested - Trying to load CountedTrip again");
-
-                this.viewModel.startCountedTrip(
-                        Status.getInt(Status.CURRENT_TRIP_ID, -1),
-                        Status.getString(Status.CURRENT_VEHICLE_ID, ""),
-                        Status.getInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1),
-                        Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
-                );
+            if (Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.READY)
+                            || Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.COUNTING)) {
+                Logging.i(this.getClass().getName(), "Retry requested - Trying to perform last action again");
+                this.viewModel.retryLastAction();
             }
         });
 
@@ -233,6 +252,13 @@ public class TripDetailsFragment extends Fragment {
                         this.showActionDialog(countedStopTime, true, false, false);
                     }
                 });
+
+                // show 'next trip' button regarding whether the trip points to a next trip ID or not
+                if (countedTrip.getNextTripId() != 0) {
+                    this.dataBinding.btnNextTrip.setVisibility(View.VISIBLE);
+                } else {
+                    this.dataBinding.btnNextTrip.setVisibility(View.GONE);
+                }
             }
         });
 

@@ -46,34 +46,46 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"  />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCancel"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/app_large_spacing"
-                        android:layout_marginStart="@dimen/app_default_spacing"
-                        android:layout_marginEnd="@dimen/app_default_spacing"
-                        android:layout_marginBottom="8dp"
-                        android:text="@string/trip_details_cancel"
-                        app:backgroundTint="@color/color_danger"
+                        android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@id/lstCountedStopTimes"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/btnQuit" />
+                        app:layout_constraintBottom_toBottomOf="parent">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnQuit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/app_default_spacing"
-                        android:layout_marginStart="@dimen/app_default_spacing"
-                        android:layout_marginEnd="@dimen/app_default_spacing"
-                        android:layout_marginBottom="8dp"
-                        android:text="@string/trip_details_quit"
-                        app:layout_constraintTop_toBottomOf="@id/btnCancel"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnNextTrip"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/app_default_spacing"
+                            android:layout_marginEnd="@dimen/app_default_spacing"
+                            android:layout_marginBottom="8dp"
+                            android:text="@string/trip_details_next_trip" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnQuit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/app_default_spacing"
+                            android:layout_marginEnd="@dimen/app_default_spacing"
+                            android:layout_marginBottom="8dp"
+                            android:text="@string/trip_details_quit" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnCancel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/app_large_spacing"
+                            android:layout_marginStart="@dimen/app_default_spacing"
+                            android:layout_marginEnd="@dimen/app_default_spacing"
+                            android:layout_marginBottom="8dp"
+                            android:text="@string/trip_details_cancel"
+                            app:backgroundTint="@color/color_danger"/>
+
+                    </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
