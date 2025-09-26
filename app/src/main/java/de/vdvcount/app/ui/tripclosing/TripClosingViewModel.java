@@ -34,7 +34,7 @@ public class TripClosingViewModel extends ViewModel {
             CountedTrip countedTrip = filesystemRepository.loadCountedTrip();
 
             if (stayInVehicle) {
-                PassengerCountingEvent passengerCountingEvent = this.extractLastPce(countedTrip);
+                PassengerCountingEvent passengerCountingEvent = countedTrip.getLastPce();
                 Status.setString(Status.LAST_PCE, passengerCountingEvent != null ? passengerCountingEvent.serialize() : null);
 
                 if (passengerCountingEvent != null) {
@@ -79,16 +79,5 @@ public class TripClosingViewModel extends ViewModel {
 
         Thread thread = new Thread(runnable);
         thread.start();
-    }
-
-    private PassengerCountingEvent extractLastPce(CountedTrip trip) {
-        CountedStopTime lastCountedStopTime = trip.getCountedStopTimes().get(trip.getCountedStopTimes().size() - 1);
-
-        PassengerCountingEvent lastPassengerCountingEvent = null;
-        if (!lastCountedStopTime.getPassengerCountingEvents().isEmpty()) {
-            lastPassengerCountingEvent = lastCountedStopTime.getPassengerCountingEvents().get(lastCountedStopTime.getPassengerCountingEvents().size() - 1);
-        }
-
-        return lastPassengerCountingEvent;
     }
 }

@@ -31,6 +31,8 @@
     <string name="trip_details_cancel">Fahrt abbrechen</string>
     <string name="trip_details_cancel_confirmation">Fahrt wirklich abbrechen?</string>
     <string name="trip_details_quit">Fahrt abschließen</string>
+    <string name="trip_details_next_trip">Zur Folgefahrt wechseln</string>
+    <string name="trip_details_next_trip_confirmation">Wirklich zur Folgefahrt wechseln?</string>
 
     <!-- TripClosingFragment -->
     <string name="trip_closing_title">Fahrtabschluss</string>
