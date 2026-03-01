@@ -24,6 +24,7 @@ import de.vdvcount.app.R;
 import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.databinding.FragmentTripClosingBinding;
+import de.vdvcount.app.ui.tripdetails.TripDetailsFragmentDirections;
 
 public class TripClosingFragment extends Fragment {
 
@@ -129,7 +130,7 @@ public class TripClosingFragment extends Fragment {
             );
         });
 
-        this.dataBinding.btnRetry.setOnClickListener(view -> {
+        this.dataBinding.btnCloseError.setOnClickListener(view -> {
             Logging.i(this.getClass().getName(), "Retry requested - Trying to close CountedTrip again");
 
             this.closeTripRequested = true;
@@ -137,6 +138,18 @@ public class TripClosingFragment extends Fragment {
             this.viewModel.closeCountedTrip(
                     this.dataBinding.cbxStayInVehicle.isChecked()
             );
+        });
+
+        this.dataBinding.btnCloseSystemError.setOnClickListener(view -> {
+            Logging.i(this.getClass().getName(), "System error committed - Recreating valid app state");
+            Logging.i(this.getClass().getName(), "Cancelling current trip ...");
+            this.viewModel.cancelCountedTrip();
+
+            TripClosingFragmentDirections.ActionTripClosingFragmentToDepartureFragment action = TripClosingFragmentDirections.actionTripClosingFragmentToDepartureFragment();
+            action.setStationId(lastStationId);
+            action.setStationName(lastStationName);
+
+            this.navigationController.navigate(action);
         });
     }
 
@@ -181,6 +194,7 @@ public class TripClosingFragment extends Fragment {
         READY,
         LOADING,
         ERROR,
+        SYSTEM_ERROR,
         DONE
     }
 }

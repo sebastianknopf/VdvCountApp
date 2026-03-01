@@ -108,7 +108,7 @@
         </androidx.core.widget.NestedScrollView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/permission"
+            android:id="@+id/error"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/app_default_spacing"
@@ -122,19 +122,51 @@
                 android:text="@string/str_network_load_error"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                app:layout_constraintBottom_toTopOf="@id/btnRetry"
+                app:layout_constraintBottom_toTopOf="@id/btnCloseError"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnRetry"
+                android:id="@+id/btnCloseError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/str_retry"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/systemError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/app_default_spacing"
+            android:visibility="@{viewModel.state == TripDetailsFragment.State.SYSTEM_ERROR ? View.VISIBLE : View.GONE}"
+            tools:context=".ui.tripdetails.TripDetailsFragment">
+
+            <TextView
+                android:id="@+id/lblSystemErrorMessage"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/str_system_error"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintBottom_toTopOf="@id/btnCloseSystemError"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCloseSystemError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/str_close"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:backgroundTint="@color/color_danger"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

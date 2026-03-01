@@ -6,12 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.common.Logging;
@@ -23,8 +19,6 @@ import de.vdvcount.app.model.PassengerCountingEvent;
 import de.vdvcount.app.model.Trip;
 import de.vdvcount.app.model.WayPoint;
 import de.vdvcount.app.remote.RemoteRepository;
-import de.vdvcount.app.ui.counting.CountingFragment;
-import de.vdvcount.app.ui.tripclosing.TripClosingFragment;
 
 public class TripDetailsViewModel extends ViewModel {
 
@@ -60,7 +54,12 @@ public class TripDetailsViewModel extends ViewModel {
     public void loadCountedTrip() {
         Runnable runnable = () -> {
             FilesystemRepository repository = FilesystemRepository.getInstance();
-            this.countedTrip.postValue(repository.loadCountedTrip());
+            try {
+                CountedTrip countedTrip = repository.loadCountedTrip();
+                this.countedTrip.postValue(countedTrip);
+            } catch (RuntimeException e) {
+                this.state.postValue(TripDetailsFragment.State.SYSTEM_ERROR);
+            }
         };
 
         Thread thread = new Thread(runnable);
@@ -102,7 +101,14 @@ public class TripDetailsViewModel extends ViewModel {
             // 1st step: close counted trip object by modifying the last PCE object
             // see comments below for documentation
             FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
-            CountedTrip lastCountedTrip = filesystemRepository.loadCountedTrip();
+            CountedTrip lastCountedTrip = null;
+
+            try {
+                lastCountedTrip = filesystemRepository.loadCountedTrip();
+            } catch (RuntimeException e) {
+                this.state.postValue(TripDetailsFragment.State.SYSTEM_ERROR);
+                return;
+            }
 
             // extract last PCE and modify it to show up as connected PCE
             // keep a copy of the PCE in order to modify it a second time when generating the new trip
@@ -165,7 +171,14 @@ public class TripDetailsViewModel extends ViewModel {
             this.state.postValue(TripDetailsFragment.State.LOADING);
 
             FilesystemRepository repository = FilesystemRepository.getInstance();
-            CountedTrip countedTrip = repository.loadCountedTrip();
+            CountedTrip countedTrip = null;
+
+            try {
+                countedTrip = repository.loadCountedTrip();
+            } catch (RuntimeException e) {
+                this.state.postValue(TripDetailsFragment.State.SYSTEM_ERROR);
+                return;
+            }
 
             Location location = LocationService.getInstance().requestCurrentLocation();
             Date timestamp = new Date();
@@ -207,7 +220,14 @@ public class TripDetailsViewModel extends ViewModel {
 
         Runnable runnable = () -> {
             FilesystemRepository repository = FilesystemRepository.getInstance();
-            CountedTrip countedTrip = repository.loadCountedTrip();
+            CountedTrip countedTrip = null;
+
+            try {
+                countedTrip = repository.loadCountedTrip();
+            } catch (RuntimeException e) {
+                this.state.postValue(TripDetailsFragment.State.SYSTEM_ERROR);
+                return;
+            }
 
             // the LocationService may be started before the initial request for the counted trip
             // is proceeded. This would result in a NullReferenceException ...
@@ -244,7 +264,14 @@ public class TripDetailsViewModel extends ViewModel {
 
         if (trip != null) {
             FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
-            CountedTrip countedTrip = filesystemRepository.startCountedTrip(trip, vehicleId, vehicleNumDoors);
+            CountedTrip countedTrip = null;
+
+            try {
+                countedTrip = filesystemRepository.startCountedTrip(trip, vehicleId, vehicleNumDoors);
+            } catch (RuntimeException e) {
+                this.state.postValue(TripDetailsFragment.State.SYSTEM_ERROR);
+                return;
+            }
 
             if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
                 String passengerCountingEventJson = Status.getString(Status.LAST_PCE, null);
@@ -282,7 +309,7 @@ public class TripDetailsViewModel extends ViewModel {
             Status.setString(Status.CURRENT_VEHICLE_ID, vehicleId);
             Status.setInt(Status.CURRENT_VEHICLE_NUM_DOORS, vehicleNumDoors);
         } else {
-            this.state.postValue(TripDetailsFragment.State.ERROR);
+            this.cancelCountedTrip();
         }
     }
 }
