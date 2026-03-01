@@ -1,14 +1,9 @@
 package de.vdvcount.app.ui.tripdetails;
 
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -210,12 +205,20 @@ public class TripDetailsFragment extends Fragment {
             this.navigationController.navigate(action);
         });
 
-        this.dataBinding.btnRetry.setOnClickListener(view -> {
-            if (Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.READY)
-                            || Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.COUNTING)) {
+        this.dataBinding.btnCloseError.setOnClickListener(view -> {
+            if (Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.READY) || Status.getString(Status.STATUS, Status.Values.READY).equals(Status.Values.COUNTING)) {
                 Logging.i(this.getClass().getName(), "Retry requested - Trying to perform last action again");
                 this.viewModel.retryLastAction();
             }
+        });
+
+        this.dataBinding.btnCloseSystemError.setOnClickListener(view -> {
+            Logging.i(this.getClass().getName(), "System error committed - Recreating valid app state");
+            Logging.i(this.getClass().getName(), "Cancelling current trip ...");
+            this.viewModel.cancelCountedTrip();
+
+            TripDetailsFragmentDirections.ActionTripDetailsFragmentToDepartureFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToDepartureFragment();
+            this.navigationController.navigate(action);
         });
 
         this.dataBinding.scrollView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
@@ -369,6 +372,7 @@ public class TripDetailsFragment extends Fragment {
     public enum State {
         READY,
         LOADING,
-        ERROR
+        ERROR,
+        SYSTEM_ERROR
     }
 }
