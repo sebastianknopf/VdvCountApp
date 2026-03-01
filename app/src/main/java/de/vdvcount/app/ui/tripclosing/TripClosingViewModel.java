@@ -31,7 +31,14 @@ public class TripClosingViewModel extends ViewModel {
             this.state.postValue(TripClosingFragment.State.LOADING);
 
             FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
-            CountedTrip countedTrip = filesystemRepository.loadCountedTrip();
+            CountedTrip countedTrip = null;
+
+            try {
+                countedTrip = filesystemRepository.loadCountedTrip();
+            } catch (RuntimeException e) {
+                this.state.postValue(TripClosingFragment.State.SYSTEM_ERROR);
+                return;
+            }
 
             if (stayInVehicle) {
                 PassengerCountingEvent passengerCountingEvent = countedTrip.getLastPce();
@@ -75,6 +82,21 @@ public class TripClosingViewModel extends ViewModel {
             } else {
                 this.state.postValue(TripClosingFragment.State.ERROR);
             }
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
+
+    public void cancelCountedTrip() {
+        Runnable runnable = () -> {
+            FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
+            filesystemRepository.cancelCountedTrip();
+
+            Status.setString(Status.STATUS, Status.Values.READY);
+            Status.setInt(Status.CURRENT_TRIP_ID, -1);
+            Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
+            Status.setString(Status.CURRENT_VEHICLE_ID, "");
         };
 
         Thread thread = new Thread(runnable);
