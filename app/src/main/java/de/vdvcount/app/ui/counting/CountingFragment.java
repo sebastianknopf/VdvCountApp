@@ -160,6 +160,15 @@ public class CountingFragment extends Fragment {
                 }
             });
         });
+
+        this.dataBinding.btnCloseSystemError.setOnClickListener(view -> {
+            Logging.i(this.getClass().getName(), "System error committed - Recreating valid app state");
+            Logging.i(this.getClass().getName(), "Cancelling current trip ...");
+            this.viewModel.cancelCountedTrip();
+
+            CountingFragmentDirections.ActionCountingFragmentToDepartureFragment action = CountingFragmentDirections.actionCountingFragmentToDepartureFragment();
+            this.navigationController.navigate(action);
+        });
     }
 
     private void initObserverEvents() {
@@ -207,7 +216,8 @@ public class CountingFragment extends Fragment {
     public enum State {
         INITIAL,
         STORING,
-        STORED
+        STORED,
+        SYSTEM_ERROR
     }
 
 }
