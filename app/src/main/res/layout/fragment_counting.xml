@@ -17,120 +17,126 @@
 
     </data>
 
-    <androidx.core.widget.NestedScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewModel.state == CountingFragment.State.INITIAL ? View.VISIBLE : View.GONE}">
+
+                    <LinearLayout
+                        android:id="@+id/layoutStopInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/app_default_spacing"
+                        app:layout_constraintBottom_toTopOf="@id/lstCountingSequences"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_margin="@dimen/app_default_spacing"
+                            android:src="@drawable/ic_stop"
+                            app:tint="?attr/defaultIconColor" />
+
+                        <TextView
+                            android:id="@+id/lblStopInfo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/app_default_spacing"
+                            android:layout_weight="1"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                            tools:text="Zählung an der Haltestelle Pforzheim Emilienstraße"/>
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/lstCountingSequences"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/layoutStopInfo"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"  />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/app_medium_spacing"
+                        android:layout_marginStart="@dimen/app_default_spacing"
+                        android:layout_marginEnd="@dimen/app_default_spacing"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/counting_save"
+                        app:layout_constraintTop_toBottomOf="@id/lstCountingSequences"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/app_default_spacing"
+            android:visibility="@{viewModel.state == CountingFragment.State.SYSTEM_ERROR ? View.VISIBLE : View.GONE}">
+
+            <TextView
+                android:id="@+id/lblSystemErrorMessage"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="@string/str_system_error"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintBottom_toTopOf="@id/btnCloseSystemError"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCloseSystemError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/str_close"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:backgroundTint="@color/color_danger"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:visibility="@{viewModel.state == CountingFragment.State.STORING ? View.VISIBLE : View.GONE}">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="@{viewModel.state == CountingFragment.State.INITIAL ? View.VISIBLE : View.GONE}">
+            <ProgressBar
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="160dp"
+                android:layout_centerInParent="true"
+                style="?android:attr/progressBarStyleLarge" />
 
-                <LinearLayout
-                    android:id="@+id/layoutStopInfo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:padding="@dimen/app_default_spacing"
-                    app:layout_constraintBottom_toTopOf="@id/lstCountingSequences"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+        </RelativeLayout>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_margin="@dimen/app_default_spacing"
-                        android:src="@drawable/ic_stop"
-                        app:tint="?attr/defaultIconColor" />
-
-                    <TextView
-                        android:id="@+id/lblStopInfo"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/app_default_spacing"
-                        android:layout_weight="1"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                        tools:text="Zählung an der Haltestelle Pforzheim Emilienstraße"/>
-
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/lstCountingSequences"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/layoutStopInfo"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"  />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSave"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/app_medium_spacing"
-                    android:layout_marginStart="@dimen/app_default_spacing"
-                    android:layout_marginEnd="@dimen/app_default_spacing"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/counting_save"
-                    app:layout_constraintTop_toBottomOf="@id/lstCountingSequences"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/app_default_spacing"
-                android:visibility="@{viewModel.state == CountingFragment.State.SYSTEM_ERROR ? View.VISIBLE : View.GONE}">
-
-                <TextView
-                    android:id="@+id/lblSystemErrorMessage"
-                    android:layout_width="320dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/str_system_error"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                    app:layout_constraintBottom_toTopOf="@id/btnCloseSystemError"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCloseSystemError"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/str_close"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:backgroundTint="@color/color_danger"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="@{viewModel.state == CountingFragment.State.STORING ? View.VISIBLE : View.GONE}">
-
-                <ProgressBar
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="160dp"
-                    android:layout_centerInParent="true"
-                    style="?android:attr/progressBarStyleLarge" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
 
 </layout>
