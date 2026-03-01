@@ -58,30 +58,35 @@ public class FilesystemRepository {
     public void updateCountedTrip(CountedTrip countedTrip) {
         String countedTripFilename = this.getCountedTripFilename();
 
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String countedTripData = gson.toJson(countedTrip.mapApiObject());
-
-        FileOutputStream fos = null;
-
         try {
-            File outputFile = new File(countedTripFilename);
-            outputFile.createNewFile();
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            String countedTripData = gson.toJson(countedTrip.mapApiObject());
 
-            fos = new FileOutputStream(countedTripFilename);
-
-            PrintStream printStream = new PrintStream(fos);
-            printStream.print(countedTripData);
-
-            Logging.i(this.getClass().getName(), "Updated CountedTrip object in local storage");
-        } catch (IOException e) {
-            Logging.e(this.getClass().getName(), "Failed to update CountedTrip object in local storage", e);
-        } finally {
+            FileOutputStream fos = null;
             try {
-                if (fos != null) {
-                    fos.close();
-                }
+                File outputFile = new File(countedTripFilename);
+                outputFile.createNewFile();
+
+                fos = new FileOutputStream(countedTripFilename);
+
+                PrintStream printStream = new PrintStream(fos);
+                printStream.print(countedTripData);
+
+                Logging.i(this.getClass().getName(), "Updated CountedTrip object in local storage");
             } catch (IOException e) {
+                Logging.e(this.getClass().getName(), "Failed to update CountedTrip object in local storage", e);
+            } finally {
+                try {
+                    if (fos != null) {
+                        fos.close();
+                    }
+                } catch (IOException e) {
+                }
             }
+        } catch (Exception e) {
+            Logging.e(this.getClass().getName(), "Failed to serialize CountedTrip object from local storage file", e);
+
+            throw new RuntimeException(e);
         }
     }
 
@@ -112,14 +117,20 @@ public class FilesystemRepository {
             }
         }
 
-        String countedTripObjectJson = new String(buffer, Charsets.UTF_8);
-        Gson gson = new GsonBuilder().serializeNulls().create();
+        try {
+            String countedTripObjectJson = new String(buffer, Charsets.UTF_8);
+            Gson gson = new GsonBuilder().serializeNulls().create();
 
-        CountedTripObject countedTripObject = gson.fromJson(countedTripObjectJson, CountedTripObject.class);
+            CountedTripObject countedTripObject = gson.fromJson(countedTripObjectJson, CountedTripObject.class);
 
-        Logging.i(this.getClass().getName(), "Loaded CountedTrip object from local storage");
+            Logging.i(this.getClass().getName(), "Loaded CountedTrip object from local storage");
 
-        return countedTripObject.mapDomainModel();
+            return countedTripObject.mapDomainModel();
+        } catch (Exception e) {
+            Logging.e(this.getClass().getName(), "Failed to deserialize CountedTrip object from local storage file", e);
+
+            throw new RuntimeException(e);
+        }
     }
 
     public void closeCountedTrip() {
