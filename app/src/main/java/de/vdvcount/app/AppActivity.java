@@ -96,6 +96,9 @@ public class AppActivity extends AppCompatActivity {
 
             if (this.actionBarTapCount == 1) {
                 this.actionBarTapCountResetHandler.postDelayed(this.actionBarTapCountResetRunnable, 5000);
+            } else if (this.actionBarTapCount == 2) {
+                Logging.i(this.getClass().getName(), "Manual log dump triggered");
+                this.sendLogs();
             } else if (this.actionBarTapCount >= 5 && this.actionBarTapCount < 10) {
                 this.actionBarTapCountToast = Toast.makeText(this, this.getString(R.string.app_reset_counter, 10 - this.actionBarTapCount), Toast.LENGTH_SHORT);
                 this.actionBarTapCountToast.show();
