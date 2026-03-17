@@ -67,6 +67,7 @@ public class DepartureFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.viewModel = new ViewModelProvider(this).get(DepartureViewModel.class);
+        this.dataBinding.setViewModel(this.viewModel);
 
         this.initViewEvents();
         this.initObserverEvents();

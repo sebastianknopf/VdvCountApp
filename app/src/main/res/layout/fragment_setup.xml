@@ -3,6 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="de.vdvcount.app.ui.setup.SetupViewModel" />
+
+        <variable
+            type="SetupViewModel"
+            name="viewModel" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/permission"
         android:layout_width="match_parent"
@@ -17,10 +27,23 @@
             android:text="@string/setup_information_text"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            app:layout_constraintBottom_toTopOf="@id/btnContinue"
+            app:layout_constraintBottom_toTopOf="@id/lblDeviceId"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/lblDeviceId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/app_default_spacing"
+            android:layout_marginBottom="@dimen/app_default_spacing"
+            android:text="@{viewModel.deviceId}"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnContinue" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnContinue"

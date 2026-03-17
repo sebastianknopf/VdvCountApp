@@ -5,6 +5,7 @@ import java.security.InvalidKeyException;
 import java.util.UUID;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.common.SingleLiveEvent;
@@ -15,13 +16,21 @@ import de.vdvcount.app.security.Cipher;
 public class SetupViewModel extends ViewModel {
 
     private SingleLiveEvent<Boolean> setupSuccessful;
+    private MutableLiveData<String> deviceId;
 
     public SetupViewModel() {
+        String deviceId = Secret.getSecretString(Secret.DEVICE_ID, "");
+
         this.setupSuccessful = new SingleLiveEvent<>();
+        this.deviceId = new MutableLiveData<>(deviceId);
     }
 
     public LiveData<Boolean> getSetupSuccessful() {
         return this.setupSuccessful;
+    }
+
+    public LiveData<String> getDeviceId() {
+        return this.deviceId;
     }
 
     public void setupApplication(String setupString) {
