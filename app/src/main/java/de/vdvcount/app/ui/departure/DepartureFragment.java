@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Map;
 
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
@@ -25,6 +26,7 @@ import de.vdvcount.app.common.OnItemClickListener;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentDepartureBinding;
 import de.vdvcount.app.model.Departure;
+import de.vdvcount.app.remote.RemoteRepository;
 
 public class DepartureFragment extends Fragment {
 
@@ -127,6 +129,10 @@ public class DepartureFragment extends Fragment {
             );
 
             this.navigationController.navigate(action);
+        });
+
+        this.dataBinding.lblDeviceId.setOnClickListener(view -> {
+            this.viewModel.sendLogs();
         });
     }
 

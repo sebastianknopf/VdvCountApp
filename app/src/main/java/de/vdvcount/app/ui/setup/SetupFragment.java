@@ -114,6 +114,10 @@ public class SetupFragment extends Fragment {
     }
 
     private void initViewEvents() {
+        this.dataBinding.lblDeviceId.setOnClickListener(view -> {
+            this.viewModel.sendLogs();
+        });
+
         this.dataBinding.btnContinue.setOnClickListener(sender -> {
             String[] permissions = {
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
