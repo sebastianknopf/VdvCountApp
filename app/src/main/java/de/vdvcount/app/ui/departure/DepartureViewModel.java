@@ -47,24 +47,6 @@ public class DepartureViewModel extends ViewModel {
     }
 
     public void sendLogs() {
-        Runnable runnable = () -> {
-            try {
-                Logging.i(this.getClass().getName(), "Sending logs to remote server");
-                Logging.archiveCurrentLogs();
-
-                RemoteRepository repository = RemoteRepository.getInstance();
-                Map<String, String> archivedLogs = Logging.getArchivedLogs();
-                for (Map.Entry<String, String> archivedLog : archivedLogs.entrySet()) {
-                    if (repository.postLogs(archivedLog.getValue())) {
-                        Logging.removeArchivedLog(archivedLog.getKey());
-                    }
-                }
-            } catch (Exception ex) {
-                Logging.e(this.getClass().getName(), "Failed to send logs to remote API", ex);
-            }
-        };
-
-        Thread thread = new Thread(runnable);
-        thread.start();
+        Logging.sendLogs();
     }
 }
