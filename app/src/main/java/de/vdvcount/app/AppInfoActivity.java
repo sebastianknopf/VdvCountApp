@@ -15,6 +15,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import de.vdvcount.app.common.Logging;
+import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.databinding.ActivityAppInfoBinding;
 
 public class AppInfoActivity extends AppCompatActivity {
@@ -32,6 +33,9 @@ public class AppInfoActivity extends AppCompatActivity {
         this.setSupportActionBar(this.dataBinding.toolbar);
 
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        this.initViewData();
+        this.initViewEvents();
     }
 
     @Override
@@ -48,5 +52,15 @@ public class AppInfoActivity extends AppCompatActivity {
         super.onDestroy();
 
         Logging.i(this.getClass().getName(), "App info activity closed");
+    }
+
+    private void initViewData() {
+        this.dataBinding.lblDeviceId.setText(Secret.getSecretString(Secret.DEVICE_ID, null));
+    }
+
+    private void initViewEvents() {
+        this.dataBinding.btnSendLogs.setOnClickListener(view -> {
+            Logging.sendLogs();
+        });
     }
 }
