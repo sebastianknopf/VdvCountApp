@@ -82,8 +82,4 @@ public class SetupViewModel extends ViewModel {
         Thread thread = new Thread(runnable);
         thread.start();
     }
-
-    public void sendLogs() {
-        Logging.sendLogs();
-    }
 }

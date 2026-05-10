@@ -45,8 +45,4 @@ public class DepartureViewModel extends ViewModel {
         Thread thread = new Thread(runnable);
         thread.start();
     }
-
-    public void sendLogs() {
-        Logging.sendLogs();
-    }
 }

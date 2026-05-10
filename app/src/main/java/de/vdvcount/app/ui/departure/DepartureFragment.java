@@ -130,10 +130,6 @@ public class DepartureFragment extends Fragment {
 
             this.navigationController.navigate(action);
         });
-
-        this.dataBinding.lblDeviceId.setOnClickListener(view -> {
-            this.viewModel.sendLogs();
-        });
     }
 
     private void initObserverEvents() {
