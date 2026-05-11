@@ -11,6 +11,13 @@
     <style name="Theme.VdvCount.Toolbar" parent="Theme.VdvCount">
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
+        <item name="popupTheme">@style/ThemeOverlay.VdvCount.Toolbar.Popup</item>
+        <item name="android:popupTheme">@style/ThemeOverlay.VdvCount.Toolbar.Popup</item>
+    </style>
+
+    <style name="ThemeOverlay.VdvCount.Toolbar.Popup" parent="ThemeOverlay.MaterialComponents">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
 
 </resources>
