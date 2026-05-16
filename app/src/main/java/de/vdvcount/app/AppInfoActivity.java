@@ -55,6 +55,7 @@ public class AppInfoActivity extends AppCompatActivity {
     }
 
     private void initViewData() {
+        this.dataBinding.lblAppVersion.setText(BuildConfig.VERSION_NAME);
         this.dataBinding.lblDeviceId.setText(Secret.getSecretString(Secret.DEVICE_ID, null));
     }
 

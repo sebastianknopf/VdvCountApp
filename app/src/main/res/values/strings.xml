@@ -75,6 +75,8 @@
     <string name="str_additional_stop">Zwischenhalt</string>
     <string name="str_run_through">Durchfahrt</string>
     <string name="str_close">Schließen</string>
+    <string name="str_app_version">App-Version</string>
+    <string name="str_device_id">Geräte-ID</string>
     <string name="str_send_logs">Logs senden</string>
 
     <string name="str_format_time">HH:mm</string>

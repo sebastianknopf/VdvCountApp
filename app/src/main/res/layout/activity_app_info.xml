@@ -23,7 +23,42 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="@dimen/app_default_spacing">
+
+            <TextView
+                android:id="@+id/lblAppVersionLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                android:text="@string/str_app_version"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/lblAppVersion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:text="Version"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lblAppVersionLabel" />
+
+            <TextView
+                android:id="@+id/lblDeviceIdLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                android:text="@string/str_device_id"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lblAppVersion" />
 
             <TextView
                 android:id="@+id/lblDeviceId"
@@ -31,18 +66,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:text="DeviceID"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/btnSendLogs" />
+                app:layout_constraintTop_toBottomOf="@id/lblDeviceIdLabel" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSendLogs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/app_default_spacing"
-                android:layout_marginEnd="@dimen/app_default_spacing"
                 android:layout_marginBottom="@dimen/app_default_spacing"
                 android:text="@string/str_send_logs"
                 app:layout_constraintStart_toStartOf="parent"
