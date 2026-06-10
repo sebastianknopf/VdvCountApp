@@ -61,7 +61,7 @@
     <string name="dialog_gps_warning_message">Bitte aktivieren Sie den Gerätestandort, um die Zählung fortzusetzen.</string>
 
     <!-- Common Strings -->
-    <string name="app_name">VdvCountApp</string>
+    <string name="app_name">ZÄHLÄPP</string>
     <string name="app_info">App-Info</string>
     <string name="app_reset_counter">Noch %dx zum Zurücksetzen.</string>
     <string name="str_continue">Weiter</string>
