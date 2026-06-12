@@ -17,7 +17,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:theme="@style/Theme.Realtimer.Toolbar" />
+                android:theme="@style/Theme.VdvCount.Toolbar" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

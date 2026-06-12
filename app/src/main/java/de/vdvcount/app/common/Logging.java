@@ -16,6 +16,7 @@ import java.util.Map;
 
 import de.vdvcount.app.App;
 import de.vdvcount.app.BuildConfig;
+import de.vdvcount.app.remote.RemoteRepository;
 
 public class Logging {
 
@@ -112,6 +113,28 @@ public class Logging {
       if (fileIndex != 0 && activeLogFile.exists()) {
          activeLogFile.renameTo(archiveLogFile);
       }
+   }
+
+   public static void sendLogs() {
+      Runnable runnable = () -> {
+         try {
+            Logging.i(Logging.class.getName(), "Sending logs to remote server");
+            Logging.archiveCurrentLogs();
+
+            RemoteRepository repository = RemoteRepository.getInstance();
+            Map<String, String> archivedLogs = Logging.getArchivedLogs();
+            for (Map.Entry<String, String> archivedLog : archivedLogs.entrySet()) {
+               if (repository.postLogs(archivedLog.getValue())) {
+                  Logging.removeArchivedLog(archivedLog.getKey());
+               }
+            }
+         } catch (Exception ex) {
+            Logging.e(Logging.class.getName(), "Failed to send logs to remote API", ex);
+         }
+      };
+
+      Thread thread = new Thread(runnable);
+      thread.start();
    }
 
    public static void d(String tag, String message) {

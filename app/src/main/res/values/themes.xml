@@ -11,11 +11,15 @@
         <item name="android:textColorSecondary">@color/color_secondary_600</item>
     </style>
 
-    <style name="Theme.Realtimer" parent="Theme.VdvCount" />
-
-    <style name="Theme.Realtimer.Toolbar" parent="Theme.VdvCount">
+    <style name="Theme.VdvCount.Toolbar" parent="Theme.VdvCount">
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
-        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="popupTheme">@style/ThemeOverlay.VdvCount.Toolbar.Popup</item>
+        <item name="android:popupTheme">@style/ThemeOverlay.VdvCount.Toolbar.Popup</item>
+    </style>
+
+    <style name="ThemeOverlay.VdvCount.Toolbar.Popup" parent="ThemeOverlay.MaterialComponents">
+        <item name="android:textColorPrimary">@color/gray</item>
+        <item name="android:textColorSecondary">@color/gray</item>
     </style>
 </resources>

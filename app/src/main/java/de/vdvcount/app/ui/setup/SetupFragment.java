@@ -64,6 +64,7 @@ public class SetupFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.viewModel = new ViewModelProvider(this).get(SetupViewModel.class);
+        this.dataBinding.setViewModel(this.viewModel);
 
         this.initViewEvents();
         this.initObserverEvents();

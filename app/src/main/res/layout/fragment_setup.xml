@@ -3,6 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="de.vdvcount.app.ui.setup.SetupViewModel" />
+
+        <variable
+            type="SetupViewModel"
+            name="viewModel" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/permission"
         android:layout_width="match_parent"
