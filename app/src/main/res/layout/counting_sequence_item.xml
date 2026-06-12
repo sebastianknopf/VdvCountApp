@@ -25,7 +25,8 @@
             android:layout_marginEnd="@dimen/app_default_spacing"
             android:text="@{@string/str_door(countingSequence.doorId)}"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            android:textStyle="bold"
             tools:text="Tür 1" />
 
         <TextView
@@ -34,7 +35,7 @@
             android:layout_marginTop="@dimen/app_default_spacing"
             android:text="@string/counting_in"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.Material3.LabelMedium" />
+            android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,10 +46,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDecreaseIn"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:text="@string/str_minus"
                 android:textStyle="bold"
+                android:textSize="30sp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <EditText
@@ -67,10 +69,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnIncreaseIn"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:text="@string/str_plus"
                 android:textStyle="bold"
+                android:textSize="30sp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         </LinearLayout>
@@ -80,7 +83,7 @@
             android:layout_height="wrap_content"
             android:text="@string/counting_out"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.Material3.LabelMedium" />
+            android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,10 +95,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDecreaseOut"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:text="@string/str_minus"
                 android:textStyle="bold"
+                android:textSize="30sp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <EditText
@@ -114,10 +118,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnIncreaseOut"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:text="@string/str_plus"
                 android:textStyle="bold"
+                android:textSize="30sp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         </LinearLayout>

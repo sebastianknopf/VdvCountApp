@@ -2,10 +2,14 @@ package de.vdvcount.app.ui.setup;
 
 import java.net.URI;
 import java.security.InvalidKeyException;
+import java.util.Map;
 import java.util.UUID;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.common.SingleLiveEvent;
 import de.vdvcount.app.common.Status;

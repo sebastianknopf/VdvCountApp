@@ -1,13 +1,15 @@
 package de.vdvcount.app;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.security.InvalidKeyException;
-import java.util.Map;
 import java.util.UUID;
 
 import androidx.databinding.DataBindingUtil;
@@ -17,7 +19,6 @@ import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.ActivityAppBinding;
-import de.vdvcount.app.remote.RemoteRepository;
 import de.vdvcount.app.security.Cipher;
 
 public class AppActivity extends AppCompatActivity {
@@ -68,6 +69,23 @@ public class AppActivity extends AppCompatActivity {
         }
 
         this.initViewEvents();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.getMenuInflater().inflate(R.menu.menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.mnuAppInfo) {
+            Intent appInfoIntent = new Intent(this, AppInfoActivity.class);
+            this.startActivity(appInfoIntent);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -124,24 +142,6 @@ public class AppActivity extends AppCompatActivity {
     }
 
     public void sendLogs() {
-        Runnable runnable = () -> {
-            try {
-                Logging.i(this.getClass().getName(), "Sending logs to remote server");
-                Logging.archiveCurrentLogs();
-
-                RemoteRepository repository = RemoteRepository.getInstance();
-                Map<String, String> archivedLogs = Logging.getArchivedLogs();
-                for (Map.Entry<String, String> archivedLog : archivedLogs.entrySet()) {
-                    if (repository.postLogs(archivedLog.getValue())) {
-                        Logging.removeArchivedLog(archivedLog.getKey());
-                    }
-                }
-            } catch (Exception ex) {
-                Logging.e(this.getClass().getName(), "Failed to send logs to remote API", ex);
-            }
-        };
-
-        Thread thread = new Thread(runnable);
-        thread.start();
+        Logging.sendLogs();
     }
 }
