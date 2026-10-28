@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +41,7 @@ public class TripParamsFragment extends Fragment {
     private int currentTripId;
     private String currentVehicleId;
     private int currentVehicleNumDoors;
+    private boolean countingTypeSelected;
     private VehicleListAdapter vehicleListAdapter;
     private DoorListAdapter doorListAdapter;
     private TextWatcher vehicleIdTextWatcher;
@@ -82,6 +84,12 @@ public class TripParamsFragment extends Fragment {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_trip_params, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
 
+        ArrayAdapter<CharSequence> countingTypeAdapter = ArrayAdapter.createFromResource(
+                this.requireContext(),
+                R.array.trip_params_counting_types,
+                android.R.layout.simple_list_item_1
+        );
+        this.dataBinding.edtCountingType.setAdapter(countingTypeAdapter);
         this.dataBinding.edtVehicle.setAdapter(this.vehicleListAdapter);
         this.dataBinding.lstDoors.setAdapter(this.doorListAdapter);
 
@@ -143,6 +151,27 @@ public class TripParamsFragment extends Fragment {
     }
 
     private void initViewEvents() {
+        this.dataBinding.edtCountingType.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                countingTypeSelected = false;
+                validateInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        this.dataBinding.edtCountingType.setOnItemClickListener((adapterView, view, position, id) -> {
+            this.countingTypeSelected = true;
+            this.validateInputs();
+        });
+
         this.dataBinding.edtVehicle.addTextChangedListener(this.vehicleIdTextWatcher);
 
         this.dataBinding.edtVehicle.setOnItemClickListener((adapterView, view, i, l) -> {
@@ -213,6 +242,10 @@ public class TripParamsFragment extends Fragment {
         boolean inputsValid = true;
 
         if (this.currentVehicleId == null) {
+            inputsValid = false;
+        }
+
+        if (!this.countingTypeSelected) {
             inputsValid = false;
         }
 

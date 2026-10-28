@@ -21,6 +21,11 @@
     <string name="trip_params_title">Fahrtdetails</string>
     <string name="trip_params_trip_info">Zählung auf der Linie %s nach %s, Abfahrt um %s Uhr</string>
     <string name="trip_params_stay_in_vehicle_info">Die Fahrzeug- und Türauswahl wurde aus der vorhergehenden Fahrt übernommen.</string>
+    <string name="trip_params_counting_type">Zählungstyp</string>
+    <string-array name="trip_params_counting_types">
+        <item>Vergleichszählung</item>
+        <item>Fahrgastzählung</item>
+    </string-array>
     <string name="trip_params_vehicle">Fahrzeug</string>
     <string name="trip_params_doors">Gezählte Türen</string>
     <string name="trip_params_object_classes">Gezählte Objektklassen</string>

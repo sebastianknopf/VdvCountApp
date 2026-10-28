@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/edtVehicleLayout"
+            app:layout_constraintBottom_toTopOf="@id/edtCountingTypeLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -87,6 +87,26 @@
         </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edtCountingTypeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/app_large_spacing"
+            android:layout_marginStart="@dimen/app_default_spacing"
+            android:layout_marginEnd="@dimen/app_default_spacing"
+            android:hint="@string/trip_params_counting_type"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            app:endIconMode="dropdown_menu"
+            app:layout_constraintTop_toBottomOf="@id/layoutHeading">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/edtCountingType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edtVehicleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,7 +115,7 @@
             android:layout_marginEnd="@dimen/app_default_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutHeading">
+            app:layout_constraintTop_toBottomOf="@id/edtCountingTypeLayout">
 
             <de.vdvcount.app.view.TextInputAutoCompleteTextView
                 android:id="@+id/edtVehicle"
