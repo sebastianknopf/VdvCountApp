@@ -209,6 +209,23 @@ public class TripParamsFragment extends Fragment {
             this.vehicleListAdapter.setVehicles(vehicles);
 
             if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
+                String countingTypeName = Status.getString(Status.LAST_COUNTING_TYPE, null);
+                if (countingTypeName != null) {
+                    try {
+                        CountingType countingType = CountingType.valueOf(countingTypeName);
+                        String[] countingTypeLabels = this.getResources().getStringArray(R.array.trip_params_counting_types);
+
+                        this.dataBinding.edtCountingType.setText(countingTypeLabels[countingType.ordinal()], false);
+                        this.currentCountingType = countingType;
+                        this.dataBinding.edtCountingTypeLayout.setEnabled(false);
+                        this.dataBinding.edtCountingType.setEnabled(false);
+
+                        this.validateInputs();
+                    } catch (IllegalArgumentException e) {
+                        // Keep the field editable if a stored counting type is no longer supported.
+                    }
+                }
+
                 String vehicleId = Status.getString(Status.LAST_VEHICLE_ID, null);
                 if (vehicleId != null) {
                     Optional<Vehicle> vehicle = this.vehicleListAdapter.getVehicles().stream().filter(v -> v.getName().equals(vehicleId)).findFirst();

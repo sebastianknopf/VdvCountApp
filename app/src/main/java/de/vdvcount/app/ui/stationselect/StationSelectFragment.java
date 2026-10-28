@@ -157,6 +157,7 @@ public class StationSelectFragment extends Fragment {
                 Status.setString(Status.LAST_PCE, null);
                 Status.setString(Status.LAST_VEHICLE_ID, null);
                 Status.setStringArray(Status.LAST_COUNTED_DOOR_IDS, new String[] {});
+                Status.setString(Status.LAST_COUNTING_TYPE, null);
             }
 
             StationSelectFragmentDirections.ActionStationSelectFragmentToDepartureFragment action = StationSelectFragmentDirections.actionStationSelectFragmentToDepartureFragment();

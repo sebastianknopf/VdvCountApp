@@ -82,7 +82,7 @@ public class TripDetailsViewModel extends ViewModel {
         thread.start();
     }
 
-    public void closeCountedTripAndLoadNextTrip() {
+    public void closeCountedTripAndLoadNextTrip(String countingType) {
         Runnable runnable = () -> {
             // check whether we have a counted trip at all and the counted trip has a next trip ID set
             if (this.countedTrip.getValue() == null || this.countedTrip.getValue().getNextTripId() == 0) {
@@ -144,6 +144,7 @@ public class TripDetailsViewModel extends ViewModel {
 
                 Status.setString(Status.LAST_VEHICLE_ID, vehicleId);
                 Status.setStringArray(Status.LAST_COUNTED_DOOR_IDS, countedDoorIds);
+                Status.setString(Status.LAST_COUNTING_TYPE, countingType);
                 Status.setBoolean(Status.STAY_IN_VEHICLE, true);
 
                 // performing next action now...
@@ -253,7 +254,7 @@ public class TripDetailsViewModel extends ViewModel {
             );
         }
         else if (this.lastActionCode == 1) {
-            this.closeCountedTripAndLoadNextTrip();
+            this.closeCountedTripAndLoadNextTrip(Status.getString(Status.CURRENT_COUNTING_TYPE, null));
         }
     }
 
@@ -275,6 +276,11 @@ public class TripDetailsViewModel extends ViewModel {
             }
 
             if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
+                String countingType = Status.getString(Status.LAST_COUNTING_TYPE, null);
+                if (countingType != null) {
+                    Status.setString(Status.CURRENT_COUNTING_TYPE, countingType);
+                }
+
                 String passengerCountingEventJson = Status.getString(Status.LAST_PCE, null);
                 if (passengerCountingEventJson != null) {
                     PassengerCountingEvent passengerCountingEvent = PassengerCountingEvent.deserialize(passengerCountingEventJson);
@@ -299,6 +305,7 @@ public class TripDetailsViewModel extends ViewModel {
                 Status.setString(Status.LAST_PCE, null);
                 Status.setString(Status.LAST_VEHICLE_ID, null);
                 Status.setStringArray(Status.LAST_COUNTED_DOOR_IDS, new String[] {});
+                Status.setString(Status.LAST_COUNTING_TYPE, null);
             }
 
             this.countedTrip.postValue(countedTrip);

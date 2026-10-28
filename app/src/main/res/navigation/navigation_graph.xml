@@ -132,9 +132,8 @@
             app:nullable="true" />
         <argument
             android:name="countingType"
-            android:defaultValue="@null"
-            app:argType="de.vdvcount.app.common.CountingType"
-            app:nullable="true" />
+            android:defaultValue="UNSPECIFIED"
+            app:argType="de.vdvcount.app.common.CountingType" />
         <action
             android:id="@+id/action_tripDetailsFragment_to_countingFragment"
             app:destination="@id/countingFragment" >

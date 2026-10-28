@@ -23,6 +23,7 @@ import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.common.Logging;
+import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripClosingBinding;
 import de.vdvcount.app.ui.tripdetails.TripDetailsFragmentDirections;
 
@@ -125,7 +126,8 @@ public class TripClosingFragment extends Fragment {
             this.closeTripRequested = true;
 
             this.viewModel.closeCountedTrip(
-                    this.dataBinding.cbxStayInVehicle.isChecked()
+                    this.dataBinding.cbxStayInVehicle.isChecked(),
+                    Status.getString(Status.CURRENT_COUNTING_TYPE, null)
             );
         });
 
@@ -135,7 +137,8 @@ public class TripClosingFragment extends Fragment {
             this.closeTripRequested = true;
 
             this.viewModel.closeCountedTrip(
-                    this.dataBinding.cbxStayInVehicle.isChecked()
+                    this.dataBinding.cbxStayInVehicle.isChecked(),
+                    Status.getString(Status.CURRENT_COUNTING_TYPE, null)
             );
         });
 
