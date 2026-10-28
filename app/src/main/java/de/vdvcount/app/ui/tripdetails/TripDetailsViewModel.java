@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import java.util.Date;
 import java.util.List;
 
+import de.vdvcount.app.common.CountingType;
 import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Status;
@@ -42,9 +43,9 @@ public class TripDetailsViewModel extends ViewModel {
         return this.countedTrip;
     }
 
-    public void startCountedTrip(int tripId, String vehicleId, int vehicleNumDoors, int startStopSequence) {
+    public void startCountedTrip(int tripId, String vehicleId, int vehicleNumDoors, int startStopSequence, String countingType) {
         Runnable runnable = () -> {
-            this.internalStartCountedTrip(tripId, vehicleId, vehicleNumDoors, startStopSequence);
+            this.internalStartCountedTrip(tripId, vehicleId, vehicleNumDoors, startStopSequence, countingType);
         };
 
         Thread thread = new Thread(runnable);
@@ -155,7 +156,8 @@ public class TripDetailsViewModel extends ViewModel {
                         lastCountedTrip.getNextTripId(),
                         vehicleId,
                         vehicleNumDoors,
-                        0
+                        0,
+                        countingType
                 );
             } else {
                 this.state.postValue(TripDetailsFragment.State.ERROR);
@@ -250,7 +252,8 @@ public class TripDetailsViewModel extends ViewModel {
                     Status.getInt(Status.CURRENT_TRIP_ID, -1),
                     Status.getString(Status.CURRENT_VEHICLE_ID, ""),
                     Status.getInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1),
-                    Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
+                    Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1),
+                    Status.getString(Status.CURRENT_COUNTING_TYPE, null)
             );
         }
         else if (this.lastActionCode == 1) {
@@ -258,25 +261,31 @@ public class TripDetailsViewModel extends ViewModel {
         }
     }
 
-    private void internalStartCountedTrip(int tripId, String vehicleId, int vehicleNumDoors, int startStopSequence) {
+    private void internalStartCountedTrip(int tripId, String vehicleId, int vehicleNumDoors, int startStopSequence, String countingType) {
         this.state.postValue(TripDetailsFragment.State.LOADING);
 
         RemoteRepository remoteRepository = RemoteRepository.getInstance();
         Trip trip = remoteRepository.getTripByTripId(tripId);
 
         if (trip != null) {
+            if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
+                String lastCountingType = Status.getString(Status.LAST_COUNTING_TYPE, null);
+                if (lastCountingType != null) {
+                    countingType = lastCountingType;
+                }
+            }
+
             FilesystemRepository filesystemRepository = FilesystemRepository.getInstance();
             CountedTrip countedTrip = null;
 
             try {
-                countedTrip = filesystemRepository.startCountedTrip(trip, vehicleId, vehicleNumDoors);
+                countedTrip = filesystemRepository.startCountedTrip(trip, vehicleId, vehicleNumDoors, this.parseCountingType(countingType));
             } catch (RuntimeException e) {
                 this.state.postValue(TripDetailsFragment.State.SYSTEM_ERROR);
                 return;
             }
 
             if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
-                String countingType = Status.getString(Status.LAST_COUNTING_TYPE, null);
                 if (countingType != null) {
                     Status.setString(Status.CURRENT_COUNTING_TYPE, countingType);
                 }
@@ -318,6 +327,18 @@ public class TripDetailsViewModel extends ViewModel {
             Status.setInt(Status.CURRENT_VEHICLE_NUM_DOORS, vehicleNumDoors);
         } else {
             this.cancelCountedTrip();
+        }
+    }
+
+    private CountingType parseCountingType(String countingType) {
+        if (countingType == null) {
+            return CountingType.UNSPECIFIED;
+        }
+
+        try {
+            return CountingType.valueOf(countingType);
+        } catch (IllegalArgumentException e) {
+            return CountingType.UNSPECIFIED;
         }
     }
 }
