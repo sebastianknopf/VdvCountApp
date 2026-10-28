@@ -42,7 +42,6 @@ public class CountingViewModel extends ViewModel {
             cs.setDoorId(doorId);
             cs.setCountingAreaId("1");
             cs.setObjectClass("Adult");
-            cs.setCountBeginTimestamp(new Date());
 
             countingSequences.add(cs);
         }

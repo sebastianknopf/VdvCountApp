@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.CountedTripAdapter;
+import de.vdvcount.app.common.CountingType;
 import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Status;
@@ -44,6 +45,7 @@ public class TripDetailsFragment extends Fragment {
 
     private CountedTripAdapter countedTripAdapter;
     private LocationWarningDialog locationWarningDialog;
+    private CountingType countingType;
 
     private boolean secondNextTripClick;
     private Runnable nextTripResetRunnable;
@@ -100,6 +102,8 @@ public class TripDetailsFragment extends Fragment {
         if (args.getCountedDoorIds() != null) {
             Status.setStringArray(Status.CURRENT_COUNTED_DOOR_IDS, args.getCountedDoorIds());
         }
+
+        this.countingType = args.getCountingType();
 
         return this.dataBinding.getRoot();
     }
@@ -199,6 +203,7 @@ public class TripDetailsFragment extends Fragment {
             TripDetailsFragmentDirections.ActionTripDetailsFragmentToTripClosingFragment action = TripDetailsFragmentDirections.actionTripDetailsFragmentToTripClosingFragment();
             action.setLastStationId(lastCountedStopTime.getStop().getParentId());
             action.setLastStationName(lastCountedStopTime.getStop().getName());
+            action.setCountingType(this.countingType);
 
             this.resetCurrentVerticalScrollPosition();
 
@@ -290,6 +295,7 @@ public class TripDetailsFragment extends Fragment {
                         Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {})
                 );
 
+                action.setCountingType(this.countingType);
                 action.setStopName(countedStopTime.getStop().getName());
                 action.setStopSequence(countedStopTime.getSequence());
 
@@ -305,6 +311,7 @@ public class TripDetailsFragment extends Fragment {
                         Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {})
                 );
 
+                action.setCountingType(this.countingType);
                 action.setAfterStopSequence(countedStopTime.getSequence());
 
                 this.navigationController.navigate(action);

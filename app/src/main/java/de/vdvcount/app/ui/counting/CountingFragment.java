@@ -27,6 +27,7 @@ import de.vdvcount.app.App;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.CountingSequenceListAdapter;
+import de.vdvcount.app.common.CountingType;
 import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.databinding.FragmentCountingBinding;
@@ -43,6 +44,7 @@ public class CountingFragment extends Fragment {
     private int currentStopSequence;
     private int currentAfterStopSequence;
     private String[] currentCountedDoorIds;
+    private CountingType currentCountingType;
     private final CountingSequenceListAdapter countingSequenceListAdapter;
     private LocationWarningDialog locationWarningDialog;
 
@@ -79,6 +81,7 @@ public class CountingFragment extends Fragment {
         }
 
         this.currentCountedDoorIds = args.getCountedDoorIds();
+        this.currentCountingType = args.getCountingType();
 
         return this.dataBinding.getRoot();
     }
@@ -124,6 +127,7 @@ public class CountingFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             CountingFragmentDirections.ActionCountingFragmentToTripDetailsFragment action = CountingFragmentDirections.actionCountingFragmentToTripDetailsFragment();
+            action.setCountingType(this.currentCountingType);
             this.navigationController.navigate(action);
 
             return true;
@@ -175,6 +179,7 @@ public class CountingFragment extends Fragment {
         this.viewModel.getState().observe(this.getViewLifecycleOwner(), state -> {
             if (state == State.STORED) {
                 CountingFragmentDirections.ActionCountingFragmentToTripDetailsFragment action = CountingFragmentDirections.actionCountingFragmentToTripDetailsFragment();
+                action.setCountingType(this.currentCountingType);
                 this.navigationController.navigate(action);
             }
         });

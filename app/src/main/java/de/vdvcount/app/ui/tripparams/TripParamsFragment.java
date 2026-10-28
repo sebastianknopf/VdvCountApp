@@ -15,6 +15,7 @@ import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.DoorListAdapter;
 import de.vdvcount.app.adapter.VehicleListAdapter;
+import de.vdvcount.app.common.CountingType;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripParamsBinding;
 import de.vdvcount.app.model.Vehicle;
@@ -41,7 +42,7 @@ public class TripParamsFragment extends Fragment {
     private int currentTripId;
     private String currentVehicleId;
     private int currentVehicleNumDoors;
-    private boolean countingTypeSelected;
+    private CountingType currentCountingType;
     private VehicleListAdapter vehicleListAdapter;
     private DoorListAdapter doorListAdapter;
     private TextWatcher vehicleIdTextWatcher;
@@ -158,7 +159,7 @@ public class TripParamsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                countingTypeSelected = false;
+                currentCountingType = null;
                 validateInputs();
             }
 
@@ -168,7 +169,7 @@ public class TripParamsFragment extends Fragment {
         });
 
         this.dataBinding.edtCountingType.setOnItemClickListener((adapterView, view, position, id) -> {
-            this.countingTypeSelected = true;
+            this.currentCountingType = CountingType.values()[position];
             this.validateInputs();
         });
 
@@ -197,6 +198,7 @@ public class TripParamsFragment extends Fragment {
             );
 
             action.setVehicleNumDoors(this.currentVehicleNumDoors);
+            action.setCountingType(this.currentCountingType);
 
             this.navigationController.navigate(action);
         });
@@ -245,7 +247,7 @@ public class TripParamsFragment extends Fragment {
             inputsValid = false;
         }
 
-        if (!this.countingTypeSelected) {
+        if (this.currentCountingType == null) {
             inputsValid = false;
         }
 

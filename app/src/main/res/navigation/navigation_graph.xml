@@ -130,6 +130,11 @@
             android:name="countedDoorIds"
             app:argType="string[]"
             app:nullable="true" />
+        <argument
+            android:name="countingType"
+            android:defaultValue="@null"
+            app:argType="de.vdvcount.app.common.CountingType"
+            app:nullable="true" />
         <action
             android:id="@+id/action_tripDetailsFragment_to_countingFragment"
             app:destination="@id/countingFragment" >
@@ -194,6 +199,11 @@
         <argument
             android:name="countedDoorIds"
             app:argType="string[]" />
+        <argument
+            android:name="countingType"
+            android:defaultValue="@null"
+            app:argType="de.vdvcount.app.common.CountingType"
+            app:nullable="true" />
         <action
             android:id="@+id/action_countingFragment_to_departureFragment"
             app:destination="@id/departureFragment"
@@ -242,5 +252,10 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null" />
+        <argument
+            android:name="countingType"
+            android:defaultValue="@null"
+            app:argType="de.vdvcount.app.common.CountingType"
+            app:nullable="true" />
     </fragment>
 </navigation>
