@@ -13,6 +13,7 @@ public class Status extends KeyValueStore {
     public final static String CURRENT_VEHICLE_ID = "de.vdvcount.app.kvs.status.CURRENT_VEHICLE_ID";
     public final static String CURRENT_VEHICLE_NUM_DOORS = "de.vdvcount.app.kvs.status.CURRENT_VEHICLE_NUM_DOORS";
     public final static String CURRENT_COUNTED_DOOR_IDS = "de.vdvcount.app.kvs.status.CURRENT_COUNTED_DOOR_IDS";
+    public final static String CURRENT_COUNTING_TYPE = "de.vdvcount.app.kvs.status.CURRENT_COUNTING_TYPE";
 
     public final static String LAST_PCE = "de.vdvcount.app.kvs.status.LAST_PCE";
     public final static String LAST_VEHICLE_ID = "de.vdvcount.app.kvs.status.LAST_VEHICLE_ID";

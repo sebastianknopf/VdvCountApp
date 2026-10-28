@@ -71,6 +71,7 @@ public class TripClosingViewModel extends ViewModel {
                 Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
                 Status.setString(Status.CURRENT_VEHICLE_ID, "");
                 Status.setInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1);
+                Status.setString(Status.CURRENT_COUNTING_TYPE, null);
 
                 if (stayInVehicle) {
                     String[] countedDoorIds = Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {});
@@ -97,6 +98,7 @@ public class TripClosingViewModel extends ViewModel {
             Status.setInt(Status.CURRENT_TRIP_ID, -1);
             Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
             Status.setString(Status.CURRENT_VEHICLE_ID, "");
+            Status.setString(Status.CURRENT_COUNTING_TYPE, null);
         };
 
         Thread thread = new Thread(runnable);

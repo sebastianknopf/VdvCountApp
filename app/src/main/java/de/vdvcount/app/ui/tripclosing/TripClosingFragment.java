@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
-import de.vdvcount.app.common.CountingType;
 import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.databinding.FragmentTripClosingBinding;
@@ -36,7 +35,6 @@ public class TripClosingFragment extends Fragment {
 
     private int lastStationId = -1;
     private String lastStationName = null;
-    private CountingType countingType;
     private boolean closeTripRequested = false;
 
     public static TripClosingFragment newInstance() {
@@ -56,8 +54,6 @@ public class TripClosingFragment extends Fragment {
         if (args.getLastStationName() != null) {
             this.lastStationName = args.getLastStationName();
         }
-        this.countingType = args.getCountingType();
-
         return this.dataBinding.getRoot();
     }
 
@@ -105,7 +101,6 @@ public class TripClosingFragment extends Fragment {
         if (item.getItemId() == android.R.id.home) {
             if (!this.closeTripRequested) {
                 TripClosingFragmentDirections.ActionTripClosingFragmentToTripDetailsFragment action = TripClosingFragmentDirections.actionTripClosingFragmentToTripDetailsFragment();
-                action.setCountingType(this.countingType);
                 this.navigationController.navigate(action);
             }
 
