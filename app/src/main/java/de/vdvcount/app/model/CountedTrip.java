@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.vdvcount.app.BuildConfig;
 import de.vdvcount.app.common.ApiObjectMapper;
+import de.vdvcount.app.common.CountingType;
 import de.vdvcount.app.common.Secret;
 import de.vdvcount.app.remote.CountedStopTimeObject;
 import de.vdvcount.app.remote.CountedTripObject;
@@ -17,6 +18,7 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
     private String deviceId;
     private String vehicleId;
     private int vehicleNumDoors;
+    private CountingType countingType;
     private List<CountedStopTime> countedStopTimes;
     private List<PassengerCountingEvent> unmatchedPassengerCountingEvents;
     private List<WayPoint> wayPoints;
@@ -27,7 +29,7 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         this.wayPoints = new ArrayList<>();
     }
 
-    public static CountedTrip from(Trip trip) {
+    public static CountedTrip from(Trip trip, CountingType countingType) {
         String vcaVersion = BuildConfig.VERSION_NAME;
         String deviceId = Secret.getSecretString(Secret.DEVICE_ID, null);
 
@@ -42,6 +44,7 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         countedTrip.setVcaVersion(vcaVersion);
         countedTrip.setDeviceId(deviceId);
         countedTrip.setVehicleId(null);
+        countedTrip.setCountingType(countingType);
 
         for (StopTime stopTime : trip.getStopTimes()) {
             countedTrip.getCountedStopTimes().add(CountedStopTime.from(stopTime));
@@ -92,6 +95,14 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         this.vehicleNumDoors = vehicleNumDoors;
     }
 
+    public CountingType getCountingType() {
+        return this.countingType;
+    }
+
+    public void setCountingType(CountingType countingType) {
+        this.countingType = countingType;
+    }
+
     public List<CountedStopTime> getCountedStopTimes() {
         return this.countedStopTimes;
     }
@@ -131,6 +142,7 @@ public class CountedTrip extends Trip implements ApiObjectMapper<CountedTripObje
         apiObject.setDeviceId(this.getDeviceId());
         apiObject.setVehicleId(this.getVehicleId());
         apiObject.setVehicleNumDoors(this.getVehicleNumDoors());
+        apiObject.setCountingType(this.getCountingType());
 
         List<CountedStopTimeObject> countedStopTimes = new ArrayList<>();
         for (CountedStopTime obj : this.getCountedStopTimes()) {

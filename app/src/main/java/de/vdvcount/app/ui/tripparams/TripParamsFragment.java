@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +15,7 @@ import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.DoorListAdapter;
 import de.vdvcount.app.adapter.VehicleListAdapter;
+import de.vdvcount.app.common.CountingType;
 import de.vdvcount.app.common.Status;
 import de.vdvcount.app.databinding.FragmentTripParamsBinding;
 import de.vdvcount.app.model.Vehicle;
@@ -40,6 +42,7 @@ public class TripParamsFragment extends Fragment {
     private int currentTripId;
     private String currentVehicleId;
     private int currentVehicleNumDoors;
+    private CountingType currentCountingType;
     private VehicleListAdapter vehicleListAdapter;
     private DoorListAdapter doorListAdapter;
     private TextWatcher vehicleIdTextWatcher;
@@ -82,6 +85,12 @@ public class TripParamsFragment extends Fragment {
         this.dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_trip_params, container, false);
         this.dataBinding.setLifecycleOwner(this.getViewLifecycleOwner());
 
+        ArrayAdapter<CharSequence> countingTypeAdapter = ArrayAdapter.createFromResource(
+                this.requireContext(),
+                R.array.trip_params_counting_types,
+                android.R.layout.simple_list_item_1
+        );
+        this.dataBinding.edtCountingType.setAdapter(countingTypeAdapter);
         this.dataBinding.edtVehicle.setAdapter(this.vehicleListAdapter);
         this.dataBinding.lstDoors.setAdapter(this.doorListAdapter);
 
@@ -143,6 +152,27 @@ public class TripParamsFragment extends Fragment {
     }
 
     private void initViewEvents() {
+        this.dataBinding.edtCountingType.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                currentCountingType = null;
+                validateInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        this.dataBinding.edtCountingType.setOnItemClickListener((adapterView, view, position, id) -> {
+            this.currentCountingType = CountingType.values()[position];
+            this.validateInputs();
+        });
+
         this.dataBinding.edtVehicle.addTextChangedListener(this.vehicleIdTextWatcher);
 
         this.dataBinding.edtVehicle.setOnItemClickListener((adapterView, view, i, l) -> {
@@ -168,6 +198,7 @@ public class TripParamsFragment extends Fragment {
             );
 
             action.setVehicleNumDoors(this.currentVehicleNumDoors);
+            action.setCountingType(this.currentCountingType);
 
             this.navigationController.navigate(action);
         });
@@ -178,6 +209,23 @@ public class TripParamsFragment extends Fragment {
             this.vehicleListAdapter.setVehicles(vehicles);
 
             if (Status.getBoolean(Status.STAY_IN_VEHICLE, false)) {
+                String countingTypeName = Status.getString(Status.LAST_COUNTING_TYPE, null);
+                if (countingTypeName != null) {
+                    try {
+                        CountingType countingType = CountingType.valueOf(countingTypeName);
+                        String[] countingTypeLabels = this.getResources().getStringArray(R.array.trip_params_counting_types);
+
+                        this.dataBinding.edtCountingType.setText(countingTypeLabels[countingType.ordinal()], false);
+                        this.currentCountingType = countingType;
+                        this.dataBinding.edtCountingTypeLayout.setEnabled(false);
+                        this.dataBinding.edtCountingType.setEnabled(false);
+
+                        this.validateInputs();
+                    } catch (IllegalArgumentException e) {
+                        // Keep the field editable if a stored counting type is no longer supported.
+                    }
+                }
+
                 String vehicleId = Status.getString(Status.LAST_VEHICLE_ID, null);
                 if (vehicleId != null) {
                     Optional<Vehicle> vehicle = this.vehicleListAdapter.getVehicles().stream().filter(v -> v.getName().equals(vehicleId)).findFirst();
@@ -213,6 +261,10 @@ public class TripParamsFragment extends Fragment {
         boolean inputsValid = true;
 
         if (this.currentVehicleId == null) {
+            inputsValid = false;
+        }
+
+        if (this.currentCountingType == null) {
             inputsValid = false;
         }
 

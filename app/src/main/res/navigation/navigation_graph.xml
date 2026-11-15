@@ -130,6 +130,10 @@
             android:name="countedDoorIds"
             app:argType="string[]"
             app:nullable="true" />
+        <argument
+            android:name="countingType"
+            android:defaultValue="UNSPECIFIED"
+            app:argType="de.vdvcount.app.common.CountingType" />
         <action
             android:id="@+id/action_tripDetailsFragment_to_countingFragment"
             app:destination="@id/countingFragment" >
