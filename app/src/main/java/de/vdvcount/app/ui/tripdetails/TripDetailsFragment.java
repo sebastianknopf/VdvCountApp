@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import de.vdvcount.app.AppActivity;
 import de.vdvcount.app.R;
 import de.vdvcount.app.adapter.CountedTripAdapter;
+import de.vdvcount.app.common.CountingType;
 import de.vdvcount.app.common.LocationService;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.common.Status;
@@ -101,6 +102,10 @@ public class TripDetailsFragment extends Fragment {
             Status.setStringArray(Status.CURRENT_COUNTED_DOOR_IDS, args.getCountedDoorIds());
         }
 
+        if (args.getCountingType() != CountingType.UNSPECIFIED) {
+            Status.setString(Status.CURRENT_COUNTING_TYPE, args.getCountingType().name());
+        }
+
         return this.dataBinding.getRoot();
     }
 
@@ -119,7 +124,8 @@ public class TripDetailsFragment extends Fragment {
                         Status.getInt(Status.CURRENT_TRIP_ID, -1),
                         Status.getString(Status.CURRENT_VEHICLE_ID, ""),
                         Status.getInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1),
-                        Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1)
+                        Status.getInt(Status.CURRENT_START_STOP_SEQUENCE, -1),
+                        Status.getString(Status.CURRENT_COUNTING_TYPE, null)
                 );
             } else {
                 Logging.i(this.getClass().getName(), "Already in state COUNTING - Loading CountedTrip object");
@@ -171,7 +177,9 @@ public class TripDetailsFragment extends Fragment {
                 this.nextTripResetHandler.removeCallbacks(this.nextTripResetRunnable);
 
                 Logging.i(this.getClass().getName(), "Switching to next connected trip ...");
-                this.viewModel.closeCountedTripAndLoadNextTrip();
+                this.viewModel.closeCountedTripAndLoadNextTrip(
+                        Status.getString(Status.CURRENT_COUNTING_TYPE, null)
+                );
             }
         });
 

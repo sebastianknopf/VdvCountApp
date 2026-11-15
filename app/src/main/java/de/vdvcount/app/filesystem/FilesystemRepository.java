@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 import de.vdvcount.app.App;
+import de.vdvcount.app.common.CountingType;
 import de.vdvcount.app.common.Logging;
 import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.model.Trip;
@@ -37,8 +38,8 @@ public class FilesystemRepository {
         this.verifyFileSystemStructure();
     }
 
-    public CountedTrip startCountedTrip(Trip trip, String vehicleId, int vehicleNumDoors) {
-        CountedTrip countedTrip = CountedTrip.from(trip);
+    public CountedTrip startCountedTrip(Trip trip, String vehicleId, int vehicleNumDoors, CountingType countingType) {
+        CountedTrip countedTrip = CountedTrip.from(trip, countingType);
         countedTrip.setVehicleId(vehicleId);
         countedTrip.setVehicleNumDoors(vehicleNumDoors);
 

@@ -26,7 +26,7 @@ public class TripClosingViewModel extends ViewModel {
         return this.state;
     }
 
-    public void closeCountedTrip(boolean stayInVehicle) {
+    public void closeCountedTrip(boolean stayInVehicle, String countingType) {
         Runnable runnable = () -> {
             this.state.postValue(TripClosingFragment.State.LOADING);
 
@@ -71,12 +71,14 @@ public class TripClosingViewModel extends ViewModel {
                 Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
                 Status.setString(Status.CURRENT_VEHICLE_ID, "");
                 Status.setInt(Status.CURRENT_VEHICLE_NUM_DOORS, -1);
+                Status.setString(Status.CURRENT_COUNTING_TYPE, null);
 
                 if (stayInVehicle) {
                     String[] countedDoorIds = Status.getStringArray(Status.CURRENT_COUNTED_DOOR_IDS, new String[] {});
 
                     Status.setString(Status.LAST_VEHICLE_ID, countedTrip.getVehicleId());
                     Status.setStringArray(Status.LAST_COUNTED_DOOR_IDS, countedDoorIds);
+                    Status.setString(Status.LAST_COUNTING_TYPE, countingType);
                     Status.setBoolean(Status.STAY_IN_VEHICLE, true);
                 }
             } else {
@@ -97,6 +99,7 @@ public class TripClosingViewModel extends ViewModel {
             Status.setInt(Status.CURRENT_TRIP_ID, -1);
             Status.setInt(Status.CURRENT_START_STOP_SEQUENCE, -1);
             Status.setString(Status.CURRENT_VEHICLE_ID, "");
+            Status.setString(Status.CURRENT_COUNTING_TYPE, null);
         };
 
         Thread thread = new Thread(runnable);

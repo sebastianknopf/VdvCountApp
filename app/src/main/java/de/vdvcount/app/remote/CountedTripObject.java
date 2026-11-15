@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.vdvcount.app.common.CountingType;
 import de.vdvcount.app.model.CountedStopTime;
 import de.vdvcount.app.model.CountedTrip;
 import de.vdvcount.app.model.PassengerCountingEvent;
@@ -20,6 +21,8 @@ public class CountedTripObject extends TripObject {
     private String vehicleId;
     @SerializedName("vehicle_num_doors")
     private int vehicleNumDoors;
+    @SerializedName("counting_type")
+    private CountingType countingType;
     @SerializedName("counted_stop_times")
     private List<CountedStopTimeObject> countedStopTimes;
     @SerializedName("unmatched_passenger_counting_events")
@@ -75,6 +78,14 @@ public class CountedTripObject extends TripObject {
         this.vehicleNumDoors = vehicleNumDoors;
     }
 
+    public CountingType getCountingType() {
+        return this.countingType;
+    }
+
+    public void setCountingType(CountingType countingType) {
+        this.countingType = countingType;
+    }
+
     public List<CountedStopTimeObject> getCountedStopTimes() {
         return this.countedStopTimes;
     }
@@ -114,6 +125,7 @@ public class CountedTripObject extends TripObject {
         domainModel.setDeviceId(this.getDeviceId());
         domainModel.setVehicleId(this.getVehicleId());
         domainModel.setVehicleNumDoors(this.getVehicleNumDoors());
+        domainModel.setCountingType(this.getCountingType());
 
         List<CountedStopTime> countedStopTimes = new ArrayList<>();
         for (CountedStopTimeObject obj : this.getCountedStopTimes()) {
